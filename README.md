@@ -1,6 +1,6 @@
 # CirdlesWebUI
 
-This project consists of the frontend for the CIRDLES web services. It is mainly made with [React](https://reactjs.org) and [Redux](https://redux.js.org).
+This project consists of the frontend for the CIRDLES web services. It is mainly made with [React](https://reactjs.org) and [Redux](https://redux.js.org). More info on each of the projects can be found in the [Wiki](https://github.com/CIRDLES/CirdlesWebUI/wiki).
 
 ## Development
 
