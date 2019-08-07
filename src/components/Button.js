@@ -8,6 +8,8 @@ type Props = {
   size?: number,
   color?: string,
   textColor?: string,
+  margin?: string,
+  disabled?: boolean,
   children?: any
 };
 
@@ -15,23 +17,38 @@ const BaseButton = ({
   onClick,
   size = 12,
   color = colors.dark,
+  textColor,
+  margin,
+  disabled,
   children,
   ...rest
 }: Props) => {
   const style = {
     fontSize: size,
-    padding: `${Math.round(size / 4)}px ${Math.round(size / 1.5)}px`,
+    padding: "0.25em 0.5em",
+    margin: margin || "",
     backgroundColor: 'transparent',
-    border: `solid 1px ${color}`,
-    color,
+    borderStyle: "solid",
+    borderWidth: "1px",
+    borderColor: color,
+    color: textColor || color,
     ':hover': {
       backgroundColor: color,
+      borderColor: color,
       color: colors.white,
-      border: `solid 1px ${color}`
+    },
+    ':disabled': {
+      pointerEvents: "none",
+      backgroundColor: colors.lightGray + '88',
+      borderColor: colors.mediumGray,
+      color: colors.mediumGray
+    },
+    ':focus': {
+      outline: 'none'
     }
   };
   return (
-    <button style={[styles.button, style]} onClick={onClick} {...rest}>
+    <button style={[styles.button, style]} onClick={onClick} disabled={disabled} {...rest}>
       {children}
     </button>
   );
@@ -39,7 +56,7 @@ const BaseButton = ({
 
 const styles = {
   button: {
-    borderRadius: 50,
+    borderRadius: "1.5em",
     transition: 'all 0.4s',
     ':hover': {
       cursor: 'pointer'

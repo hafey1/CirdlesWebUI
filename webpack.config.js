@@ -3,7 +3,7 @@ var path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const endpoints = ['', 'squid', 'ambapo'];
+const endpoints = ['', 'squid', 'ambapo', 'topsoil'];
 const HtmlWebpackPluginList = [];
 for (let endpoint of endpoints) {
   const HtmlWebpackPluginEndpoint = new HtmlWebpackPlugin({
@@ -24,9 +24,23 @@ module.exports = {
     loaders: [
       { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
       {
-        test: /\.scss$/,
+        test: /^(?!.*?\.module).*\.scss$/,
         include: path.appSrc,
         loaders: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.module\.scss$/,
+        include: path.appSrc,
+        loaders: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
+          'sass-loader'
+        ]
       },
       {
         test: /\.(jpg|png|svg)$/,

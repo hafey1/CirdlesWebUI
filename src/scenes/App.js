@@ -1,27 +1,32 @@
 // @flow
-import React, { Component } from 'react';
-import Radium from 'radium';
-import { Switch, Route, withRouter } from 'react-router-dom';
-import { Header } from 'components';
-import Home from './Home';
-import Squid from './Squid';
-import Ambapo from './Ambapo';
-import { HEADER_HEIGHT } from 'constants';
-import { colors } from 'constants';
+import React, { Component } from "react";
+import Radium from "radium";
+import { Switch, Route, withRouter } from "react-router-dom";
+import { Header } from "components";
+import Home from "./Home";
+import Squid from "./Squid";
+import Ambapo from "./Ambapo";
+import Topsoil from "./Topsoil";
+import { HEADER_HEIGHT } from "constants";
+import { colors } from "constants";
 
 const routes = {
-  '/': {
-    title: 'CIRDLES Web Services',
+  "/": {
+    title: "CIRDLES Web Services",
     exact: true,
     component: Home
   },
-  '/ambapo': {
-    title: 'Ambapo',
+  "/ambapo": {
+    title: "Ambapo",
     component: Ambapo
   },
-  '/squid': {
-    title: 'Squid Ink: Squid\'s Reporting Service (Beta)',
+  "/squid": {
+    title: "Squid Ink: Squid's Reporting Service (Beta)",
     component: Squid
+  },
+  "/topsoil": {
+    title: "Topsoil",
+    component: Topsoil
   }
 };
 
@@ -76,13 +81,13 @@ class App extends Component<Props, State> {
 
 const styles = {
   wrapper: {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%",
     backgroundColor: colors.primary
   },
   body: {
     padding: `${HEADER_HEIGHT + 10}px 10px 10px 10px`,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,

@@ -1,13 +1,16 @@
+$background: #cfd8dc;
+
 *{
   --squidColor: #3a4c88;
 }
 
+html, 
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  height: '100%';
-  width: '100%';
+  height: 100%;
+  width: 100%;
 }
 .center-div
 {
@@ -19,7 +22,7 @@ body {
   left: 25;
   width: 575px;
   height: 500px;
-  background-color: #cfd8dc;
+  background-color: $background;
   border: 5px solid #3a4c88;
   border-radius: 20px;
   padding:20px;
@@ -77,3 +80,31 @@ input[type=text] {
   background-color: #3a4c88;
   color: white;
 }
+
+.tab-pane {
+  background-color: #ccc;
+}
+.tab-list {
+  border-bottom: 1px solid #ccc;
+  margin: 0;
+  padding-top: 0.25em;
+  padding-left: 0.25em;
+}
+.tab-label {
+  display: inline-block;
+  list-style: none;
+  border: solid #888;
+  border-width: 1px 1px 0 1px;
+  margin-bottom: -1px;
+  padding: 0.5em 0.75em;
+  background-color: #ddd;
+}
+.tab-label.active {
+  background-color: #eee;
+}
+.tab-content {
+  background-color: #eee;
+  overflow: auto;
+  height: calc(100% - 2.5em);
+}
+

@@ -7,9 +7,14 @@ export const colors = {
   ambapo: '#635b7d',
   squid: '#3A4C88',
 
+  topsoil: '#67ccff',
+  topsoilLight: '#C9EDFF',
+  topsoilMedium: '#016699',
+  topsoilDark: '#0FAEFB',
+
   white: '#ffffff',
   whiteGray: '#eeeeee',
   lightGray: '#cccccc',
-  mediumGray: '#a0a0a0',
+  mediumGray: '#aaaaaa',
   darkGray: '#505050'
 };

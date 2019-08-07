@@ -90,6 +90,9 @@ class BaseNav extends Component<Props, State> {
               <Link to="/ambapo" style={styles.link} onClick={this.resetMenu}>
                 Ambapo
               </Link>
+              <Link to="/topsoil" style={styles.link} onClick={this.resetMenu}>
+                Topsoil
+              </Link>
             </div>
           )}
         </div>
