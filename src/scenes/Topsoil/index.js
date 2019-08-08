@@ -194,9 +194,10 @@ class TopsoilPage extends Component<{}, State> {
       "sigma_y": "±2σ (%)(1)",
       "rho": "corr coef"
     };
+    table.unctFormat = "%";
 
     const plot = { ...this.state.plot };
-    plot.data = calculatePlotData(table.rows, table.variables, "%");
+    plot.data = calculatePlotData(table.rows, table.variables, table.unctFormat);
 
     this.setState({ table, plot });
   }
@@ -332,6 +333,7 @@ class TopsoilPage extends Component<{}, State> {
     const { rows, variables, unctFormat } = this.state.table,
           plot = { ...this.state.plot };
     if (Object.entries(variables).length > 0) {
+      console.log(unctFormat);
       plot.data = calculatePlotData(rows, variables, unctFormat);
       plot.options[Option.X_AXIS] = variables[Variable.X];
       plot.options[Option.Y_AXIS] = variables[Variable.Y];
@@ -339,7 +341,7 @@ class TopsoilPage extends Component<{}, State> {
       plot.data = [];
     }
     this.setState({ plot }, () => {
-      if (!resetView) return;
+      if (resetView !== true) return;
       const instance = this.plotComponent.current.instance;
       if (instance) instance.resetView();
     });
@@ -507,6 +509,9 @@ function calculatePlotData(rows, variables, unctFormat, rtnval) {
       }
       if (Variable.SELECTED in row) {
         entry[Variable.SELECTED] = row[Variable.SELECTED];
+      }
+      if (Variable.VISIBLE in row) {
+        entry[Variable.VISIBLE] = row[Variable.VISIBLE];
       }
       if (unctFormat === "%") {
         if (Variable.SIGMA_X in entry) {

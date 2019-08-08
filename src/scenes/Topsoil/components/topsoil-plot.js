@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from "react";
-import { ScatterPlot, Feature } from "topsoil-js";
+import { ScatterPlot, Feature, Option } from "topsoil-js";
 import { svgElementToBlob } from "actions";
 import { colors } from "constants";
 import { Button } from "components";
@@ -98,7 +98,7 @@ class TopsoilPlot extends Component<Props> {
       link = document.createElement("a");
 
     link.href = url;
-    link.download = this.context.title || "download";
+    link.download = this.options[Option.TITLE] || "download";
 
     const onClick = () => {
       setTimeout(() => {

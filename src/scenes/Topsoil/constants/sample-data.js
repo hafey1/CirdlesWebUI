@@ -34,7 +34,8 @@ export const SampleRows = [
     "corr coef": 0.918191745,
     "title": "row1",
     "±2σ (%)": 1.519417676,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.714916493,
@@ -43,7 +44,8 @@ export const SampleRows = [
     "corr coef": 0.915069472,
     "title": "row2",
     "±2σ (%)": 1.7999456,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.709482828,
@@ -52,7 +54,8 @@ export const SampleRows = [
     "corr coef": 0.918845083,
     "title": "row3",
     "±2σ (%)": 1.44194351,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.70707849,
@@ -61,7 +64,8 @@ export const SampleRows = [
     "corr coef": 0.918344571,
     "title": "row4",
     "±2σ (%)": 1.320690194,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.709615006,
@@ -70,7 +74,8 @@ export const SampleRows = [
     "corr coef": 0.918344571,
     "title": "row5",
     "±2σ (%)": 1.359029744,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.710934267,
@@ -79,7 +84,8 @@ export const SampleRows = [
     "corr coef": 0.919124777,
     "title": "row6",
     "±2σ (%)": 1.424328137,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.68695182,
@@ -88,7 +94,8 @@ export const SampleRows = [
     "corr coef": 0.920490463,
     "title": "row7",
     "±2σ (%)": 1.35324389,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.71570218,
@@ -97,7 +104,8 @@ export const SampleRows = [
     "corr coef": 0.918639641,
     "title": "row8",
     "±2σ (%)": 1.383868032,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.702153693,
@@ -106,7 +114,8 @@ export const SampleRows = [
     "corr coef": 0.921438073,
     "title": "row9",
     "±2σ (%)": 1.264304654,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.700081472,
@@ -115,7 +124,8 @@ export const SampleRows = [
     "corr coef": 0.917579003,
     "title": "row10",
     "±2σ (%)": 1.4555502,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.701464404,
@@ -124,7 +134,8 @@ export const SampleRows = [
     "corr coef": 0.915709384,
     "title": "row11",
     "±2σ (%)": 1.614480021,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.725185047,
@@ -133,7 +144,8 @@ export const SampleRows = [
     "corr coef": 0.917094067,
     "title": "row12",
     "±2σ (%)": 1.564622589,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.724886106,
@@ -142,7 +154,8 @@ export const SampleRows = [
     "corr coef": 0.917874287,
     "title": "row13",
     "±2σ (%)": 1.488528691,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.698240706,
@@ -151,7 +164,8 @@ export const SampleRows = [
     "corr coef": 0.918282249,
     "title": "row14",
     "±2σ (%)": 1.48075478,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.711983592,
@@ -160,7 +174,8 @@ export const SampleRows = [
     "corr coef": 0.914411266,
     "title": "row15",
     "±2σ (%)": 1.51399927,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.72442634,
@@ -169,7 +184,8 @@ export const SampleRows = [
     "corr coef": 0.914239775,
     "title": "row16",
     "±2σ (%)": 1.595745814,
-    "selected": true
+    "selected": true,
+    "visible": true
   },
   {
     "206Pb*/238U": 0.714166474,
@@ -178,6 +194,7 @@ export const SampleRows = [
     "corr coef": 0.915025602,
     "title": "row17",
     "±2σ (%)": 1.551935035,
-    "selected": true
+    "selected": true,
+    "visible": true
   }
 ];
