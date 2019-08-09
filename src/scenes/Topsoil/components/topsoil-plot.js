@@ -149,6 +149,12 @@ class TopsoilPlot extends Component<Props> {
       layers
     );
     this.instance.onZoomEnd = this.props.onZoomEnd;
+    this.instance.margin = {
+      top: 70,
+      right: 25,
+      bottom: 35,
+      left: 40
+    }
 
     // add cursor styles to draggable area
     const draggableArea = this.instance.displayContainer.node();

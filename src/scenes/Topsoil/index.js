@@ -127,7 +127,7 @@ const initialState = {
     options: DefaultOptions
   },
   split: {
-    horizontal: [50, 50],
+    horizontal: [40, 60],
     vertical: [70, 30]
   },
   varChooserIsOpen: false,
@@ -333,7 +333,6 @@ class TopsoilPage extends Component<{}, State> {
     const { rows, variables, unctFormat } = this.state.table,
           plot = { ...this.state.plot };
     if (Object.entries(variables).length > 0) {
-      console.log(unctFormat);
       plot.data = calculatePlotData(rows, variables, unctFormat);
       plot.options[Option.X_AXIS] = variables[Variable.X];
       plot.options[Option.Y_AXIS] = variables[Variable.Y];
