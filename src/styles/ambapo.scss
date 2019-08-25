@@ -1,0 +1,23 @@
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+$ambapo: #635b7d;
+
+.ambapo {
+  .form-control {
+    &:focus {
+      border-color: $ambapo;
+      box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($ambapo), $ambapo, 15%), .5);
+    }
+  }
+  label, h3 {
+    color: $ambapo;
+  }
+}
+
+.btn.btn-outline-ambapo {
+  @include button-outline-variant($ambapo, color-yiq($ambapo), $ambapo, $ambapo);
+}
+
+.border.border-ambapo {
+  border: 1px solid $ambapo !important;
+}

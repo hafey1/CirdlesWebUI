@@ -1,23 +1,14 @@
 // @flow
 import React, { Component } from "react";
-import { Button } from "../../../../components";
-import { colors } from "../../../../constants";
 
 const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  extentsGroup: {
-    margin: "0.5em 0"
-  },
   extentsField: {
-    width: "5em"
+    width: "6em"
   }
 };
 
 type Props = {
+  axis: "x" | "y",
   axisMin: number,
   axisMax: number,
   onSetExtents: Function
@@ -48,34 +39,39 @@ class AxisExtents extends Component<Props> {
 
   render() {
     const {
+      axis,
       axisMin,
       axisMax
     } = this.props;
 
     return (
-      <div style={styles.container}>
-        <div style={styles.extentsGroup}>
+      <div className="d-flex flex-column align-items-center">
+        <div className="d-flex flex-row justify-content-center my-2">
           <input
-            name="minValue"
             ref={this.minField}
-            style={styles.extentsField}
+            id={`${axis}AxisMinInput`}
             type="text"
-            defaultValue={axisMin}
+            className="form-control d-inline-block"
+            style={styles.extentsField}
+            defaultValue={axisMin.toFixed(4)}
           />
-          <span> to </span>
+          <span className="mx-1 my-auto">to</span>
           <input
-            name="maxValue"
             ref={this.maxField}
-            style={styles.extentsField}
+            id={`${axis}AxisMaxInput`}
             type="text"
-            defaultValue={axisMax}
+            className="form-control d-inline-block"
+            style={styles.extentsField}
+            defaultValue={axisMax.toFixed(4)}
           />
         </div>
-        <Button 
-          size={12}
-          color={colors.topsoilDark}
+
+        <button 
+          className="btn btn-sm btn-outline-topsoil rounded-pill mx-auto"
           onClick={this.handleSetExtents}
-        >Set Extents</Button>
+        >
+          Set Extents
+        </button>
       </div>
     );
   }

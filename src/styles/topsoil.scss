@@ -1,17 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Arimo:400,400i,700&display=swap');
 
 @import "../../node_modules/tabulator-tables/dist/css/tabulator.min.css";
+@import "../../node_modules/bootstrap/scss/functions.scss";
+@import "../../node_modules/bootstrap/scss/mixins.scss";
+@import "../../node_modules/bootstrap/scss/variables.scss";
 
 $topsoil: #67ccff;
 $topsoilLight: #c9edff;
 $topsoilDark: #0faefb;
-
-// Helps SplitJS
-.split {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
 
 .draggable {
   cursor: grab;
@@ -20,9 +16,19 @@ $topsoilDark: #0faefb;
   }
 }
 
-.topsoil-page {
-  font-family: 'Arimo', sans-serif;
+.btn.btn-outline-topsoil {
+  @include button-outline-variant($topsoilDark, color-yiq($topsoilDark), $topsoilDark, $topsoilDark);
 
+  &:disabled {
+    color: #888;
+    border-color: #888;
+    background-color: rgba(200, 200, 200, 0.3);
+  }
+
+}
+
+
+.topsoil {
   *::-webkit-scrollbar {
     width: 0.75em;
     height: 0.75em;
@@ -39,6 +45,39 @@ $topsoilDark: #0faefb;
   *::-webkit-scrollbar-corner {
     background-color: $topsoilDark;
   }
+
+  a {
+    color: $topsoilDark;
+  }
+
+  .form-control,
+  .custom-control {
+    .custom-control-input {
+      &:checked {
+        color: $topsoil;
+      }
+    }
+    
+    &:focus {
+      border-color: $topsoilDark;
+      box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($topsoilDark), $topsoilDark, 15%), .5);
+    }
+  }
+
+  .tab-container {
+    .nav-tabs {
+      .nav-link {
+        &.active {
+          background-color: #eee;
+          border-bottom: none;
+        }
+      }
+    }
+    .tab-content {
+      background-color: #eee;
+    }
+  }
+  
 }
 
 .data-table {
@@ -48,11 +87,14 @@ $topsoilDark: #0faefb;
   }
 
   .tabulator-tableHolder {
-    font-family: 'Lucida Console', monospace;
+
+    .tabulator-table {
+      font-family: 'Lucida Console', monospace;
+    }
 
     .tabulator-placeholder {
       span {
-        color: #fff;
+        color: #fff !important;
       }
     }
   }
@@ -63,26 +105,7 @@ $topsoilDark: #0faefb;
     }
 
     &:hover {
-      background-color: #ccc
+      background-color: #ccc;
     }
-  }
-}
-
-.topsoil-plot-panel {
-  .tab-pane {
-    background-color: #ccc;
-  }
-  .tab-list {
-    border-bottom: 1px solid #ccc;
-  }
-  .tab-label {
-    border-radius: 0.5em 0.5em 0 0;
-    background-color: #ddd;
-  }
-  .tab-label.active {
-    background-color: #eee;
-  }
-  .tab-content {
-    background-color: #eee;
   }
 }

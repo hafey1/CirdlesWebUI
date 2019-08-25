@@ -36,7 +36,6 @@ const HomePage = ({ history }: Props) => {
           onClick={() => history.push('/topsoil')}
           style={{ margin: 40 }}
         />
-
       </div>
     </div>
   );

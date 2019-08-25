@@ -1,31 +1,24 @@
 // @flow
 import React, { Component } from "react";
 import { Option } from "topsoil-js";
-import { Input, Select, RadioButton, CheckBox, TabPane, Tab, Button, RangeSlider } from "components";
-import AxisExtents from "./axis-extents";
-import Lambda from "./lambda";
-import { colors } from "constants";
+import {
+  TabPane,
+  Tab
+} from "components";
+import {
+  CheckBox,
+  LeftLabelledInput,
+  LeftLabelledSelect,
+  RadioButton
+} from "components/bootstrap";
+import AxisExtents from "./AxisExtents";
+import LambdaInput from "./LambdaInput";
 
-const styles = {
-  optionList: {
-    margin: "5px",
-    listStyle: "none"
-  },
-  optionListLabel: {
-    display: "inline-block",
-    margin: 0
-  },
-  subpanel: {
-    display: "flex",
-    flexFlow: "row wrap",
-    // subtract padding from height
-    maxHeight: "calc(100% - 1em)",
-    padding: "0.5em"
-  },
-  controlBlock: {
-    margin: "0.5em"
-  }
-};
+const classes = {
+  subpanel: "d-flex flex-row flex-wrap align-items-start",
+  formGroup: "form-group m-2",
+  controlList: "list-unstyled ml-3"
+}
 
 type Props = {
   plot: {},
@@ -37,7 +30,7 @@ type Props = {
 export class TopsoilPlotPanel extends Component<Props> {
   constructor(props) {
     super(props);
-    
+
     this.handleSetExtents = this.handleSetExtents.bind(this);
   }
 
@@ -62,68 +55,79 @@ export class TopsoilPlotPanel extends Component<Props> {
       snapToWetherillConcordia
     } = this.props;
     return (
-      <div className="topsoil-plot-panel">
+      <div className="topsoil-plot-panel bg-white rounded">
         <TabPane>
-          <Tab label="Axis Styling">
+          <Tab label="Axis Styling" idPrefix="axisStyling">
             <AxisStylingPanel
               options={options}
               onOptionChanged={onOptionChanged}
               onSetExtents={this.handleSetExtents}
             />
           </Tab>
-          <Tab label="Data Options">
+          <Tab label="Data Options" idPrefix="dataOptions">
             <DataOptionsPanel
               options={options}
               onOptionChanged={onOptionChanged}
             />
           </Tab>
-          <Tab label="Plot Features">
+          <Tab label="Plot Features" idPrefix="plotFeatures">
             <PlotFeaturesPanel
               options={options}
               onOptionChanged={onOptionChanged}
               snapToWetherillConcordia={snapToWetherillConcordia}
             />
           </Tab>
-          <Tab label="Constants">
-            <ConstantsPanel options={options} onOptionChanged={onOptionChanged} />
+          <Tab label="Constants" idPrefix="constants">
+            <ConstantsPanel
+              options={options}
+              onOptionChanged={onOptionChanged}
+            />
           </Tab>
         </TabPane>
       </div>
-      
     );
   }
 }
 
 const AxisStylingPanel = ({ options, onOptionChanged, onSetExtents }) => {
   return (
-    <div style={styles.subpanel}>
-      <Input
-        value={options[Option.TITLE]}
-        label="Title"
-        onChange={e => onOptionChanged(Option.TITLE, e.target.value)}
-        style={styles.controlBlock}
-      />
-
-      <div style={styles.controlBlock}>
-        <Input
-          label="X Axis"
+    <div className={classes.subpanel}>
+      <div className={classes.formGroup}>
+        <LeftLabelledInput
+          id="plotTitleInput"
+          label="Title:"
+          type="text"
+          value={options[Option.TITLE]}
+          onChange={e => onOptionChanged(Option.TITLE, e.target.value)}
+        />
+      </div>
+      
+      <div className={`${classes.formGroup} d-flex flex-column align-items-center`}>
+        <LeftLabelledInput
+          id="xAxisInput"
+          label="X&nbsp;Axis:"
+          type="text"
           value={options[Option.X_AXIS]}
           onChange={e => onOptionChanged(Option.X_AXIS, e.target.value)}
         />
-        <AxisExtents
+        <AxisExtents 
+          axis="x"
           axisMin={options[Option.X_MIN]}
           axisMax={options[Option.X_MAX]}
           onSetExtents={(min, max) => onSetExtents(min, max, null, null)}
         />
       </div>
 
-      <div style={styles.controlBlock}>
-        <Input
-          label="Y Axis"
+      <div className={`${classes.formGroup} d-flex flex-column align-items-center`}>
+        <LeftLabelledInput
+          id="yAxisInput"
+          label="Y&nbsp;Axis:"
+          type="text"
           value={options[Option.Y_AXIS]}
           onChange={e => onOptionChanged(Option.Y_AXIS, e.target.value)}
         />
-        <AxisExtents
+        <AxisExtents 
+          axis="y"
           axisMin={options[Option.Y_MIN]}
           axisMax={options[Option.Y_MAX]}
           onSetExtents={(min, max) => onSetExtents(null, null, min, max)}
@@ -135,42 +139,44 @@ const AxisStylingPanel = ({ options, onOptionChanged, onSetExtents }) => {
 
 const DataOptionsPanel = ({ options, onOptionChanged }) => {
   return (
-    <div style={styles.subpanel}>
-      <div style={styles.controlBlock}>
-        <Select
-          label="Isotope System"
+    <div className={classes.subpanel}>
+      <div className={classes.formGroup}>
+        <LeftLabelledSelect
+          id="isotopeSystemSelect"
+          label="Isotope&nbsp;System:"
           value={options[Option.ISOTOPE_SYSTEM]}
           onChange={e => onOptionChanged(Option.ISOTOPE_SYSTEM, e.target.value)}
         >
           <option value="Generic">Generic</option>
           <option value="Uranium Lead">U-Pb</option>
           <option value="Uranium Thorium">U-Th</option>
-        </Select>
-        <Select
-          label="Uncertainty"
+        </LeftLabelledSelect>
+        <LeftLabelledSelect
+          id="uncertaintySelect"
+          label="Uncertainty:"
           value={options[Option.UNCERTAINTY]}
           onChange={e => onOptionChanged(Option.UNCERTAINTY, e.target.value)}
         >
           <option value={1.0}>1σ</option>
           <option value={2.0}>2σ</option>
-        </Select>
+        </LeftLabelledSelect>
       </div>
 
-      <div style={styles.controlBlock}>
+      <div className={classes.formGroup}>
         <CheckBox
+          id="pointsCheckBox"
           label="Points"
           checked={options[Option.POINTS]}
           onChange={e => onOptionChanged(Option.POINTS, e.target.checked)}
         />
-        <ul style={styles.optionList}>
+        <ul className={classes.controlList}>
           <li>
-            <Input
-              label="Fill"
-              value={options[Option.POINTS_FILL]}
+            <LeftLabelledInput
+              id="pointsColorInput"
+              label="Fill:"
               type="color"
-              onChange={e =>
-                onOptionChanged(Option.POINTS_FILL, e.target.value)
-              }
+              value={options[Option.POINTS_FILL]}
+              onChange={e => onOptionChanged(Option.POINTS_FILL, e.target.value)}
             />
           </li>
           {/* <li>
@@ -187,22 +193,24 @@ const DataOptionsPanel = ({ options, onOptionChanged }) => {
         </ul>
       </div>
 
-      <div style={styles.controlBlock}>
+      <div className={classes.formGroup}>
         <RadioButton
-          label="Error Ellipses"
+          id="ellipsesRadioButton"
+          label="Error&nbsp;Ellipses"
           group="error"
-          selected={options[Option.ELLIPSES]}
-          onSelected={e => {
+          checked={options[Option.ELLIPSES]}
+          onChecked={e => {
             onOptionChanged(Option.ELLIPSES, true);
             onOptionChanged(Option.ERROR_BARS, false);
           }}
         />
-        <ul style={styles.optionList}>
+        <ul className={classes.controlList}>
           <li>
-            <Input
+            <LeftLabelledInput
+              id="ellipsesColorInput"
               label="Fill"
-              value={options[Option.ELLIPSES_FILL]}
               type="color"
+              value={options[Option.ELLIPSES_FILL]}
               onChange={e =>
                 onOptionChanged(Option.ELLIPSES_FILL, e.target.value)
               }
@@ -222,20 +230,22 @@ const DataOptionsPanel = ({ options, onOptionChanged }) => {
         </ul>
 
         <RadioButton
-          label="Error Bars"
+          id="errorBarsRadioButton"
+          label="Error&nbsp;Bars"
           group="error"
-          selected={options[Option.ERROR_BARS]}
-          onSelected={e => {
+          checked={options[Option.ERROR_BARS]}
+          onChecked={e => {
             onOptionChanged(Option.ERROR_BARS, true);
-            onOptionChanged(Option.ELLIPSES, false)
+            onOptionChanged(Option.ELLIPSES, false);
           }}
         />
-        <ul style={styles.optionList}>
+        <ul className={classes.controlList}>
           <li>
-            <Input
+            <LeftLabelledInput
+              id="errorBarsColorInput"
               label="Fill"
-              value={options[Option.ERROR_BARS_FILL]}
               type="color"
+              value={options[Option.ERROR_BARS_FILL]}
               onChange={e =>
                 onOptionChanged(Option.ERROR_BARS_FILL, e.target.value)
               }
@@ -258,38 +268,47 @@ const DataOptionsPanel = ({ options, onOptionChanged }) => {
   );
 };
 
-const PlotFeaturesPanel = ({ options, onOptionChanged, snapToWetherillConcordia }) => {
+const PlotFeaturesPanel = ({
+  options,
+  onOptionChanged,
+  snapToWetherillConcordia
+}) => {
   let systemControls = "";
   switch (options[Option.ISOTOPE_SYSTEM]) {
     case "Uranium Lead":
-      systemControls = UPbFeatures(options, onOptionChanged, snapToWetherillConcordia);
+      systemControls = UPbFeatures(
+        options,
+        onOptionChanged,
+        snapToWetherillConcordia
+      );
       break;
     case "Uranium Thorium":
       systemControls = UThFeatures(options, onOptionChanged);
       break;
   }
 
-  return <div style={styles.subpanel}>{systemControls}</div>;
+  return <div className={classes.subpanel}>{systemControls}</div>;
 };
 
 const UPbFeatures = (options, onOptionChanged, snapToWetherillConcordia) => {
-
   const concordiaType = options[Option.CONCORDIA_TYPE];
 
   return (
     <React.Fragment>
-      <div style={styles.controlBlock}>
+      <div className={classes.formGroup}>
         <CheckBox
+          id="concordiaCheckBox"
           label="Concordia"
           checked={options[Option.CONCORDIA_LINE]}
           onChange={e =>
             onOptionChanged(Option.CONCORDIA_LINE, e.target.checked)
           }
         />
-        <ul style={styles.optionList}>
+        <ul className={classes.controlList}>
           <li>
             <CheckBox
-              label="Error Envelope"
+              id="concordiaEnvelopeCheckBox"
+              label="Error&nbsp;Envelope"
               checked={options[Option.CONCORDIA_ENVELOPE]}
               onChange={e =>
                 onOptionChanged(Option.CONCORDIA_ENVELOPE, e.target.checked)
@@ -298,39 +317,41 @@ const UPbFeatures = (options, onOptionChanged, snapToWetherillConcordia) => {
           </li>
           <li>
             <RadioButton
+              id="wetherillRadioButton"
               label="Wetherill"
               group="concordia-type"
-              selected={concordiaType === "wetherill"}
-              onSelected={e => {
+              checked={concordiaType === "wetherill"}
+              onChecked={e => {
                 onOptionChanged(Option.CONCORDIA_TYPE, "wetherill");
               }}
             />
-            <ul style={styles.optionList}>
+            <ul className={classes.controlList}>
               <li>
-                <Button
-                  size={12}
-                  color={colors.topsoilDark}
-                  disabled={options[Option.CONCORDIA_LINE] && concordiaType !== "wetherill"}
+                <button 
+                  className="btn btn-sm btn-outline-topsoil rounded-pill mx-auto"
                   onClick={snapToWetherillConcordia}
+                  disabled={options[Option.CONCORDIA_LINE] && concordiaType !== "wetherill"}
                 >
                   Snap to Corners
-                </Button>
+                </button>
               </li>
             </ul>
           </li>
           <li>
             <RadioButton
+              id="teraWasserburgRadioButton"
               label="Tera-Wasserburg"
               group="concordia-type"
-              selected={options[Option.CONCORDIA_TYPE] === "tera-wasserburg"}
-              onSelected={e => {
+              checked={options[Option.CONCORDIA_TYPE] === "tera-wasserburg"}
+              onChecked={e => {
                 onOptionChanged(Option.CONCORDIA_TYPE, "tera-wasserburg");
               }}
             />
           </li>
           <li>
-            <Input
-              label="Line Fill"
+            <LeftLabelledInput
+              id="concordiaLineColorInput"
+              label="Line&nbsp;Fill"
               type="color"
               value={options[Option.CONCORDIA_LINE_FILL]}
               onChange={e =>
@@ -339,8 +360,9 @@ const UPbFeatures = (options, onOptionChanged, snapToWetherillConcordia) => {
             />
           </li>
           <li>
-            <Input
-              label="Envelope Fill"
+            <LeftLabelledInput
+              id="concordiaEnvelopeColorInput"
+              label="Envelope&nbsp;Fill"
               type="color"
               value={options[Option.CONCORDIA_ENVELOPE_FILL]}
               onChange={e =>
@@ -357,9 +379,10 @@ const UPbFeatures = (options, onOptionChanged, snapToWetherillConcordia) => {
 const UThFeatures = (options, onOptionChanged) => {
   return (
     <React.Fragment>
-      <div style={styles.controlBlock}>
+      <div className={classes.formGroup}>
         <CheckBox
-          label="Evolution Matrix"
+          id="evolutionCheckBox"
+          label="Evolution&nbsp;Matrix"
           checked={options[Option.EVOLUTION]}
           onChange={e => onOptionChanged(Option.EVOLUTION, e.target.checked)}
         />
@@ -370,31 +393,39 @@ const UThFeatures = (options, onOptionChanged) => {
 
 const ConstantsPanel = ({ options, onOptionChanged }) => {
   return (
-    <div style={styles.subpanel}>
-      <Lambda
-        label="Lambda 230"
-        defaultValue={options[Option.LAMBDA_230]}
-        onSetValue={newValue => onOptionChanged(Option.LAMBDA_230, newValue)}
-        style={styles.controlBlock}
-      />
-      <Lambda
-        label="Lambda 234"
-        defaultValue={options[Option.LAMBDA_234]}
-        onSetValue={newValue => onOptionChanged(Option.LAMBDA_234, newValue)}
-        style={styles.controlBlock}
-      />
-      <Lambda
-        label="Lambda 235"
-        defaultValue={options[Option.LAMBDA_235]}
-        onSetValue={newValue => onOptionChanged(Option.LAMBDA_235, newValue)}
-        style={styles.controlBlock}
-      />
-      <Lambda
-        label="Lambda 238"
-        defaultValue={options[Option.LAMBDA_238]}
-        onSetValue={newValue => onOptionChanged(Option.LAMBDA_238, newValue)}
-        style={styles.controlBlock}
-      />
+    <div className={classes.subpanel}>
+      <div className={classes.formGroup}>
+        <LambdaInput
+          id="lambda230Input"
+          label="Lambda&nbsp;230:"
+          defaultValue={options[Option.LAMBDA_230]}
+          onSetValue={newValue => onOptionChanged(Option.LAMBDA_230, newValue)}
+        />
+      </div>
+      <div className={classes.formGroup}>
+        <LambdaInput
+          id="lambda234Input"
+          label="Lambda&nbsp;234:"
+          defaultValue={options[Option.LAMBDA_234]}
+          onSetValue={newValue => onOptionChanged(Option.LAMBDA_234, newValue)}
+        />
+      </div>
+      <div className={classes.formGroup}>
+        <LambdaInput
+          id="lambda235Input"
+          label="Lambda&nbsp;235:"
+          defaultValue={options[Option.LAMBDA_235]}
+          onSetValue={newValue => onOptionChanged(Option.LAMBDA_235, newValue)}
+        />
+      </div>
+      <div className={classes.formGroup}>
+        <LambdaInput
+          id="lambda238Input"
+          label="Lambda&nbsp;238:"
+          defaultValue={options[Option.LAMBDA_238]}
+          onSetValue={newValue => onOptionChanged(Option.LAMBDA_238, newValue)}
+        />
+      </div>
     </div>
   );
 };

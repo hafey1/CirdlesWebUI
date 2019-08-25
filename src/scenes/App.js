@@ -1,78 +1,95 @@
 // @flow
-import React, { Component } from "react";
-import Radium from "radium";
-import { Switch, Route, withRouter } from "react-router-dom";
-import { Header } from "components";
+import React, { Component, Fragment } from "react";
+import { Switch, Route, Link, NavLink } from "react-router-dom";
 import Home from "./Home";
 import Squid from "./Squid";
 import Ambapo from "./Ambapo";
 import Topsoil from "./Topsoil";
-import { HEADER_HEIGHT } from "constants";
+import squidLogo from "../img/logos/Squid.svg";
+import ambapoLogo from "../img/logos/Ambapo.svg";
+import topsoilLogo from "../img/logos/Topsoil.svg";
 import { colors } from "constants";
 
-const routes = {
-  "/": {
+import "styles/index.scss";
+
+const routes = [
+  {
+    path: "/",
     title: "CIRDLES Web Services",
     exact: true,
-    component: Home
+    component: Home,
+    logo: null
   },
-  "/ambapo": {
+  {
+    path: "/ambapo",
     title: "Ambapo",
-    component: Ambapo
+    component: Ambapo,
+    logo: ambapoLogo
   },
-  "/squid": {
+  {
+    path: "/squid",
     title: "Squid Ink: Squid's Reporting Service (Beta)",
-    component: Squid
+    component: Squid,
+    logo: squidLogo
   },
-  "/topsoil": {
+  {
+    path: "/topsoil",
     title: "Topsoil",
-    component: Topsoil
+    component: Topsoil,
+    logo: topsoilLogo
   }
-};
+];
 
-type Props = {
-  history: any
-};
+const Header = ({ title, logo }) => {
+  const image = logo ? (
+    <img src={logo} width="30" height="30" alt={`${title} logo`} className="d-inline-block align-top mr-2" />
+  ) : null;
+  return (
+    <nav className="navbar navbar-light bg-light">
+      <div className="container">
+        <Link className="navbar-brand" to="#">
+          {image}
+          {title}
+        </Link>
+        <div className="navbar-nav flex-row ml-auto">
+            <NavLink className="nav-item nav-link ml-4" to="/"><strong>Home</strong></NavLink>
+            <NavLink className="nav-item nav-link ml-4" to="/squid">Squid</NavLink>
+            <NavLink className="nav-item nav-link ml-4" to="/ambapo">Ambapo</NavLink>
+            <NavLink className="nav-item nav-link ml-4" to="/topsoil">Topsoil</NavLink>
+          </div>
+      </div>
+    </nav>
+  );
+}
 
-type State = {
-  title: string
-};
-class App extends Component<Props, State> {
-  constructor(props: any) {
-    super(props);
-    this.state = { title: routes[props.history.location.pathname].title };
-    const _this: any = this;
-    _this.wrapperClicked = this.wrapperClicked.bind(this);
-    props.history.listen(l =>
-      this.setState({ title: routes[l.pathname].title })
-    );
-  }
-
-  header;
-
-  wrapperClicked(e: Event) {
-    this.header && this.header.closeMenu();
-  }
+class App extends Component {
 
   render() {
-    const { title } = this.state;
-    let routeComponents = [];
-    for (const route in routes) {
-      const data = routes[route];
-      routeComponents.push(
-        <Route
-          key={route}
-          path={route}
-          exact={data.exact}
-          component={data.component}
-        />
-      );
-    }
     return (
-      <div style={styles.wrapper} onClick={this.wrapperClicked}>
-        <Header ref={header => (this.header = header)} title={title} />
+      <div style={styles.wrapper}>
+        {routes.map(route => {
+          const { title, path, exact } = route;
+          return (
+            <Route 
+              key={title + "-header-route"}
+              path={path}
+              exact={exact}
+              render={() => Header(route)}
+            />
+          );
+        })}
         <main style={styles.body}>
-          <Switch>{routeComponents}</Switch>
+          <Switch>
+            {routes.map(route => {
+              const { title, ...rest } = route;
+              return (
+                <Route
+                  key={title + "-main-route"}
+                  {...rest}
+                />
+              );
+            })}
+          </Switch>
         </main>
       </div>
     );
@@ -81,18 +98,19 @@ class App extends Component<Props, State> {
 
 const styles = {
   wrapper: {
-    height: "100%",
+    height: "100vh",
     width: "100%",
-    backgroundColor: colors.primary
+    backgroundColor: colors.primary,
   },
   body: {
-    padding: `${HEADER_HEIGHT + 10}px 10px 10px 10px`,
     position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
+    top: "3.5em",
+    right: "0",
+    bottom: "0",
+    left: "0",
+    overflow: "auto",
+    backgroundColor: colors.primary,
   }
 };
 
-export default withRouter(Radium(App));
+export default App;

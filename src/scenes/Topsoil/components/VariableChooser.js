@@ -1,39 +1,7 @@
 // @flow
 import React, { Component } from "react";
 import { Variable } from "topsoil-js";
-import { Select, Collapse } from "components";
-
-const styles = {
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 15em",
-    width: "100%",
-    height: "100%"
-  },
-  varList: {
-    gridColumn: 1,
-    padding: "0.5em",
-    overflow: "auto"
-  },
-  varListItem: {
-    margin: "0.5em"
-  },
-  selectionList: {
-    gridColumn: 2,
-    margin: 0,
-    padding: "0.5em",
-    listStyle: "none",
-    border: "1px solid #ccc",
-    overflow: "auto"
-  },
-  selectionListItem: {
-    margin: "0.5em"
-  },
-  errorMessage: {
-    color: "red",
-    marginLeft: "1em"
-  }
-}
+import { Collapse, LeftLabelledSelect } from "components/bootstrap";
 
 const numberVariables = [
   Variable.X,
@@ -177,7 +145,6 @@ class VariableChooser extends Component<Props, State> {
         selectionItems.push(
           <li 
             key={`${variable}-selected-item`}
-            style={styles.selectionListItem}
           >
             {`${variable} => ${column}`}
           </li>
@@ -185,39 +152,46 @@ class VariableChooser extends Component<Props, State> {
       }
     }
 
-    let errorMessage;
-    if (this.state.submitInvalid) {
-
-    }
-
     return (
       <div>
-        <div style={styles.grid}>
-          <div style={styles.varList}>
-            {this.props.columns.map(column => {
-              if (column.columns) {
-                return this.renderParentColumnItem(column);
-              } else {
-                return this.renderLeafColumnItem(column);
-              }
-            })}
+        <div className="container">
+          <div className="row">
+            <div className="m-2 overflow-auto col">
+              {this.props.columns.map(column => {
+                if (column.columns) {
+                  return this.renderParentColumnItem(column);
+                } else {
+                  return this.renderLeafColumnItem(column);
+                }
+              })}
+            </div>
+            <ul className="col list-unstyled mx-0 mb-auto p-2 border border-dark overflow-auto rounded">
+              {selectionItems.length === 0 ? "No selections." : selectionItems}
+            </ul>
           </div>
-          <ul style={styles.selectionList}>
-            {selectionItems.length === 0 ? "No selections." : selectionItems}
-          </ul>
+          
         </div>
-        <br />
-        <Select
-          label="Error Format"
-          value={this.state.unctFormat}
-          onChange={this.handleChangeUnctFormat}
-        >
-          <option value="abs">abs</option>
-          <option value="%">%</option>
-        </Select>
-        <br />
-        <button onClick={this.handleSubmit}>Submit</button>
-        <span style={styles.errorMessage}>{this.state.errorMessage}</span>
+        <div className="row my-2">
+          <div className="col">
+            <LeftLabelledSelect
+              id="errorFormatSelect"
+              label="Error&nbsp;Format:"
+              value={this.state.unctFormat}
+              onChange={this.handleChangeUnctFormat}
+            >
+              <option value="abs">abs</option>
+              <option value="%">%</option>
+            </LeftLabelledSelect>
+          </div>
+        </div>
+        
+        <div className="row">
+          <div className="col text-center">
+            <button className="btn btn-outline-topsoil" onClick={this.handleSubmit}>Submit</button>
+            <span className="text-danger ml-3">{this.state.errorMessage}</span>
+          </div>
+        </div>
+        
       </div>
     );
   }
@@ -231,9 +205,10 @@ class VariableChooser extends Component<Props, State> {
     const { title: colName } = column;
     return (
       <Collapse
+        id={`${colName}-collapse`}
         key={`${colName}-collapse`}
-        collapsed={this.state.collapse[colName]}
         label={colName}
+        collapsed={this.state.collapse[colName]}
         onClick={() => this.handleToggleCollapse(colName)}
       >
         {column.columns.map(child => {
@@ -256,19 +231,18 @@ class VariableChooser extends Component<Props, State> {
     const { title: colName } = column,
           { selections } = this.state;
     return (
-      <Select
+      <LeftLabelledSelect
+        id={`${colName}-select`}
         key={`${colName}-select`}
-        label={colName}
+        label={colName + ":"}
         value={selections.hasOwnProperty(colName) ? selections[colName] : ""}
         onChange={event => this.handleSelectionChange(colName, event.target.value)}
-        style={{ margin: "10px" }}
       >
         <option key={`${colName}-option-default`} value=""></option>
         {numberVariables.map(v => <option key={`${colName}-option-${v}`} value={v}>{v}</option>)}
-      </Select>
+      </LeftLabelledSelect>
     );
   }
-
 
 }
 

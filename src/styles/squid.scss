@@ -1,0 +1,28 @@
+
+@import "../../node_modules/bootstrap/scss/functions.scss";
+@import "../../node_modules/bootstrap/scss/variables.scss";
+@import "../../node_modules/bootstrap/scss/mixins.scss";
+
+$squid: #3a4c88;
+
+.squid {
+  .form-control,
+  .custom-file input[type="file"].custom-file-input ~ .custom-file-label {
+    &:focus {
+      border-color: $squid;
+      box-shadow: $btn-box-shadow, 0 0 0 $btn-focus-width rgba(mix(color-yiq($squid), $squid, 15%), .5);
+    }
+  }
+  label,
+  h4 {
+    color: $squid;
+  }
+}
+
+.btn.btn-outline-squid {
+  @include button-outline-variant($squid, color-yiq($squid), $squid, $squid);
+}
+
+.border.border-squid {
+  border: 1px solid $squid !important;
+}

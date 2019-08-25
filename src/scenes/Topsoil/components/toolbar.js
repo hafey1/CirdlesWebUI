@@ -1,19 +1,7 @@
 // @flow
 import React, { Component } from 'react';
-import logo from "img/logos/Topsoil.svg";
-import { colors } from 'constants';
-import { Button } from 'components';
 
 const styles = {
-  toolbar: {
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "stretch",
-    maxWidth: "7.75em",
-    padding: "0.25em",
-    height: "calc(100% - 0.5em)"
-  },
   toolbarTail: {
     position: "absolute",
     bottom: 0,
@@ -22,65 +10,53 @@ const styles = {
     alignItems: "center",
     margin: "0.25em",
     width: "calc(100% - 1em)"
-  },
-  logo: {
-    backgroundImage: `url(${logo})`,
-    width: "5em",
-    height: "5em",
-    margin: "0.25em"
-  },
-  toolbarItem: {
-    margin: "0.25em"
-  },
-  tailLink: {
-    textAlign: "center",
-    margin: "0.25em 0"
-  },
-  separator: {
-    height: "0.2em",
-    margin: "0.25em",
-    backgroundColor: colors.darkGray
   }
 }
 
 type Props = {
-  style?: {},
-  children: []
+  children?: []
 }
 
 export class Toolbar extends Component<Props> {
 
   render() { 
-
     return (
-      <div style={styles.toolbar}>
+      <div className="position-relative">
         
-        {React.Children.map(this.props.children, child => {
-          return React.cloneElement(child);
-        })}
+        <ul className="nav flex-column align-items-stretch p-2">
+          {React.Children.map(this.props.children, child => {
+            return React.cloneElement(child);
+          })}
+        </ul>
 
         <div style={styles.toolbarTail}>
-          <div style={styles.logo} />
           <a
             href="http://cirdles.org/projects/topsoil/"
             target="_blank"
-            style={styles.tailLink}
+            className="text-center my-2"
           >
             CIRDLES.org
           </a>
           <a
             href="https://github.com/CIRDLES/Topsoil"
             target="_blank"
-            style={styles.tailLink}
+            className="text-center my-2"
           >
             GitHub
           </a>
           <a
             href="https://github.com/CIRDLES/CirdlesWebUI/issues/new"
             target="_blank"
-            style={styles.tailLink}
+            className="text-center my-2"
           >
             Report Issue
+          </a>
+          <a
+            href="https://github.com/CIRDLES/CirdlesWebUI/wiki/Topsoil"
+            target="_blank"
+            className="text-center my-2"
+          >
+            Help
           </a>
         </div>
       </div>
@@ -88,14 +64,21 @@ export class Toolbar extends Component<Props> {
   }
 }
 
-export const ToolbarSeparator = () => {
+export const ToolbarSpacer = () => {
   return (
-    <div style={styles.separator} />
+    <li className="nav-item m-2" />
   );
 }
 
-export const ToolbarButton = ({ onClick, text, ...rest }) => {
+export const ToolbarButton = ({ text, ...rest }) => {
   return (
-    <Button onClick={onClick} size={14} color={colors.topsoilDark} {...rest}>{text}</Button>
+    <li className="nav-item m-2">
+      <button
+        className="btn btn-sm btn-outline-topsoil rounded-pill w-100"
+        {...rest}
+      >
+        {text}
+      </button>
+    </li>
   );
 }

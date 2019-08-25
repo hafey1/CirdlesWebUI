@@ -12,9 +12,9 @@ import {
   VariableChooser,
   Toolbar,
   ToolbarButton,
-  ToolbarSeparator,
   TopsoilPlot,
-  TopsoilPlotPanel
+  TopsoilPlotPanel,
+  ToolbarSpacer
 } from "./components";
 import { DefaultOptions } from "./constants/defaults";
 import { SampleRows, SampleColumns } from "./constants/sample-data";
@@ -57,38 +57,10 @@ const styles = {
   loadIndicator: {
     padding: "0.5em 0.75em"
   },
-  pageContainer: {
-    position: "relative",
-    display: "flex",
-    flexDirection: "row",
-    height: "100%",
-    width: "100%"
-  },
-  toolbarButton: {
-    margin: "0.25em"
-  },
-  mainContainer: {
-    flexGrow: 1,
-    height: "calc(100% - 0.5em)",
-    maxWidth: "calc(100% - 7.75em)",
-    border: "0.25em solid " + colors.darkGray
-  },
-  mainSplit: {
-    position: "relative"
-  },
-  rightSplit: {
-    display: "inline-block",
-    position: "absolute",
-    top: 0,
-    height: "100%"
-  },
-  tableContainer: {
-    float: "left",
-    height: "calc(100% - 2px)"
-  },
+
   splitElement: (dimension, elementSize, gutterSize, index) => {
     const style = {};
-    style[dimension] = `calc(${elementSize}% - ${gutterSize + 1}px)`;
+    style[dimension] = `calc(${elementSize}% - ${gutterSize}px)`;
     return style;
   },
   splitGutter: (dimension, gutterSize, index) => {
@@ -96,18 +68,18 @@ const styles = {
       backgroundRepeat: "no-repeat",
       backgroundColor: colors.topsoilLight,
       backgroundPosition: "center",
-      border: "solid " + colors.topsoilDark,
-    }
+      border: "solid " + colors.topsoilDark
+    };
     style[dimension] = `${gutterSize}px`;
     if (dimension === "width") {
       style.display = "inline-block";
       style.height = "100%";
       style.borderWidth = "0 1px 0 1px";
-      style.backgroundImage = `url(${verticalGrip})`
+      style.backgroundImage = `url(${verticalGrip})`;
     } else {
-      style.width = "100%"
+      style.width = "100%";
       style.borderWidth = "1px 0 1px 0";
-      style.backgroundImage = `url(${horizontalGrip})`
+      style.backgroundImage = `url(${horizontalGrip})`;
     }
     return style;
   }
@@ -188,16 +160,20 @@ class TopsoilPage extends Component<{}, State> {
     table.rows = SampleRows;
     table.columns = SampleColumns;
     table.variables = {
-      "x": "207Pb*/235U",
-      "sigma_x": "±2σ (%)",
-      "y": "206Pb*/238U",
-      "sigma_y": "±2σ (%)(1)",
-      "rho": "corr coef"
+      x: "207Pb*/235U",
+      sigma_x: "±2σ (%)",
+      y: "206Pb*/238U",
+      sigma_y: "±2σ (%)(1)",
+      rho: "corr coef"
     };
     table.unctFormat = "%";
 
     const plot = { ...this.state.plot };
-    plot.data = calculatePlotData(table.rows, table.variables, table.unctFormat);
+    plot.data = calculatePlotData(
+      table.rows,
+      table.variables,
+      table.unctFormat
+    );
 
     this.setState({ table, plot });
   }
@@ -227,7 +203,7 @@ class TopsoilPage extends Component<{}, State> {
       data.append("tableFile", selectedTableFile);
       data.append("template", template);
 
-      const table = {...this.state.table};
+      const table = { ...this.state.table };
 
       axios
         .post(TOPSOIL_ENDPOINT, data)
@@ -274,7 +250,7 @@ class TopsoilPage extends Component<{}, State> {
   }
 
   handleClearPlot() {
-    const table = {...this.state.table};
+    const table = { ...this.state.table };
     table.variables = {};
     this.setState({ table }, this.handleUpdatePlotState);
   }
@@ -331,7 +307,7 @@ class TopsoilPage extends Component<{}, State> {
 
   handleUpdatePlotState(resetView) {
     const { rows, variables, unctFormat } = this.state.table,
-          plot = { ...this.state.plot };
+      plot = { ...this.state.plot };
     if (Object.entries(variables).length > 0) {
       plot.data = calculatePlotData(rows, variables, unctFormat);
       plot.options[Option.X_AXIS] = variables[Variable.X];
@@ -351,12 +327,16 @@ class TopsoilPage extends Component<{}, State> {
 
     let loader;
     if (this.state.loading) {
-      loader = <div style={styles.loadContainer}><span style={styles.loadIndicator}>Loading...</span></div>;
+      loader = (
+        <div style={styles.loadContainer}>
+          <span style={styles.loadIndicator}>Loading...</span>
+        </div>
+      );
     }
 
     return (
       <React.Fragment>
-        <div style={styles.pageContainer} className="topsoil-page">
+        <div className="topsoil p-2 h-100 w-100 mw-100 d-flex flex-row">
           <Modal
             isOpen={this.state.varChooserIsOpen}
             onRequestClose={this.handleCloseVarChooser}
@@ -403,38 +383,37 @@ class TopsoilPage extends Component<{}, State> {
           </Modal>
 
           <Toolbar>
-            <ToolbarButton 
+            <ToolbarButton
               text="Load Sample Data"
               onClick={this.handleLoadSampleData}
-              margin={styles.toolbarButton.margin}
             />
             <ToolbarButton
               text="Upload Data"
               onClick={this.handleOpenUploadForm}
-              margin={styles.toolbarButton.margin}
             />
             <ToolbarButton
               text="Clear Data"
               onClick={this.handleClearTableData}
               disabled={table.rows.length === 0}
-              margin={styles.toolbarButton.margin}
             />
-            <ToolbarSeparator />
+            <ToolbarSpacer />
             <ToolbarButton
               text="Generate Plot"
               onClick={this.handleOpenVarChooser}
               disabled={table.rows.length === 0}
-              margin={styles.toolbarButton.margin}
             />
             <ToolbarButton
               text="Clear Plot"
               onClick={this.handleClearPlot}
               disabled={Object.entries(table.variables).length === 0}
-              margin={styles.toolbarButton.margin}
             />
           </Toolbar>
 
-          <div style={styles.mainContainer}>
+          {/* Setting width will keep div from growing outside parent */}
+          <div
+            className="flex-grow-1 border border-dark rounded h-100"
+            style={{ width: "100px" }}
+          >
             <Split
               sizes={this.state.split.horizontal}
               direction="horizontal"
@@ -442,12 +421,12 @@ class TopsoilPage extends Component<{}, State> {
                 this.handleRefreshPlot();
               }}
               onDragEnd={this.handleHorizontalSplitSizeChange}
-              style={styles.mainSplit}
+              className="position-relative h-100"
               elementStyle={styles.splitElement}
               gutterSize={10}
               gutterStyle={styles.splitGutter}
             >
-              <div style={styles.tableContainer}>
+              <div className="float-left position-relative h-100">
                 <DataTable
                   ref={this.dataTable}
                   rows={table.rows || []}
@@ -463,7 +442,7 @@ class TopsoilPage extends Component<{}, State> {
                   this.handleRefreshPlot();
                 }}
                 onDragEnd={this.handleVerticalSplitSizeChange}
-                style={styles.rightSplit}
+                className="position-absolute d-inline-block h-100"
                 elementStyle={styles.splitElement}
                 gutterSize={10}
                 gutterStyle={styles.splitGutter}
@@ -495,7 +474,9 @@ function calculatePlotData(rows, variables, unctFormat, rtnval) {
   rtnval = rtnval || [];
   rows.forEach(row => {
     if (row._children) {
-      rtnval.concat(calculatePlotData(row._children, variables, unctFormat, rtnval));
+      rtnval.concat(
+        calculatePlotData(row._children, variables, unctFormat, rtnval)
+      );
     } else {
       const entry = {};
       let colName;

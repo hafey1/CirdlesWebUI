@@ -1,110 +1,13 @@
-$background: #cfd8dc;
-
-*{
-  --squidColor: #3a4c88;
-}
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
 html, 
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
   height: 100%;
   width: 100%;
 }
-.center-div
-{
-  position: absolute;
-  margin: auto;
-  top: 50;
-  right: 0;
-  bottom: 0;
-  left: 25;
-  width: 575px;
-  height: 500px;
-  background-color: $background;
-  border: 5px solid #3a4c88;
-  border-radius: 20px;
-  padding:20px;
-}
 
-.progress-bar{
-  position: relative;
-  height: 10px;
-  width: 550px;
-  border-radius: 50px;
-  border: 1px solid #3a4c88;
-  margin: 10px;
+.project-card .card-img-overlay>.streched-link:hover {
+  opacity: 1;
 }
-
-.filler{
-  background: #3a4c88;
-  height: 100%;
-  border-radius: inherit;
-  transition: width .2s ease-in;
-}
-
-input[type=file] {
-  padding:5px; 
-  border:1px solid #3a4c88; 
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  width: 350px;
-}
-
-input[type=text] {
-  padding:5px; 
-  border:1px solid #3a4c88;
-  width: 100px; 
-}
-
-.btn {
-  border: 2px solid #3a4c88;
-  background-color: white;
-  color: 3a4c88;
-  padding: 14px 28px;
-  font-size: 16px;
-  cursor: pointer;
-  position: relative;
-  margin-left: 2%;
-  margin-right: 2%
-}
-
-/* Green */
-.upload {
-  border-color: #3a4c88;
-  color: #3a4c88;
-}
-
-.upload:hover {
-  background-color: #3a4c88;
-  color: white;
-}
-
-.tab-pane {
-  background-color: #ccc;
-}
-.tab-list {
-  border-bottom: 1px solid #ccc;
-  margin: 0;
-  padding-top: 0.25em;
-  padding-left: 0.25em;
-}
-.tab-label {
-  display: inline-block;
-  list-style: none;
-  border: solid #888;
-  border-width: 1px 1px 0 1px;
-  margin-bottom: -1px;
-  padding: 0.5em 0.75em;
-  background-color: #ddd;
-}
-.tab-label.active {
-  background-color: #eee;
-}
-.tab-content {
-  background-color: #eee;
-  overflow: auto;
-  height: calc(100% - 2.5em);
-}
-

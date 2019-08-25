@@ -1,8 +1,8 @@
-export { default as UploadForm } from "./upload-form"
-export { default as VariableChooser } from "./variable-chooser";
+export { default as UploadForm } from "./UploadForm"
+export { default as VariableChooser } from "./VariableChooser";
 
-export * from "./data-table/data-table";
+export * from "./data-table";
 
-export { default as TopsoilPlot } from "./topsoil-plot";
+export { default as TopsoilPlot } from "./TopsoilPlot";
 export { TopsoilPlotPanel } from "./plot-panel";
 export * from "./toolbar";

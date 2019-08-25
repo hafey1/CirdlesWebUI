@@ -89,7 +89,7 @@ export class DataTable extends Component<Props> {
 
   render() { 
     return (
-      <div ref={this.tabulatorRef} className="data-table" />
+      <div ref={this.tabulatorRef} className="data-table rounded w-100" />
     );
   }
 
