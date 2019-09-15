@@ -21,17 +21,17 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [
-      { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
+    rules: [
+      { test: /\.jsx?$/, use: 'babel-loader', exclude: /node_modules/ },
       {
         test: /^(?!.*?\.module).*\.scss$/,
         include: path.appSrc,
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.module\.scss$/,
         include: path.appSrc,
-        loaders: [
+        use: [
           'style-loader',
           {
             loader: 'css-loader',
@@ -44,7 +44,7 @@ module.exports = {
       },
       {
         test: /\.(jpg|png|svg)$/,
-        loader: 'file-loader'
+        use: 'file-loader'
       }
     ]
   },
