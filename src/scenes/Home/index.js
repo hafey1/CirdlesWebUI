@@ -2,7 +2,7 @@
 import React from 'react';
 import Radium from 'radium';
 import { ProjectCard } from 'components';
-import { SQUID, AMBAPO, TOPSOIL } from 'constants';
+import { SQUID, AMBAPO, TOPSOIL, MARS } from 'constants';
 
 type Props = {
   history: any
@@ -34,6 +34,13 @@ const HomePage = ({ history }: Props) => {
           width={300}
           height={300}
           onClick={() => history.push('/topsoil')}
+          style={{ margin: 40 }}
+        />
+        <ProjectCard
+          description={MARS.description}
+          logo={require('img/logos/Mars.svg')}
+          width={300}
+          height={300}
           style={{ margin: 40 }}
         />
       </div>

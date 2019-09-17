@@ -43,8 +43,6 @@ module.system=haste
 
 emoji=true
 
-experimental.strict_type_args=true
-
 munge_underscores=true
 
 module.file_ext=.js
@@ -70,7 +68,5 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(>=0\\.\\(5[0-7]\\|[1-4][0-9]\\|
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
 suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
-unsafe.enable_getters_and_setters=true
-
 [version]
-^0.57.0
+^0.107.0
