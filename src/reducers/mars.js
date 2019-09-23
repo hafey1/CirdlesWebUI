@@ -13,6 +13,7 @@ import {
 export default function(state = {}, action) {
   switch (action.type) {
     case AUTHENTICATED:
+      console.log(state);
       return {
         ...state,
         authenticated: true,
@@ -21,6 +22,7 @@ export default function(state = {}, action) {
         password: action.password
       };
     case UNAUTHENTICATED:
+      console.log(state);
       return { ...state, authenticated: false };
     case AUTHENTICATION_ERROR:
       return { ...state, error: action.payload };

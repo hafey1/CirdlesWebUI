@@ -1,8 +1,8 @@
 // @flow
-import React from 'react';
-import Radium from 'radium';
-import { ProjectCard } from 'components';
-import { SQUID, AMBAPO, TOPSOIL, MARS } from 'constants';
+import React from "react";
+import Radium from "radium";
+import { ProjectCard } from "components";
+import { SQUID, AMBAPO, TOPSOIL, MARS } from "constants";
 
 type Props = {
   history: any
@@ -14,33 +14,34 @@ const HomePage = ({ history }: Props) => {
       <div style={styles.cardWrapper}>
         <ProjectCard
           description={SQUID.description}
-          logo={require('img/logos/Squid.svg')}
+          logo={require("img/logos/Squid.svg")}
           width={300}
           height={300}
-          onClick={() => history.push('/squid')}
+          onClick={() => history.push("/squid")}
           style={{ margin: 40 }}
         />
         <ProjectCard
           description={AMBAPO.description}
-          logo={require('img/logos/Ambapo.svg')}
+          logo={require("img/logos/Ambapo.svg")}
           width={300}
           height={300}
-          onClick={() => history.push('/ambapo')}
+          onClick={() => history.push("/ambapo")}
           style={{ margin: 40 }}
         />
-        <ProjectCard 
+        <ProjectCard
           description={TOPSOIL.description}
-          logo={require('img/logos/Topsoil.svg')}
+          logo={require("img/logos/Topsoil.svg")}
           width={300}
           height={300}
-          onClick={() => history.push('/topsoil')}
+          onClick={() => history.push("/topsoil")}
           style={{ margin: 40 }}
         />
         <ProjectCard
           description={MARS.description}
-          logo={require('img/logos/Mars.svg')}
+          logo={require("img/logos/Mars.svg")}
           width={300}
           height={300}
+          onClick={() => history.push("/mars")}
           style={{ margin: 40 }}
         />
       </div>
@@ -50,15 +51,15 @@ const HomePage = ({ history }: Props) => {
 
 const styles = {
   home: {
-    height: '100%'
+    height: "100%"
   },
   cardWrapper: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 };
 

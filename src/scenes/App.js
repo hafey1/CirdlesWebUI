@@ -5,9 +5,11 @@ import Home from "./Home";
 import Squid from "./Squid";
 import Ambapo from "./Ambapo";
 import Topsoil from "./Topsoil";
+import Mars from "./Mars";
 import squidLogo from "../img/logos/Squid.svg";
 import ambapoLogo from "../img/logos/Ambapo.svg";
 import topsoilLogo from "../img/logos/Topsoil.svg";
+import marslogo from "../img/logos/Mars.svg";
 import { colors } from "constants";
 
 import "styles/index.scss";
@@ -38,6 +40,12 @@ const routes = [
     title: "Topsoil",
     component: Topsoil,
     logo: topsoilLogo
+  },
+  {
+    path: "/mars",
+    title: "MARS",
+    component: Mars,
+    logo: marslogo
   }
 ];
 
@@ -70,6 +78,9 @@ const Header = ({ title, logo }) => {
           </NavLink>
           <NavLink className="nav-item nav-link ml-4" to="/topsoil">
             Topsoil
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/mars">
+            MARS
           </NavLink>
         </div>
       </div>

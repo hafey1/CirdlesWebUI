@@ -15,7 +15,7 @@ for (let endpoint of endpoints) {
 }
 
 module.exports = {
-  entry: ["./src/index.js"],
+  entry: ["babel-polyfill", "./src/index.js"],
   output: {
     path: path.resolve("dist"),
     filename: "bundle.js"
@@ -45,6 +45,13 @@ module.exports = {
       {
         test: /\.(jpg|png|svg)$/,
         use: "file-loader"
+      },
+      {
+        test: /\.worker\.js$/,
+        use: {
+          loader: "worker-loader",
+          options: { inline: true, fallback: false }
+        }
       }
     ]
   },
