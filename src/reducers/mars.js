@@ -45,8 +45,8 @@ export default function(state = {}, action) {
       for (let i = 0; i < results.length; i++) {
         let index = selectedSamples[i];
         let igsn = {
-          originalKey: "",
-          originalValue: "",
+          originalKey: "igsn",
+          originalValue: results[i].igsn,
           key: "igsn",
           value: results[i].igsn
         };

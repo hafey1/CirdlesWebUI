@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import { signInAction } from "../../../../actions/mars";
 import { Form, Field, reduxForm } from "redux-form";
-
+import "../../../../styles/mars.scss";
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
     <label>{label}</label>
@@ -39,7 +39,7 @@ class LogIn extends Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <div className="form">
+      <div className="inoutform">
         <div className="container">
           <h2>GeoPass Login</h2>
           <Form onSubmit={handleSubmit(this.submit)}>
@@ -55,7 +55,7 @@ class LogIn extends Component {
               type="password"
               placeholder="password"
             />
-            <button type="submit" className="btn btn-primary btn-md login">
+            <button type="submit" className="btn btn-primary btn-md inbutton">
               Login
             </button>
           </Form>

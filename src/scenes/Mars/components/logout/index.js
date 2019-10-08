@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { signOutAction } from "../../../../actions/mars";
-
+import "../../../../styles/mars.scss";
 //TODO: Fix CSS
 class LogOut extends Component {
   signOut() {
@@ -10,9 +10,9 @@ class LogOut extends Component {
 
   render() {
     return (
-      <div className="signout">
+      <div className="inoutform">
         <button
-          className="btn btn-danger btn-lg logout"
+          className="btn btn-danger btn-lg outbutton"
           onClick={() => this.signOut()}
         >
           Sign Out

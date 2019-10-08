@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+import "../../../../styles/mars.scss";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import MUIDataTable from "mui-datatables";
@@ -41,6 +41,7 @@ class Upload extends Component {
       rowData: [],
       columnDefs: [],
       originalKeys: [],
+      originalValues: [],
       uploadSamples: []
     };
 
@@ -70,6 +71,7 @@ class Upload extends Component {
   createTable(uploadSamples) {
     var sesarKeys = new Set();
     var rowData = [];
+    var originalValues = [];
     var columnDefs = [];
     var originalKeys = [];
 
@@ -116,6 +118,28 @@ class Upload extends Component {
       this.setState({ rowData });
     }
 
+    for (let i = 0; i < uploadSamples.length; i++) {
+      var keyValue = {};
+
+      for (let j = 0; j < originalKeys.length; j++) {
+        var keyData = originalKeys[j];
+        console.log("Key data: ", keyData);
+        var data = uploadSamples[i]
+          .filter(x => {
+            console.log(x);
+            return x.originalKey === originalKeys[j];
+          })
+          .map(x => {
+            return x.originalValue;
+          });
+        console.log("data: ", data);
+        keyValue[keyData] = data[0];
+      }
+
+      originalValues = [...originalValues, keyValue];
+      this.setState({ originalValues });
+    }
+
     //create columnDefs based on the keys
     for (let i = 0; i < sesarKeys.length; i++) {
       columnDefs.push(sesarKeys[i]);
@@ -143,6 +167,7 @@ class Upload extends Component {
   render() {
     const { classes } = this.props;
     var rows = this.state.uploadSamples;
+    console.log(this.state);
 
     let theme = createMuiTheme({
       overrides: {
@@ -223,12 +248,12 @@ class Upload extends Component {
           <div className="container">
             <div id="left"></div>
 
-            <div className="center">
+            <div className="centercontainer">
               <MuiThemeProvider theme={theme}>
                 <MUIDataTable
                   title={"Sample Data"}
-                  data={this.state.rowData}
-                  columns={this.state.columnDefs}
+                  data={this.state.originalValues}
+                  columns={this.state.originalKeys}
                   options={options}
                 />
               </MuiThemeProvider>

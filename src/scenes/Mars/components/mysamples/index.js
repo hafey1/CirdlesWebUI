@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
 import MUIDataTable from "mui-datatables";
+import "../../../../styles/mars.scss";
 import {
   withStyles,
   createMuiTheme,
@@ -176,13 +177,13 @@ class MySamples extends Component {
     } else {
       return (
         <div style={{ width: "100%", height: "100%" }}>
-          <div className="container">
+          <div className="centercontainer">
             <div id="left"></div>
             <div className="center">
               <div className="center">
                 <MuiThemeProvider theme={theme}>
                   <MUIDataTable
-                    title={"My Samples"}
+                    title={"My Samples from SESAR"}
                     data={this.state.rowData}
                     columns={this.state.columnDefs}
                     options={options}

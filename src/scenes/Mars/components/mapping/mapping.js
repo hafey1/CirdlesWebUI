@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Panel from "../panel";
+import "../../../../styles/mars.scss";
 
 class Mapping extends Component {
   constructor(props) {
