@@ -71,11 +71,15 @@ class MarsPage extends Component {
         </header>
         <main>
           <Route exact path="/mars" component={noRequireAuth(HomePage)} />
-          <Route path="/mars/login" component={noRequireAuth(LogIn)} />
-          <Route path="/mars/mysamples" component={requireAuth(MySamples)} />
-          <Route path="/mars/logout" component={requireAuth(LogOut)} />
-          <Route path="/mars/mapping" component={requireAuth(Mapping)} />
-          <Route path="/mars/upload" component={requireAuth(Upload)} />
+          <Route exact path="/mars/login" component={noRequireAuth(LogIn)} />
+          <Route
+            exact
+            path="/mars/mysamples"
+            component={requireAuth(MySamples)}
+          />
+          <Route exact path="/mars/logout" component={requireAuth(LogOut)} />
+          <Route exact path="/mars/mapping" component={requireAuth(Mapping)} />
+          <Route exact path="/mars/upload" component={requireAuth(Upload)} />
         </main>
       </div>
     );
