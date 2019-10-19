@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { signOutAction } from "../../../../actions/mars";
+import marsbackground from "img/marsBackground.jpg";
 import "../../../../styles/mars.scss";
 //TODO: Fix CSS
 class LogOut extends Component {
@@ -10,7 +11,10 @@ class LogOut extends Component {
 
   render() {
     return (
-      <div className="inoutform">
+      <div
+        className="inoutform"
+        style={{ backgroundImage: `url(${marsbackground})` }}
+      >
         <button
           className="btn btn-danger btn-lg outbutton"
           onClick={() => this.signOut()}

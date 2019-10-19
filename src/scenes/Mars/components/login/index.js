@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import { signInAction } from "../../../../actions/mars";
 import { Form, Field, reduxForm } from "redux-form";
+import marsbackground from "img/marsBackground.jpg";
 import "../../../../styles/mars.scss";
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
@@ -39,7 +40,10 @@ class LogIn extends Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <div className="inoutform">
+      <div
+        className="inoutform"
+        style={{ backgroundImage: `url(${marsbackground})` }}
+      >
         <div className="container">
           <h2>GeoPass Login</h2>
           <Form onSubmit={handleSubmit(this.submit)}>
