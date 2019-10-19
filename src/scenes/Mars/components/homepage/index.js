@@ -6,7 +6,7 @@ class HomePage extends Component {
     return (
       <div className="home">
         <div className="header">
-          MARS
+          MARS BETA
           <div className="subtitle">
             Middleware for Assisting the Registration of Samples
           </div>

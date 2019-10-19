@@ -64,7 +64,7 @@ class MarsPage extends Component {
         <header>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <Link className="navbar-brand" to="/mars">
-              Mars
+              MARS BETA
             </Link>
             <div>{this.navbarLinks()}</div>
           </nav>
