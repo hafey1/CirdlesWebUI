@@ -23,7 +23,15 @@ export default function(state = {}, action) {
       };
     case UNAUTHENTICATED:
       console.log(state);
-      return { ...state, authenticated: false };
+      return {
+        ...state,
+        authenticated: false,
+        samples: null,
+        sourceFiles: null,
+        username: null,
+        password: null,
+        usercode: null
+      };
     case AUTHENTICATION_ERROR:
       return { ...state, error: action.payload };
     case CHANGE_SOURCE_FILE:

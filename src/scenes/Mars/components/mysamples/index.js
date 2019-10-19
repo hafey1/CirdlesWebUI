@@ -183,7 +183,7 @@ class MySamples extends Component {
               <div className="center">
                 <MuiThemeProvider theme={theme}>
                   <MUIDataTable
-                    title={"My Samples from SESAR"}
+                    title={"My Samples from SESAR Development Server"}
                     data={this.state.rowData}
                     columns={this.state.columnDefs}
                     options={options}

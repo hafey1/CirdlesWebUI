@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Panel from "../panel";
+import Modal from "../modal";
 import "../../../../styles/mars.scss";
 
 class Mapping extends Component {
@@ -61,13 +62,15 @@ class Mapping extends Component {
         );
       } else if (this.props.uploadSamples) {
         return (
-          <button
-            type="button"
-            className="submitButton"
-            onClick={this.handleContinue}
-          >
-            Continue with Data Mapping
-          </button>
+          <div>
+            <button
+              type="button"
+              className="submitButton"
+              onClick={this.handleContinue}
+            >
+              Continue with Data Mapping
+            </button>
+          </div>
         );
       }
     };
