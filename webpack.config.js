@@ -17,8 +17,9 @@ for (let endpoint of endpoints) {
 module.exports = {
   entry: ["babel-polyfill", "./src/index.js"],
   output: {
-    path: path.resolve("dist"),
-    filename: "bundle.js"
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    publicPath: "/"
   },
   module: {
     rules: [
@@ -44,7 +45,10 @@ module.exports = {
       },
       {
         test: /\.(jpg|png|svg)$/,
-        use: "file-loader"
+        use: {
+          loader: "file-loader",
+          options: { name: "[path][name].[ext]", useRelativePaths: true }
+        }
       },
       {
         test: /\.worker\.js$/,

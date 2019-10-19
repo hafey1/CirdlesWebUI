@@ -1,10 +1,14 @@
 import React, { Component } from "react";
+import marsbackground from "img/marsBackground.jpg";
 import "../../../../styles/mars.scss";
 
 class HomePage extends Component {
   render() {
     return (
-      <div className="home">
+      <div
+        className="home"
+        style={{ backgroundImage: `url(${marsbackground})` }}
+      >
         <div className="header">
           MARS BETA
           <div className="subtitle">
