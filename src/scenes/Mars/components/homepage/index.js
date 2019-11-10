@@ -14,6 +14,10 @@ class HomePage extends Component {
           <div className="subtitle">
             Middleware for Assisting the Registration of Samples
           </div>
+          <div className="subtitleNotice">
+            NOTE: All samples are registered using our testbed and all IGSNs are
+            temporary.
+          </div>
         </div>
       </div>
     );

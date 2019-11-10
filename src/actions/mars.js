@@ -25,7 +25,6 @@ export function signInAction({ username, password }, history) {
       const formData = new FormData();
       formData.append("username", username);
       formData.append("password", password);
-      console.log("Formdata, ", formData);
       const res = await axios.post(`${SESAR_LOGIN}`, formData);
 
       //Format the api response to JSON to get the usercode data
