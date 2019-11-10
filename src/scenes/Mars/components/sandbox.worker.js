@@ -39,7 +39,8 @@ onmessage = e => {
 const readSourceMap = (mapFile, callback) => {
   let reader = new FileReader();
   reader.onload = e => {
-    let fileContents = Function(e.target.result)(); // rather than using eval, create a Function using the mapping file contents as the body
+    let fileContents = Function(e.target.result)();
+    // rather than using eval, create a Function using the mapping file contents as the body
     return callback(
       null,
       fileContents.map,
@@ -47,6 +48,7 @@ const readSourceMap = (mapFile, callback) => {
       fileContents.combinations
     );
   };
+
   reader.readAsText(mapFile);
 };
 
@@ -69,11 +71,10 @@ const combineFields = (combinations, map, uploadSamples) => {
         let filter = uploadSamples[i].filter(value =>
           map[key].includes(value.originalKey)
         );
-        // console.log(filter)
+
         let inverse = uploadSamples[i].filter(
           value => !map[key].includes(value.originalKey)
         );
-        //console.log("INVERSE: " + inverse)
         if (filter.length > 1) {
           let reduction = filter.reduce(
             (acc, field) => acc.concat([field.value]),
@@ -101,16 +102,12 @@ const combineFields = (combinations, map, uploadSamples) => {
 // createField is a helper function for all the loaders that builds each field
 // for MARS
 const createField = (key, originalValue, originalKey, logic) => {
-  //console.log("Create Field: " + " " + key, originalValue, originalKey, logic)
   if (!key) {
-    // console.log("Not Key: " + originalKey, originalValue)
-
     return {
       originalKey,
       originalValue
     };
   }
-  //console.log("True Key: " + originalKey, originalValue, key)
   return {
     originalKey,
     originalValue,

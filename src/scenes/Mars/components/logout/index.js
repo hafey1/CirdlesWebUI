@@ -19,7 +19,7 @@ class LogOut extends Component {
           className="btn btn-danger btn-lg outbutton"
           onClick={() => this.signOut()}
         >
-          Sign Out
+          Log Out
         </button>
       </div>
     );

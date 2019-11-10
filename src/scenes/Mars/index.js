@@ -21,7 +21,6 @@ class MarsPage extends Component {
   navbarLinks() {
     //Return these links if the user is authenticated
     if (this.props.authenticated) {
-      console.log(this.props);
       return (
         <ul className="nav">
           <li className="nav-item">
@@ -42,7 +41,6 @@ class MarsPage extends Component {
         </ul>
       );
     } else {
-      console.log(this.props);
       return (
         <ul className="nav">
           <li className="nav-item">
@@ -58,7 +56,6 @@ class MarsPage extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div>
         <header>
@@ -87,9 +84,9 @@ class MarsPage extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log("State: ", state);
   return {
-    authenticated: state.mars.authenticated
+    authenticated: state.mars.authenticated,
+    mapFile: state.mars.mapFile
   };
 }
 

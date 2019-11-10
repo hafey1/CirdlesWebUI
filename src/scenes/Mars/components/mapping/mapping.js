@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Panel from "../panel";
 import Modal from "../modal";
 import "../../../../styles/mars.scss";
+import * as localForage from "localforage";
 
 class Mapping extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class Mapping extends Component {
   }
 
   onChangeSourceMap(e) {
+    localForage.setItem("mapFile", e.target.files[0]);
     this.props.onChangeMapFileAction(e.target.files[0]);
   }
 
@@ -39,15 +41,24 @@ class Mapping extends Component {
 
   handleContinue(e) {
     e.preventDefault();
+    this.setState({ samples: true });
+    this.props.onProceed(this.props.mapFile, this.props.sourceFiles);
+    this.props.onChangeMapFileAction(localStorage.getItem("mapFile"));
     this.props.history.push("upload");
   }
 
+  getLocalStoarage() {
+    return localForage.getItem("mapFile");
+  }
+
   render() {
+    let mapFile = this.getLocalStoarage();
+
     const displayProceed = () => {
       if (
         this.props.mapFile &&
         this.props.sourceFiles &&
-        !this.props.uploadSamples | (this.state.samples === false)
+        !this.props.uploadSamples
       ) {
         return (
           <div>
@@ -60,13 +71,14 @@ class Mapping extends Component {
             </button>
           </div>
         );
-      } else if (this.props.uploadSamples) {
+      }
+      if (mapFile && this.props.sourceFiles && this.props.uploadSamples) {
         return (
           <div>
             <button
               type="button"
-              className="submitButton"
               onClick={this.handleContinue}
+              className="btn btn-danger"
             >
               Continue with Data Mapping
             </button>

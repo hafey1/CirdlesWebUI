@@ -18,7 +18,6 @@ class LogIn extends Component {
   //Send login info to redux actions
 
   submit = values => {
-    console.log(this.props.history);
     this.props.signInAction(values, this.props.history);
   };
 
