@@ -36,7 +36,8 @@ class MySamples extends Component {
     this.state = {
       columnDefs: ["IGSN", "Name", "Latitude", "Longitude", "Elevation"],
       rowData: [{}],
-      loading: true
+      loading: true,
+      samples: true
     };
 
     this.sendRequest = this.sendRequest.bind(this);
@@ -125,9 +126,8 @@ class MySamples extends Component {
         console.log(error);
         if (error.response.status === 404) {
           console.log("error 404");
-          var pageBeforeError = this.state.page_no - 1;
-          this.setState({ page_no: pageBeforeError });
-          this.sendRequest(0);
+          this.setState({ loading: false });
+          this.setState({ samples: false });
         }
       });
   }
@@ -174,7 +174,7 @@ class MySamples extends Component {
           </div>
         </div>
       );
-    } else {
+    } else if (this.state.loading === false && this.state.samples === true) {
       return (
         <div style={{ width: "100%", height: "100%" }}>
           <div className="centercontainer">
@@ -192,6 +192,17 @@ class MySamples extends Component {
               </div>
             </div>
             <div id="right"></div>
+          </div>
+        </div>
+      );
+    } else if (this.state.loading === false && this.state.samples === false) {
+      return (
+        <div className="wrapperDiv">
+          <div className="wapperCenter">
+            <h1 className="nosampleNotice">No Samples Yet</h1>
+            <h1 className="nosampleNotice">
+              Click on Mapping to Begin Sample Registration
+            </h1>
           </div>
         </div>
       );
