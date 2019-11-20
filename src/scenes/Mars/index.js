@@ -1,11 +1,11 @@
 import { connect } from "react-redux";
 import React, { Component } from "react";
 import { Route, Link, Switch } from "react-router-dom";
-
+import { signOutAction } from "../../actions/mars";
 import HomePage from "./components/homepage";
 //scenes
 import LogIn from "./components/login";
-import LogOut from "./components/logout";
+
 import MySamples from "./components/mysamples";
 import requireAuth from "./components/higherOrderComponents/require_auth";
 import noRequireAuth from "./components/higherOrderComponents/no_require_auth";
@@ -34,9 +34,13 @@ class MarsPage extends Component {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/mars/logout">
+            <button
+              type="button"
+              className="nav-link"
+              onClick={() => this.props.signOutAction()}
+            >
               Log Out
-            </Link>
+            </button>
           </li>
         </ul>
       );
@@ -74,7 +78,7 @@ class MarsPage extends Component {
             path="/mars/mysamples"
             component={requireAuth(MySamples)}
           />
-          <Route exact path="/mars/logout" component={requireAuth(LogOut)} />
+
           <Route exact path="/mars/mapping" component={requireAuth(Mapping)} />
           <Route exact path="/mars/upload" component={requireAuth(Upload)} />
         </main>
@@ -90,4 +94,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MarsPage);
+export default connect(
+  mapStateToProps,
+  { signOutAction }
+)(MarsPage);

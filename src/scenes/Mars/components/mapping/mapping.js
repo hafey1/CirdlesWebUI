@@ -8,38 +8,39 @@ class Mapping extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      samples: false
+      samples: false,
+      mapFile: ""
     };
 
     this.onChangeSourceFiles = this.onChangeSourceFiles.bind(this);
-    this.onChangeSourceMap = this.onChangeSourceMap.bind(this);
     this.handleProceed = this.handleProceed.bind(this);
     this.handleContinue = this.handleContinue.bind(this);
+
+    this.mapFile = React.createRef();
+    this.sourceFiles = React.createRef();
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  onChangeSourceMap(e) {
-    localForage.setItem("mapFile", e.target.files[0]);
-    this.props.onChangeMapFileAction(e.target.files[0]);
-  }
-
-  onChangeSourceFiles(e) {
-    let fileList = e.target.files;
+  onChangeSourceFiles(fileList) {
     let sourceFiles = [];
     for (var i = 0; i < fileList.length; i++) {
       sourceFiles[i] = fileList[i];
     }
-    this.setState({ samples: false });
     this.props.onChangeSourceFileAction(sourceFiles);
   }
 
-  handleProceed(e) {
-    e.preventDefault();
-    this.setState({ samples: true });
-    this.props.onProceed(this.props.mapFile, this.props.sourceFiles);
+  handleProceed(mapFile, sourceFilesList) {
+    let sourceFiles = [];
+    for (var i = 0; i < sourceFilesList.length; i++) {
+      sourceFiles[i] = sourceFilesList[i];
+    }
+    console.log(sourceFiles);
+
+    this.props.onProceed(mapFile, sourceFiles);
     this.props.history.push("upload");
   }
 
-  handleContinue(e) {
+  handleContinue(mapFile, sourceFiles) {
     e.preventDefault();
     this.setState({ samples: true });
     this.props.onProceed(this.props.mapFile, this.props.sourceFiles);
@@ -51,10 +52,32 @@ class Mapping extends Component {
     return localForage.getItem("mapFile");
   }
 
+  setLocalStorage(mapFile) {
+    localForage.setItem("mapFile", mapFile);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    let mapFile = this.mapFile.current.files[0];
+    let sourceFilesList = this.sourceFiles.current.files;
+
+    if (this.mapFile.current.files.length === 0) {
+      alert("Please Select a Mapfile to Continue");
+    } else if (this.sourceFiles.current.files.length === 0) {
+      alert("Please Select at least 1 Source File to Continue");
+    } else {
+      this.setLocalStorage(mapFile);
+      this.onChangeSourceFiles(sourceFilesList);
+      this.props.onChangeMapFileAction(mapFile);
+      this.handleProceed(mapFile, sourceFilesList);
+    }
+  }
+
   render() {
+    console.log(this.props);
     let mapFile = this.getLocalStoarage();
 
-    const displayProceed = () => {
+    /*const displayProceed = () => {
       if (
         this.props.mapFile &&
         this.props.sourceFiles &&
@@ -85,29 +108,36 @@ class Mapping extends Component {
           </div>
         );
       }
-    };
+    };*/
 
     return (
       <div className="upload">
         <Panel name="Mapping Setup">
-          <div className="text">Select your Mapping File</div>
-          <input
-            className="inputs"
-            type="file"
-            name="file"
-            accept=".js"
-            onChange={e => this.onChangeSourceMap(e)}
-          />
-          <div className="text">Select your Sample Files</div>
-          <input
-            className="inputs"
-            type="file"
-            name="file"
-            accept=".csv"
-            multiple
-            onChange={e => this.onChangeSourceFiles(e)}
-          />
-          {displayProceed()}
+          <form onSubmit={this.handleSubmit}>
+            <label className="text">
+              Select your Mapping File
+              <input
+                className="inputs"
+                type="file"
+                accept="text/javascript"
+                ref={this.mapFile}
+              />
+            </label>
+
+            <label className="text">
+              Select your sourceFiles
+              <input
+                className="inputs"
+                type="file"
+                accept="text/csv"
+                multiple
+                ref={this.sourceFiles}
+              />
+            </label>
+            <button class="btn btn-primary" type="submit">
+              Proceed to Mapping
+            </button>
+          </form>
         </Panel>
       </div>
     );
