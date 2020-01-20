@@ -1,0 +1,284 @@
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+.subtitleNotice {
+  color: rgb(0, 255, 157);
+  font-size: 30px;
+}
+// =======================================
+//login and logout
+// =======================================
+.inoutform {
+  position: absolute;
+  color: white;
+  width: 100%;
+  height: 100%;
+
+  background-size: cover;
+  display: flex;
+  align-items: center;
+}
+.inbutton {
+  display: flex;
+  margin-top: 1rem;
+  flex: auto;
+}
+.outbutton {
+  display: flex;
+  margin-top: 1rem;
+  margin-left: 2rem;
+}
+// =======================================
+// mysamples
+// =======================================
+.centercontainer {
+  margin-top: 2rem;
+}
+.buttonGroup {
+  margin-top: 0.5em;
+  width: 70%;
+  font-size: 20px;
+}
+
+.buttonContainer {
+  margin: 0;
+  background-color: transparent;
+  text-align: center;
+}
+
+.samples {
+  width: 60%;
+  margin-bottom: 1em;
+  font-size: 20px;
+}
+
+.pageLabel {
+  margin: 0;
+  text-align: center;
+}
+
+.label {
+  margin-top: 0.5em;
+  font-size: 20px;
+  color: black;
+}
+// =======================================
+// mapping
+// =======================================
+.upload {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  justify-content: center;
+  margin: auto;
+  width: 80%;
+
+  margin-top: 10px;
+}
+
+.content {
+  text-align: center;
+}
+
+.text {
+  display: block;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #545859;
+  margin-top: 1.5em;
+  padding-bottom: 5px;
+}
+
+.center {
+  margin: auto;
+}
+
+.submitSection {
+  display: flex;
+
+  border-top: 2px solid #545859;
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+
+.submitButton {
+  font-weight: bold;
+  border-radius: 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  padding: 20px 20px;
+  font-size: 1em;
+  text-transform: uppercase;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.inputs {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
+// =======================================
+// panel
+// =======================================
+.panel {
+  background: white;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: flex;
+  flex-flow: column;
+}
+
+.headerPanel {
+  flex: auto;
+  background: #007bff;
+  border-radius: 10px 10px 0 0;
+  color: white;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 1em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.content {
+  flex: auto;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 830px) {
+  .header {
+    font-size: 50px;
+  }
+}
+
+@media only screen and (max-width: 515px) {
+  .header {
+    font-size: 35px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .header {
+    font-size: 25px;
+  }
+}
+// =======================================
+// upload
+// =======================================
+.outerDiv {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+}
+
+.uploadButton {
+  margin-top: 2em;
+
+  font-size: 20px;
+  width: 50%;
+}
+
+.buttonDiv {
+  margin: 0;
+  background-color: transparent;
+  text-align: center;
+}
+
+.buttonGroup {
+  margin-top: 0.5em;
+  width: 70%;
+  font-size: 20px;
+}
+
+.buttonContainer {
+  margin: 0;
+  background-color: transparent;
+  text-align: center;
+}
+
+.samples {
+  width: 60%;
+  margin-bottom: 1em;
+  font-size: 20px;
+}
+// =======================================
+// Homepage
+// =======================================
+.home {
+  position: absolute;
+  color: white;
+  width: 100%;
+  height: 100%;
+
+  background-size: cover;
+  display: flex;
+  align-items: center;
+}
+
+.header {
+  flex: auto;
+  font-size: 80px;
+  margin: auto;
+  text-align: center;
+  border-radius: 25px;
+}
+
+.subtitle {
+  font-size: 20px;
+}
+
+.backdrop {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 50;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 30;
+  color: black;
+  border-radius: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200;
+  height: 100;
+}
+
+.modal button {
+  text-align: right;
+  border: none;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.wrapperDiv {
+  position: relative;
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.wapperCenter {
+  margin-top: 20%;
+  font-size: 35px;
+}
+
+.nosampleNotice {
+  color: rgb(55, 14, 238);
+  font-size: 60px;
+}

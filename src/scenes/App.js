@@ -5,12 +5,15 @@ import Home from "./Home";
 import Squid from "./Squid";
 import Ambapo from "./Ambapo";
 import Topsoil from "./Topsoil";
+import Mars from "./Mars";
 import squidLogo from "../img/logos/Squid.svg";
 import ambapoLogo from "../img/logos/Ambapo.svg";
 import topsoilLogo from "../img/logos/Topsoil.svg";
+import marslogo from "../img/logos/Mars.svg";
 import { colors } from "constants";
 
 import "styles/index.scss";
+import { maxHeaderSize } from "http";
 
 const routes = [
   {
@@ -37,12 +40,24 @@ const routes = [
     title: "Topsoil",
     component: Topsoil,
     logo: topsoilLogo
+  },
+  {
+    path: "/mars",
+    title: "MARS",
+    component: Mars,
+    logo: marslogo
   }
 ];
 
 const Header = ({ title, logo }) => {
   const image = logo ? (
-    <img src={logo} width="30" height="30" alt={`${title} logo`} className="d-inline-block align-top mr-2" />
+    <img
+      src={logo}
+      width="30"
+      height="30"
+      alt={`${title} logo`}
+      className="d-inline-block align-top mr-2"
+    />
   ) : null;
   return (
     <nav className="navbar navbar-light bg-light">
@@ -52,25 +67,35 @@ const Header = ({ title, logo }) => {
           {title}
         </Link>
         <div className="navbar-nav flex-row ml-auto">
-            <NavLink className="nav-item nav-link ml-4" to="/"><strong>Home</strong></NavLink>
-            <NavLink className="nav-item nav-link ml-4" to="/squid">Squid</NavLink>
-            <NavLink className="nav-item nav-link ml-4" to="/ambapo">Ambapo</NavLink>
-            <NavLink className="nav-item nav-link ml-4" to="/topsoil">Topsoil</NavLink>
-          </div>
+          <NavLink className="nav-item nav-link ml-4" to="/">
+            <strong>Home</strong>
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/squid">
+            Squid
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/ambapo">
+            Ambapo
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/topsoil">
+            Topsoil
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/mars">
+            MARS
+          </NavLink>
+        </div>
       </div>
     </nav>
   );
-}
+};
 
 class App extends Component {
-
   render() {
     return (
       <div style={styles.wrapper}>
         {routes.map(route => {
           const { title, path, exact } = route;
           return (
-            <Route 
+            <Route
               key={title + "-header-route"}
               path={path}
               exact={exact}
@@ -82,12 +107,7 @@ class App extends Component {
           <Switch>
             {routes.map(route => {
               const { title, ...rest } = route;
-              return (
-                <Route
-                  key={title + "-main-route"}
-                  {...rest}
-                />
-              );
+              return <Route key={title + "-main-route"} {...rest} />;
             })}
           </Switch>
         </main>
@@ -100,7 +120,7 @@ const styles = {
   wrapper: {
     height: "100vh",
     width: "100%",
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primary
   },
   body: {
     position: "absolute",
@@ -109,7 +129,7 @@ const styles = {
     bottom: "0",
     left: "0",
     overflow: "auto",
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primary
   }
 };
 
