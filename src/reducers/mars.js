@@ -18,7 +18,8 @@ export default function(state = {}, action) {
         authenticated: true,
         username: action.username,
         usercode: action.usercode,
-        password: action.password
+        password: action.password,
+        error: ""
       };
     case UNAUTHENTICATED:
       return {
