@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
+import { Button, Menu, MenuItem, Popover, Typography } from "@material-ui/core";
+/*mport Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Popover from "@material-ui/core/Popover";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@material-ui/core/Typography";*/
 
 function SimpleMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
