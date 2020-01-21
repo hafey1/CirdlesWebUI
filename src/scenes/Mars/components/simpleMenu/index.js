@@ -5,7 +5,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
 
-export default function SimpleMenu() {
+function SimpleMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorPop, setAnchorPop] = React.useState(null);
 
@@ -89,3 +89,5 @@ export default function SimpleMenu() {
     </div>
   );
 }
+
+export default SimpleMenu;
