@@ -98,6 +98,16 @@ class MarsPage extends Component {
           <li className="nav-item">
             <SimpleMenu />
           </li>
+          <li className="nav-item">
+            <a
+              style={{ marginTop: "1px" }}
+              className="nav-link"
+              href="http://cirdles.org/projects/mars/"
+              target="_blank"
+            >
+              Help
+            </a>
+          </li>
         </ul>
       );
     } else {
