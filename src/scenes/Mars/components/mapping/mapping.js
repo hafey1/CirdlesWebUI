@@ -14,7 +14,6 @@ class Mapping extends Component {
 
     this.onChangeSourceFiles = this.onChangeSourceFiles.bind(this);
     this.handleProceed = this.handleProceed.bind(this);
-    this.handleContinue = this.handleContinue.bind(this);
 
     this.mapFile = React.createRef();
     this.sourceFiles = React.createRef();
@@ -40,22 +39,6 @@ class Mapping extends Component {
     this.props.history.push("upload");
   }
 
-  handleContinue(mapFile, sourceFiles) {
-    e.preventDefault();
-    this.setState({ samples: true });
-    this.props.onProceed(this.props.mapFile, this.props.sourceFiles);
-    this.props.onChangeMapFileAction(localStorage.getItem("mapFile"));
-    this.props.history.push("upload");
-  }
-
-  getLocalStoarage() {
-    return localForage.getItem("mapFile");
-  }
-
-  setLocalStorage(mapFile) {
-    localForage.setItem("mapFile", mapFile);
-  }
-
   handleSubmit(event) {
     event.preventDefault();
     let mapFile = this.mapFile.current.files[0];
@@ -66,7 +49,6 @@ class Mapping extends Component {
     } else if (this.sourceFiles.current.files.length === 0) {
       alert("Please Select at least 1 Source File to Continue");
     } else {
-      this.setLocalStorage(mapFile);
       this.onChangeSourceFiles(sourceFilesList);
       this.props.onChangeMapFileAction(mapFile);
       this.handleProceed(mapFile, sourceFilesList);
@@ -74,8 +56,11 @@ class Mapping extends Component {
   }
 
   render() {
+    //this.props.history.push("upload");
+    if (this.props.uploadSamples) {
+      this.props.history.push("upload");
+    }
     console.log(this.props);
-    let mapFile = this.getLocalStoarage();
 
     /*const displayProceed = () => {
       if (
@@ -134,7 +119,7 @@ class Mapping extends Component {
                 ref={this.sourceFiles}
               />
             </label>
-            <button class="btn btn-primary" type="submit">
+            <button className="btn btn-primary" type="submit">
               Proceed to Mapping
             </button>
           </form>
