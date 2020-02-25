@@ -35,6 +35,7 @@ class Mapping extends Component {
     }
     console.log(sourceFiles);
 
+    localForage.setItem("mapFile", mapFile);
     this.props.onProceed(mapFile, sourceFiles);
     this.props.history.push("upload");
   }
