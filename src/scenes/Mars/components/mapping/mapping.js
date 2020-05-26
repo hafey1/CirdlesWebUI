@@ -9,7 +9,7 @@ class Mapping extends Component {
     super(props);
     this.state = {
       samples: false,
-      mapFile: ""
+      mapFile: "",
     };
 
     this.onChangeSourceFiles = this.onChangeSourceFiles.bind(this);
@@ -57,44 +57,10 @@ class Mapping extends Component {
   }
 
   render() {
-    //this.props.history.push("upload");
     if (this.props.uploadSamples) {
       this.props.history.push("upload");
     }
     console.log(this.props);
-
-    /*const displayProceed = () => {
-      if (
-        this.props.mapFile &&
-        this.props.sourceFiles &&
-        !this.props.uploadSamples
-      ) {
-        return (
-          <div>
-            <button
-              type="button"
-              className="submitButton"
-              onClick={this.handleProceed}
-            >
-              Proceed to Data Mapping
-            </button>
-          </div>
-        );
-      }
-      if (mapFile && this.props.sourceFiles && this.props.uploadSamples) {
-        return (
-          <div>
-            <button
-              type="button"
-              onClick={this.handleContinue}
-              className="btn btn-danger"
-            >
-              Continue with Data Mapping
-            </button>
-          </div>
-        );
-      }
-    };*/
 
     return (
       <div className="upload">

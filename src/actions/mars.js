@@ -19,8 +19,8 @@ import {
   FETCH_USER,
   FETCH_SAMPLES,
 } from "./types";
+import { actionTypes } from "redux-form";
 
-var rowData = [];
 // Authentication actions
 export function signInAction({ username, password }, history) {
   return async (dispatch: any) => {
@@ -154,11 +154,7 @@ export const fetchUsercodeAndSamples = (usercode) => async (
 ) => {
   await dispatch(fetchUsercode(usercode));
 
-  rowData = [];
   let igsn_list = getState().mars.igsnResponseList.igsn_list;
-  /*
-    dispatch(fetchSamples(igsn_list[i], rowData));
-  }*/
 
   igsn_list.forEach((element) => {
     dispatch(fetchSamples(element));

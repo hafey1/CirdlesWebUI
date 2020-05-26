@@ -38,7 +38,6 @@ class MySamples extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.usercode);
     this.props.fetchUsercodeAndSamples(this.props.usercode);
   }
 
