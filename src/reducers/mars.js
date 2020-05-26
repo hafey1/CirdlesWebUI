@@ -7,29 +7,29 @@ import {
   INITIALIZE_SAMPLES,
   UPLOAD_REQUEST,
   UPLOAD_FAILURE,
-  UPLOAD_SUCCESS
+  UPLOAD_SUCCESS,
+  FETCH_USER,
+  FETCH_SAMPLES,
 } from "actions";
 
 export default function(state = {}, action) {
   switch (action.type) {
     case AUTHENTICATED:
       return {
-        ...state,
         authenticated: true,
         username: action.username,
         usercode: action.usercode,
         password: action.password,
-        error: ""
+        error: "",
+        sampleLoading: true,
       };
     case UNAUTHENTICATED:
       return {
-        ...state,
         authenticated: false,
-        samples: null,
-        sourceFiles: null,
-        username: null,
-        password: null,
-        usercode: null
+        usercode: "",
+        username: "",
+        error: "",
+        sampleLoading: true,
       };
     case AUTHENTICATION_ERROR:
       return { ...state, error: action.payload };
@@ -55,7 +55,7 @@ export default function(state = {}, action) {
           originalKey: "igsn",
           originalValue: results[i].igsn,
           key: "igsn",
-          value: results[i].igsn
+          value: results[i].igsn,
         };
         /*IGSN for each sample
         for each sample, the sample is equal to its
@@ -67,6 +67,23 @@ export default function(state = {}, action) {
     case UPLOAD_FAILURE:
       console.log("<==== Upload Failure ====>");
       return { ...state, loading: false };
+    case FETCH_USER:
+      console.log(state);
+      return { ...state, igsnResponseList: action.payload, mySamplesList: [] };
+    case FETCH_SAMPLES:
+      const igsn = action.payload.data.sample.igsn;
+      const sampleName = action.payload.data.sample.name;
+      const latitudes = action.payload.data.sample.latitude;
+      const longitudes = action.payload.data.sample.longitude;
+      const elevations = action.payload.data.sample.elevation;
+      return {
+        ...state,
+        mySamplesList: [
+          ...state.mySamplesList,
+          [igsn, sampleName, latitudes, longitudes, elevations],
+        ],
+        sampleLoading: false,
+      };
     default:
       return state;
   }
