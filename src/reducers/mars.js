@@ -22,6 +22,7 @@ export default function(state = {}, action) {
         password: action.password,
         error: "",
         sampleLoading: true,
+        mySamplesList: [],
       };
     case UNAUTHENTICATED:
       return {
@@ -30,9 +31,10 @@ export default function(state = {}, action) {
         username: "",
         error: "",
         sampleLoading: true,
+        mySamplesList: [],
       };
     case AUTHENTICATION_ERROR:
-      return { ...state, error: action.payload };
+      return { ...state, error: action.payload, mySamplesList: [] };
     case CHANGE_SOURCE_FILE:
       return { ...state, sourceFiles: action.sourceFiles };
     case CHANGE_MAP_FILE:
@@ -68,7 +70,6 @@ export default function(state = {}, action) {
       console.log("<==== Upload Failure ====>");
       return { ...state, loading: false };
     case FETCH_USER:
-      console.log(state);
       return { ...state, igsnResponseList: action.payload, mySamplesList: [] };
     case FETCH_SAMPLES:
       const igsn = action.payload.data.sample.igsn;
@@ -76,14 +77,19 @@ export default function(state = {}, action) {
       const latitudes = action.payload.data.sample.latitude;
       const longitudes = action.payload.data.sample.longitude;
       const elevations = action.payload.data.sample.elevation;
-      return {
-        ...state,
-        mySamplesList: [
-          ...state.mySamplesList,
-          [igsn, sampleName, latitudes, longitudes, elevations],
-        ],
-        sampleLoading: false,
-      };
+
+      if (state.mySamplesList.length < state.igsnResponseList.total_counts) {
+        return {
+          ...state,
+          mySamplesList: [
+            ...state.mySamplesList,
+            [igsn, sampleName, latitudes, longitudes, elevations],
+          ],
+          sampleLoading: false,
+        };
+      } else {
+        return { ...state, sampleLoading: false };
+      }
     default:
       return state;
   }
