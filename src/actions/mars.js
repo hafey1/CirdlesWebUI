@@ -15,8 +15,11 @@ import {
   INITIALIZE_SAMPLES,
   UPLOAD_FAILURE,
   UPLOAD_REQUEST,
-  UPLOAD_SUCCESS
+  UPLOAD_SUCCESS,
+  FETCH_USER,
+  FETCH_SAMPLES,
 } from "./types";
+import { actionTypes } from "redux-form";
 
 // Authentication actions
 export function signInAction({ username, password }, history) {
@@ -37,7 +40,7 @@ export function signInAction({ username, password }, history) {
         type: AUTHENTICATED,
         username: username,
         usercode: usercode,
-        password: password
+        password: password,
       });
 
       history.push("/mars/mysamples");
@@ -45,7 +48,7 @@ export function signInAction({ username, password }, history) {
       console.log(error);
       dispatch({
         type: AUTHENTICATION_ERROR,
-        payload: "Invalid email or password"
+        payload: "Invalid email or password",
       });
     }
   };
@@ -54,7 +57,7 @@ export function signInAction({ username, password }, history) {
 export function signOutAction() {
   localStorage.clear();
   return {
-    type: UNAUTHENTICATED
+    type: UNAUTHENTICATED,
   };
 }
 
@@ -62,14 +65,14 @@ export function signOutAction() {
 export function onChangeSourceFileAction(sourceFiles) {
   return {
     type: CHANGE_SOURCE_FILE,
-    sourceFiles: sourceFiles
+    sourceFiles: sourceFiles,
   };
 }
 
 export function onChangeMapFileAction(mapFile) {
   return {
     type: CHANGE_MAP_FILE,
-    mapFile: mapFile
+    mapFile: mapFile,
   };
 }
 
@@ -77,13 +80,13 @@ export function onChangeMapFileAction(mapFile) {
 export function initializeSamples(sampleArray) {
   return {
     type: INITIALIZE_SAMPLES,
-    sampleArray: sampleArray
+    sampleArray: sampleArray,
   };
 }
 
 export function uploadRequest() {
   return {
-    type: UPLOAD_REQUEST
+    type: UPLOAD_REQUEST,
   };
 }
 
@@ -92,7 +95,7 @@ export function uploadSuccess(results, selectedSamples) {
   return {
     type: UPLOAD_SUCCESS,
     results,
-    selectedSamples
+    selectedSamples,
   };
 }
 
@@ -100,12 +103,12 @@ export function uploadSuccess(results, selectedSamples) {
 export function uploadFailure(error) {
   return {
     type: UPLOAD_FAILURE,
-    error
+    error,
   };
 }
 
 export function upload(username, password, usercode, samples, selectedSamples) {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       //Start upload request
       dispatch(uploadRequest());
@@ -135,7 +138,7 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       );
 
       //convert the response data from xml to JSON
-      convert.xmlDataToJSON(res.data, { explicitArray: true }).then(json => {
+      convert.xmlDataToJSON(res.data, { explicitArray: true }).then((json) => {
         dispatch(uploadSuccess(json.results.sample, selectedSamples));
       });
     } catch (error) {
@@ -144,3 +147,32 @@ export function upload(username, password, usercode, samples, selectedSamples) {
     }
   };
 }
+
+export const fetchUsercodeAndSamples = (usercode) => async (
+  dispatch,
+  getState
+) => {
+  await dispatch(fetchUsercode(usercode));
+
+  let igsn_list = getState().mars.igsnResponseList.igsn_list;
+
+  igsn_list.forEach((element) => {
+    dispatch(fetchSamples(element));
+  });
+};
+
+export const fetchUsercode = (usercode) => async (dispatch) => {
+  const response = await axios.get(
+    `https://sesardev.geosamples.org/samples/user_code/${usercode}`
+  );
+
+  dispatch({ type: FETCH_USER, payload: response.data });
+};
+
+export const fetchSamples = (igsn) => async (dispatch) => {
+  const response = await axios.get(
+    `https://sesardev.geosamples.org/webservices/display.php?igsn=${igsn}`
+  );
+
+  dispatch({ type: FETCH_SAMPLES, payload: response });
+};

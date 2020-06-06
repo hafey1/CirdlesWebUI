@@ -86,6 +86,24 @@ class Upload extends Component {
     if (this.props.loading === false) return false;
     return true;
   }
+
+  getMuiTheme = () =>
+    createMuiTheme({
+      overrides: {
+        MUIDataTableBodyCell: {
+          root: {
+            backgroundColor: "#FFF",
+            width: "50000000px"
+          }
+        },
+        MUIDataTableSelectCell: {
+          root: {
+            backgroundColor: "#FFFF"
+          }
+        }
+      }
+    });
+
   render() {
     if (!this.props.uploadSamples) {
       return (
@@ -150,6 +168,11 @@ class Upload extends Component {
             root: {
               backgroundColor: "#FFFF"
             }
+          },
+          MUIDataTableBodyCell: {
+            root: {
+              backgroundColor: "#FFF"
+            }
           }
         }
       });
@@ -180,7 +203,7 @@ class Upload extends Component {
           const index = rowMeta.rowIndex;
           return (
             <TableRow>
-              <TableCell colSpan={colSpan}>
+              <TableCell colSpan={4}>
                 <Paper className={classes.root}>
                   <Table className={classes.table}>
                     <TableHead>

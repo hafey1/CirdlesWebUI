@@ -5,46 +5,40 @@ import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
 import MUIDataTable from "mui-datatables";
 import "../../../../styles/mars.scss";
+import { fetchUsercodeAndSamples } from "../../../../actions/mars";
 import {
   withStyles,
   createMuiTheme,
-  MuiThemeProvider
+  MuiThemeProvider,
 } from "@material-ui/core/styles";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     width: "100%",
     display: "flex",
     justifyContent: "center",
 
-    overflowX: "auto"
+    overflowX: "auto",
   },
   table: {
     minWidth: "100%",
-    height: "2rem"
+    height: "2rem",
   },
   column: {
     whiteSpace: "normal",
     wordWrap: "break-word",
-    width: "25%"
-  }
+    width: "25%",
+  },
 });
 
 class MySamples extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      columnDefs: ["IGSN", "Name", "Latitude", "Longitude", "Elevation"],
-      rowData: [{}],
-      loading: true,
-      samples: true
-    };
-
-    this.sendRequest = this.sendRequest.bind(this);
+    this.state = {};
   }
 
   componentDidMount() {
-    this.sendRequest(0);
+    this.props.fetchUsercodeAndSamples(this.props.usercode);
   }
 
   openWindow(selectedRows, displayData) {
@@ -74,64 +68,6 @@ class MySamples extends Component {
     }
   }
 
-  sendRequest(num) {
-    //Reset state everytime new information needs to be put into state
-    this.setState({
-      rowData: [],
-      loading: true,
-      page_no: this.state.page_no + num
-    });
-
-    //API Request: Get IGSNs
-    axios
-      .get(
-        `https://sesardev.geosamples.org/samples/user_code/${this.props.usercode}`
-      )
-      .then(response => {
-        const length = response.data.igsn_list.length;
-        response.data.igsn_list.map((igsn, i) => {
-          //API Request: Get other information for each IGSN
-          axios
-            .get(
-              `https://sesardev.geosamples.org/webservices/display.php?igsn=${igsn}`
-            )
-            .then(response => {
-              //Grabbing each piece of information needed and updating state as needed.
-              const sampleName = response.data.sample.name;
-              const latitudes = response.data.sample.latitude;
-              const longitudes = response.data.sample.longitude;
-              const elevations = response.data.sample.elevation;
-              this.setState({
-                rowData: [
-                  ...this.state.rowData,
-                  {
-                    IGSN: igsn,
-                    Name: sampleName,
-                    Latitude: latitudes,
-                    Longitude: longitudes,
-                    Elevation: elevations
-                  }
-                ]
-              });
-
-              if (this.state.rowData.length === length) {
-                //Allow the information to be rendered.
-                this.setState({ loading: false });
-              }
-            });
-        });
-      })
-      //Throw an error if the GET request don't come through
-      .catch(error => {
-        console.log(error);
-        if (error.response.status === 404) {
-          console.log("error 404");
-          this.setState({ loading: false });
-          this.setState({ samples: false });
-        }
-      });
-  }
-
   render() {
     const options = {
       filter: true,
@@ -147,20 +83,20 @@ class MySamples extends Component {
             View Webpage for Selected Samples
           </Button>
         </div>
-      )
+      ),
     };
 
     let theme = createMuiTheme({
       overrides: {
         MUIDataTableSelectCell: {
           root: {
-            backgroundColor: "#FFFF"
-          }
-        }
-      }
+            backgroundColor: "#FFFF",
+          },
+        },
+      },
     });
 
-    if (this.state.loading === true) {
+    if (this.props.sampleLoading === true) {
       return (
         <div className="outerDiv">
           <div className="d-flex justify-content-center">
@@ -174,7 +110,9 @@ class MySamples extends Component {
           </div>
         </div>
       );
-    } else if (this.state.loading === false && this.state.samples === true) {
+    } else if (this.props.sampleLoading === false) {
+      var columns = ["IGSN", "Name", "Latitude", "Longitude", "Elevation"];
+      var data = this.props.mySamplesList;
       return (
         <div style={{ width: "100%", height: "100%" }}>
           <div className="centercontainer">
@@ -184,8 +122,8 @@ class MySamples extends Component {
                 <MuiThemeProvider theme={theme}>
                   <MUIDataTable
                     title={"My Samples from SESAR Development Server"}
-                    data={this.state.rowData}
-                    columns={this.state.columnDefs}
+                    data={this.props.mySamplesList}
+                    columns={columns}
                     options={options}
                   />
                 </MuiThemeProvider>
@@ -195,7 +133,7 @@ class MySamples extends Component {
           </div>
         </div>
       );
-    } else if (this.state.loading === false && this.state.samples === false) {
+    } else if (this.props.loading === false && this.props.rowData === false) {
       return (
         <div className="wrapperDiv">
           <div className="wapperCenter">
@@ -211,14 +149,19 @@ class MySamples extends Component {
 }
 
 MySamples.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    usercode: state.mars.usercode
+    usercode: state.mars.usercode,
+    mySamplesList: state.mars.mySamplesList,
+    sampleLoading: state.mars.sampleLoading,
   };
 }
 
-const MySamplesPage = connect(mapStateToProps)(MySamples);
+const MySamplesPage = connect(
+  mapStateToProps,
+  { fetchUsercodeAndSamples }
+)(MySamples);
 export default withStyles(styles)(MySamplesPage);

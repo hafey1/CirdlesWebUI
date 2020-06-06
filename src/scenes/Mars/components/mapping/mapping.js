@@ -9,12 +9,11 @@ class Mapping extends Component {
     super(props);
     this.state = {
       samples: false,
-      mapFile: ""
+      mapFile: "",
     };
 
     this.onChangeSourceFiles = this.onChangeSourceFiles.bind(this);
     this.handleProceed = this.handleProceed.bind(this);
-    this.handleContinue = this.handleContinue.bind(this);
 
     this.mapFile = React.createRef();
     this.sourceFiles = React.createRef();
@@ -36,24 +35,9 @@ class Mapping extends Component {
     }
     console.log(sourceFiles);
 
+    localForage.setItem("mapFile", mapFile);
     this.props.onProceed(mapFile, sourceFiles);
     this.props.history.push("upload");
-  }
-
-  handleContinue(mapFile, sourceFiles) {
-    e.preventDefault();
-    this.setState({ samples: true });
-    this.props.onProceed(this.props.mapFile, this.props.sourceFiles);
-    this.props.onChangeMapFileAction(localStorage.getItem("mapFile"));
-    this.props.history.push("upload");
-  }
-
-  getLocalStoarage() {
-    return localForage.getItem("mapFile");
-  }
-
-  setLocalStorage(mapFile) {
-    localForage.setItem("mapFile", mapFile);
   }
 
   handleSubmit(event) {
@@ -66,7 +50,6 @@ class Mapping extends Component {
     } else if (this.sourceFiles.current.files.length === 0) {
       alert("Please Select at least 1 Source File to Continue");
     } else {
-      this.setLocalStorage(mapFile);
       this.onChangeSourceFiles(sourceFilesList);
       this.props.onChangeMapFileAction(mapFile);
       this.handleProceed(mapFile, sourceFilesList);
@@ -74,41 +57,10 @@ class Mapping extends Component {
   }
 
   render() {
+    if (this.props.uploadSamples) {
+      this.props.history.push("upload");
+    }
     console.log(this.props);
-    let mapFile = this.getLocalStoarage();
-
-    /*const displayProceed = () => {
-      if (
-        this.props.mapFile &&
-        this.props.sourceFiles &&
-        !this.props.uploadSamples
-      ) {
-        return (
-          <div>
-            <button
-              type="button"
-              className="submitButton"
-              onClick={this.handleProceed}
-            >
-              Proceed to Data Mapping
-            </button>
-          </div>
-        );
-      }
-      if (mapFile && this.props.sourceFiles && this.props.uploadSamples) {
-        return (
-          <div>
-            <button
-              type="button"
-              onClick={this.handleContinue}
-              className="btn btn-danger"
-            >
-              Continue with Data Mapping
-            </button>
-          </div>
-        );
-      }
-    };*/
 
     return (
       <div className="upload">
@@ -134,7 +86,7 @@ class Mapping extends Component {
                 ref={this.sourceFiles}
               />
             </label>
-            <button class="btn btn-primary" type="submit">
+            <button className="btn btn-primary" type="submit">
               Proceed to Mapping
             </button>
           </form>

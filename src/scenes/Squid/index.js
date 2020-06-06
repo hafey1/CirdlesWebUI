@@ -6,7 +6,7 @@ import axios from "axios";
 
 import "styles/squid.scss";
 
-const endpoint = "http://cirdles.cs.cofc.edu/Services/squidReporting";
+const endpoint = "https://cirdles.cs.cofc.edu/Services/squidReporting";
 const FileDownload = require("downloadjs");
 // checkout https://www.npmjs.com/package/rn-fetch-blob for soultion involving progress etc
 
