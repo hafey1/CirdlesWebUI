@@ -2,6 +2,7 @@
   "name": "cirdlesweb",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://sesardev.geosamples.org",
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",

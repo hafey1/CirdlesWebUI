@@ -78,6 +78,7 @@ export function onChangeMapFileAction(mapFile) {
 
 //Upload Actions
 export function initializeSamples(sampleArray) {
+  console.log(sampleArray);
   return {
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
@@ -118,6 +119,44 @@ export function upload(username, password, usercode, samples, selectedSamples) {
         let index = selectedSamples[i];
         samplesToUpload[i] = samples[index];
       }
+
+      let sampleNames = [];
+      //for (let i = 0; i < selectedSamples)
+      console.log(samplesToUpload[0]);
+
+      for (var i = 0; i < samplesToUpload.length; i++) {
+        for (var j = 0; j < samplesToUpload[i].length; j++) {
+          if (
+            samplesToUpload[i][j].key != undefined &&
+            samplesToUpload[i][j].key == "name"
+          ) {
+            let name = samplesToUpload[i][j].value;
+            sampleNames.push(name);
+          }
+        }
+      }
+
+      let alreadyUploadedSamples = [];
+      for (var i = 0; i < sampleNames.length; i++) {
+        let url = `https://sesardev.geosamples.org/samples/user_code/${usercode}?sample_name=${sampleNames[i]}`;
+
+        try {
+          const response = await axios.get(url);
+
+          if (response.data.igsn_list.length != 0) {
+            var removeIndex = samplesToUpload
+              .map(function(item) {
+                return item.name;
+              })
+              .indexOf(sampleNames[i]);
+
+            samplesToUpload.splice(removeIndex, 1);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
       //convert samples to xml scheme
       let xmlSample = toXML(samplesToUpload, usercode);
 
