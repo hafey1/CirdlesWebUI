@@ -41,7 +41,6 @@ export default function(state = {}, action) {
       return { ...state, mapFile: action.mapFile };
     case INITIALIZE_SAMPLES:
       console.log("<==== Samples Ready ====>");
-      console.log(state);
       return { ...state, samples: action.sampleArray, loading: false };
     case UPLOAD_REQUEST:
       console.log("<==== Upload Requested ====>");

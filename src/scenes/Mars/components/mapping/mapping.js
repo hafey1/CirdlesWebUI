@@ -33,7 +33,6 @@ class Mapping extends Component {
     for (var i = 0; i < sourceFilesList.length; i++) {
       sourceFiles[i] = sourceFilesList[i];
     }
-    console.log(sourceFiles);
 
     localForage.setItem("mapFile", mapFile);
     this.props.onProceed(mapFile, sourceFiles);

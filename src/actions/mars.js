@@ -78,7 +78,6 @@ export function onChangeMapFileAction(mapFile) {
 
 //Upload Actions
 export function initializeSamples(sampleArray) {
-  console.log(sampleArray);
   return {
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
