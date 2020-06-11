@@ -5,6 +5,8 @@ import toXML from "../scenes/Mars/components/toXML";
 import FormData from "form-data";
 import convert from "xml-to-json-promise";
 import { SESAR_LOGIN } from "../constants/api";
+import _ from "lodash";
+import { csvParse } from "d3-dsv";
 
 import {
   AUTHENTICATED,
@@ -18,41 +20,41 @@ import {
   UPLOAD_SUCCESS,
   FETCH_USER,
   FETCH_SAMPLES,
+  FETCH_SAMPLES_SUCCESS,
 } from "./types";
 import { actionTypes } from "redux-form";
 
-// Authentication actions
-export function signInAction({ username, password }, history) {
-  return async (dispatch: any) => {
-    try {
-      const formData = new FormData();
-      formData.append("username", username);
-      formData.append("password", password);
-      const res = await axios.post(`${SESAR_LOGIN}`, formData);
-
-      //Format the api response to JSON to get the usercode data
-      let options = { ignoreComment: true, alwaysChildren: true };
-      let resJSON = await jsCON.xml2js(res.data, options);
-      let usercode =
-        resJSON.elements[0].elements[1].elements[0].elements[0].text;
-
-      dispatch({
-        type: AUTHENTICATED,
-        username: username,
-        usercode: usercode,
-        password: password,
-      });
-
-      history.push("/mars/mysamples");
-    } catch (error) {
-      console.log(error);
-      dispatch({
-        type: AUTHENTICATION_ERROR,
-        payload: "Invalid email or password",
-      });
-    }
-  };
-}
+// ==============================================================================
+// SIGN IN AND SIGNOUT ACTIONS
+// ==============================================================================
+export const signInAction = (formProps, callback) => async (dispatch) => {
+  try {
+    console.log(formProps);
+    const formData = new FormData();
+    formData.append("username", formProps.username);
+    formData.append("password", formProps.password);
+    const response = await axios.post(
+      "https://sesardev.geosamples.org/webservices/credentials_service_v2.php",
+      formData
+    );
+    let options = { ignoreComment: true, alwaysChildren: true };
+    let resJSON = await jsCON.xml2js(response.data, options);
+    let usercode = resJSON.elements[0].elements[1].elements[0].elements[0].text;
+    console.log(usercode);
+    dispatch({
+      type: AUTHENTICATED,
+      username: formProps.username,
+      usercode: usercode,
+      password: formProps.password,
+    });
+    callback();
+  } catch (e) {
+    dispatch({
+      type: AUTHENTICATION_ERROR,
+      payload: "Invalid email or password",
+    });
+  }
+};
 
 export function signOutAction() {
   localStorage.clear();
@@ -61,7 +63,9 @@ export function signOutAction() {
   };
 }
 
-//Mapping Actions
+// ==============================================================================
+// MAPPING ACTIONS
+// ==============================================================================
 export function onChangeSourceFileAction(sourceFiles) {
   return {
     type: CHANGE_SOURCE_FILE,
@@ -84,6 +88,9 @@ export function initializeSamples(sampleArray) {
   };
 }
 
+// ==============================================================================
+// UPLOAD ACTIONS
+// ==============================================================================
 export function uploadRequest() {
   return {
     type: UPLOAD_REQUEST,
@@ -186,17 +193,22 @@ export function upload(username, password, usercode, samples, selectedSamples) {
   };
 }
 
+// ==============================================================================
+// MYSAMPLES ACTIONS
+// ==============================================================================
 export const fetchUsercodeAndSamples = (usercode) => async (
   dispatch,
   getState
 ) => {
   await dispatch(fetchUsercode(usercode));
 
-  let igsn_list = getState().mars.igsnResponseList.igsn_list;
+  var igsn_list = getState().mars.igsnResponseList.igsn_list;
 
-  igsn_list.forEach((element) => {
-    dispatch(fetchSamples(element));
+  igsn_list.forEach(async (element) => {
+    await dispatch(fetchSamples(element));
   });
+
+  await dispatch(fetchSamplesSuccessful());
 };
 
 export const fetchUsercode = (usercode) => async (dispatch) => {
@@ -213,4 +225,138 @@ export const fetchSamples = (igsn) => async (dispatch) => {
   );
 
   dispatch({ type: FETCH_SAMPLES, payload: response });
+};
+
+export const fetchSamplesSuccessful = () => async (dispatch) => {
+  dispatch({ type: FETCH_SAMPLES_SUCCESS, payload: "Success" });
+};
+
+// ==============================================================================
+// READ & MERGE CSVs ACTIONS
+// ==============================================================================
+export const onProceedMapping = (sourceMap, sourceFiles, callback) => async (
+  dispatch
+) => {
+  let sourceFormat = ".csv";
+
+  readSourceMap(sourceMap, (err, map, logic) => {
+    readSourceData(sourceFormat, sourceFiles, map, logic, (err, samples) => {
+      dispatch(initializeSamples(samples));
+    });
+  });
+  callback();
+};
+
+const readSourceMap = (mapFile, callback) => {
+  let reader = new FileReader();
+  reader.onload = (e) => {
+    let fileContents = Function(e.target.result)();
+
+    return callback(
+      null,
+      fileContents.map,
+      fileContents.logic,
+      fileContents.combinations
+    );
+  };
+
+  reader.readAsText(mapFile);
+};
+
+const readSourceData = (format, files, map, logic, callback) => {
+  switch (format) {
+    case ".csv":
+      return loadCSV(files, map, logic, callback);
+    default:
+      return callback("ERROR");
+  }
+};
+
+const createField = (key, originalValue, originalKey, logic) => {
+  if (!key) {
+    return {
+      originalKey,
+      originalValue,
+    };
+  }
+  return {
+    originalKey,
+    originalValue,
+    key,
+    value: logic[key] ? logic[key](originalValue, originalKey) : originalValue,
+  };
+};
+// Load CSV files by merging them
+const loadCSV = (files, map, logic, callback) => {
+  let samples = [];
+  let counter = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    // closure reads each file and fires callback when completed
+    ((file) => {
+      // create a fileReader for each file
+      let reader = new FileReader();
+
+      // Because FileReader is asynchronous, there is no guaranteed order in
+      // which each file will fire the onloadend event
+      reader.onloadend = (e) => {
+        // csvParse is a D3 function that loads a csv string. It takes a function
+        // which handles the logic for mapping each individual sample
+        csvParse(e.target.result, (d, i) => {
+          if (!samples[i]) {
+            samples[i] = [];
+          }
+          for (let key in map) {
+            if (Array.isArray(map[key])) {
+              for (let j = 0; j < map[key].length; j++) {
+                if (d[map[key][j]]) {
+                  samples[i].push(
+                    createField(key, d[map[key][j]], map[key][j], logic)
+                  );
+                  delete d[map[key][i]];
+                }
+              }
+            } else if (d[map[key]]) {
+              samples[i].push(createField(key, d[map[key]], map[key], logic));
+              delete d[map[key]];
+            }
+          }
+          // Get the unmapped samples
+          for (let key in d) {
+            if (d[key]) {
+              samples[i].push(createField(undefined, d[key], key, logic));
+            }
+          }
+        });
+
+        // the counter helps us know when all the files have been loaded by counting
+        // the number of loadend events that are fired
+        counter++;
+        if (counter == files.length) {
+          // filter repeats with hash tables
+          for (let i = 0; i < samples.length; i++) {
+            let seen = {};
+            samples[i] = samples[i].filter((field) =>
+              seen.hasOwnProperty(field.originalKey)
+                ? false
+                : (seen[field.originalKey] = true)
+            );
+          }
+          for (let i = 0; i < samples.length; i++) {
+            let igsn = [
+              {
+                originalKey: "igsn",
+                originalValue: "",
+                key: "igsn",
+                value: "",
+              },
+            ]; //IGSN for each sample
+            samples[i] = igsn.concat(samples[i]);
+          }
+          callback(null, samples);
+        }
+      };
+      reader.readAsText(file);
+    })(files[i]); // end closure
+  }
 };

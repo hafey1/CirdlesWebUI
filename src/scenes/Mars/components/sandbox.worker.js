@@ -6,7 +6,8 @@ import { csvParse } from "d3-dsv";
 
 // sandbox only recieves one message which tells it which files
 // will be used and how. Data is stored in e.data
-onmessage = e => {
+onmessage = (e) => {
+  console.log(e.data);
   if (e.data.type == "map") {
     // This callback chain contains all the logic of the webworker
     readSourceMap(e.data.sourceMap, (err, map, logic) => {
@@ -38,7 +39,7 @@ onmessage = e => {
 // Read read source map. callback(err, map, logic)
 const readSourceMap = (mapFile, callback) => {
   let reader = new FileReader();
-  reader.onload = e => {
+  reader.onload = (e) => {
     let fileContents = Function(e.target.result)();
     // rather than using eval, create a Function using the mapping file contents as the body
     return callback(
@@ -68,12 +69,12 @@ const combineFields = (combinations, map, uploadSamples) => {
   for (let i = 0; i < uploadSamples.length; i++) {
     for (let key in map) {
       if (Array.isArray(map[key])) {
-        let filter = uploadSamples[i].filter(value =>
+        let filter = uploadSamples[i].filter((value) =>
           map[key].includes(value.originalKey)
         );
 
         let inverse = uploadSamples[i].filter(
-          value => !map[key].includes(value.originalKey)
+          (value) => !map[key].includes(value.originalKey)
         );
         if (filter.length > 1) {
           let reduction = filter.reduce(
@@ -105,14 +106,14 @@ const createField = (key, originalValue, originalKey, logic) => {
   if (!key) {
     return {
       originalKey,
-      originalValue
+      originalValue,
     };
   }
   return {
     originalKey,
     originalValue,
     key,
-    value: logic[key] ? logic[key](originalValue, originalKey) : originalValue
+    value: logic[key] ? logic[key](originalValue, originalKey) : originalValue,
   };
 };
 
@@ -123,13 +124,13 @@ const loadCSV = (files, map, logic, callback) => {
 
   for (let i = 0; i < files.length; i++) {
     // closure reads each file and fires callback when completed
-    (file => {
+    ((file) => {
       // create a fileReader for each file
       let reader = new FileReader();
 
       // Because FileReader is asynchronous, there is no guaranteed order in
       // which each file will fire the onloadend event
-      reader.onloadend = e => {
+      reader.onloadend = (e) => {
         // csvParse is a D3 function that loads a csv string. It takes a function
         // which handles the logic for mapping each individual sample
         csvParse(e.target.result, (d, i) => {
@@ -166,7 +167,7 @@ const loadCSV = (files, map, logic, callback) => {
           // filter repeats with hash tables
           for (let i = 0; i < samples.length; i++) {
             let seen = {};
-            samples[i] = samples[i].filter(field =>
+            samples[i] = samples[i].filter((field) =>
               seen.hasOwnProperty(field.originalKey)
                 ? false
                 : (seen[field.originalKey] = true)
@@ -174,7 +175,12 @@ const loadCSV = (files, map, logic, callback) => {
           }
           for (let i = 0; i < samples.length; i++) {
             let igsn = [
-              { originalKey: "igsn", originalValue: "", key: "igsn", value: "" }
+              {
+                originalKey: "igsn",
+                originalValue: "",
+                key: "igsn",
+                value: "",
+              },
             ]; //IGSN for each sample
             samples[i] = igsn.concat(samples[i]);
           }

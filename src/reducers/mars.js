@@ -10,11 +10,13 @@ import {
   UPLOAD_SUCCESS,
   FETCH_USER,
   FETCH_SAMPLES,
+  FETCH_SAMPLES_SUCCESS,
 } from "actions";
 
 export default function(state = {}, action) {
   switch (action.type) {
     case AUTHENTICATED:
+      console.log("hello");
       return {
         authenticated: true,
         username: action.username,
@@ -41,6 +43,7 @@ export default function(state = {}, action) {
       return { ...state, mapFile: action.mapFile };
     case INITIALIZE_SAMPLES:
       console.log("<==== Samples Ready ====>");
+      console.log(action.sampleArray);
       return { ...state, samples: action.sampleArray, loading: false };
     case UPLOAD_REQUEST:
       console.log("<==== Upload Requested ====>");
@@ -70,8 +73,14 @@ export default function(state = {}, action) {
       console.log("<==== Upload Failure ====>");
       return { ...state, loading: false };
     case FETCH_USER:
-      return { ...state, igsnResponseList: action.payload, mySamplesList: [] };
+      return {
+        ...state,
+        igsnResponseList: action.payload,
+        mySamplesList: [],
+        loading: true,
+      };
     case FETCH_SAMPLES:
+      console.log(state);
       const igsn = action.payload.data.sample.igsn;
       const sampleName = action.payload.data.sample.name;
       const latitudes = action.payload.data.sample.latitude;
@@ -90,6 +99,9 @@ export default function(state = {}, action) {
       } else {
         return { ...state, sampleLoading: false };
       }
+
+    case FETCH_SAMPLES_SUCCESS:
+      return { ...state, loading: false };
     default:
       return state;
   }
