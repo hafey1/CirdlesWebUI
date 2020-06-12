@@ -43,32 +43,26 @@ export default function(state = {}, action) {
       return { ...state, mapFile: action.mapFile };
     case INITIALIZE_SAMPLES:
       console.log("<==== Samples Ready ====>");
-      console.log(action.sampleArray);
-      return { ...state, samples: action.sampleArray, loading: false };
+      console.log(action.valuesWithoutIgsn);
+      return {
+        ...state,
+        samples: action.sampleArray,
+        loading: false,
+        originalKeys: action.originalKeys,
+        originalValues: action.originalValues,
+        sesarKeys: action.sesarKeys,
+        valuesWithoutIgsn: action.valuesWithoutIgsn,
+      };
     case UPLOAD_REQUEST:
       console.log("<==== Upload Requested ====>");
       return { ...state, loading: true };
     case UPLOAD_SUCCESS:
-      let results = action.results;
-      let samples = state.samples;
-      let selectedSamples = action.selectedSamples;
-
-      //Add the IGSNs to each sample
-      for (let i = 0; i < results.length; i++) {
-        let index = selectedSamples[i];
-        let igsn = {
-          originalKey: "igsn",
-          originalValue: results[i].igsn,
-          key: "igsn",
-          value: results[i].igsn,
-        };
-        /*IGSN for each sample
-        for each sample, the sample is equal to its
-        previous version with IGSN added to the end*/
-        samples[index][0] = igsn;
-      }
+      console.log("ACTION", action);
       console.log("<==== Upload Succcessful ====>");
-      return { ...state, samples: samples, loading: false };
+      return {
+        ...state,
+        loading: false,
+      };
     case UPLOAD_FAILURE:
       console.log("<==== Upload Failure ====>");
       return { ...state, loading: false };
@@ -81,24 +75,12 @@ export default function(state = {}, action) {
       };
     case FETCH_SAMPLES:
       console.log(state);
-      const igsn = action.payload.data.sample.igsn;
-      const sampleName = action.payload.data.sample.name;
-      const latitudes = action.payload.data.sample.latitude;
-      const longitudes = action.payload.data.sample.longitude;
-      const elevations = action.payload.data.sample.elevation;
 
-      if (state.mySamplesList.length < state.igsnResponseList.total_counts) {
-        return {
-          ...state,
-          mySamplesList: [
-            ...state.mySamplesList,
-            [igsn, sampleName, latitudes, longitudes, elevations],
-          ],
-          sampleLoading: false,
-        };
-      } else {
-        return { ...state, sampleLoading: false };
-      }
+      return {
+        ...state,
+        mySamplesList: [...state.mySamplesList, action.payload],
+        sampleLoading: false,
+      };
 
     case FETCH_SAMPLES_SUCCESS:
       return { ...state, loading: false };

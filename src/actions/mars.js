@@ -82,9 +82,58 @@ export function onChangeMapFileAction(mapFile) {
 
 //Upload Actions
 export function initializeSamples(sampleArray) {
+  var seasarKeys = new Set();
+  var originalValues = [];
+  var originalKeys = [];
+  var uploadSamples = sampleArray;
+
+  for (let i = 0; i < uploadSamples.length; i++) {
+    for (let j = 0; j < uploadSamples[i].length; j++) {
+      let sampleData = uploadSamples[i];
+      let dataRow = uploadSamples[i][j];
+      if (dataRow.key !== undefined) {
+        seasarKeys.add(dataRow.key);
+      }
+      originalKeys = [
+        ...new Set(
+          sampleData.map((data) => {
+            return data.originalKey;
+          })
+        ),
+      ];
+    }
+  }
+  seasarKeys = [...seasarKeys];
+
+  for (let i = 0; i < uploadSamples.length; i++) {
+    var keyValue = {};
+    for (let j = 0; j < originalKeys.length; j++) {
+      var keyData = originalKeys[j];
+      var data = uploadSamples[i]
+        .filter((x) => {
+          return x.originalKey === originalKeys[j];
+        })
+        .map((x) => {
+          return x.originalValue;
+        });
+      keyValue[keyData] = data[0];
+    }
+    originalValues = [...originalValues, keyValue];
+  }
+
+  const valuesWithoutIgsn = originalValues;
+  const key = "igsn";
+  for (let i = 0; i < valuesWithoutIgsn.length; i++) {
+    delete valuesWithoutIgsn[i][key];
+  }
+
   return {
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
+    originalKeys: originalKeys,
+    originalValues: originalValues,
+    seasarKeys: seasarKeys,
+    valuesWithoutIgsn: valuesWithoutIgsn,
   };
 }
 
@@ -98,13 +147,32 @@ export function uploadRequest() {
 }
 
 // All samples uploaded correctly
-export function uploadSuccess(results, selectedSamples) {
-  return {
+export const uploadSuccess = (results, selectedSamples) => async (
+  dispatch,
+  getState
+) => {
+  let samples = getState().mars.samples;
+  for (let i = 0; i < results.length; i++) {
+    let index = selectedSamples[i];
+
+    /*IGSN for each sample
+    for each sample, the sample is equal to its
+    previous version with IGSN added to the end*/
+
+    samples[index][0] = {
+      ...samples[index][0],
+      originalValue: results[i].igsn[0],
+      value: results[i].igsn[0],
+    };
+  }
+
+  dispatch({
     type: UPLOAD_SUCCESS,
     results,
     selectedSamples,
-  };
-}
+    samples,
+  });
+};
 
 // Not all samples uploaded correctly
 export function uploadFailure(error) {
@@ -124,43 +192,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       for (let i = 0; i < selectedSamples.length; i++) {
         let index = selectedSamples[i];
         samplesToUpload[i] = samples[index];
-      }
-
-      let sampleNames = [];
-      //for (let i = 0; i < selectedSamples)
-      console.log(samplesToUpload[0]);
-
-      for (var i = 0; i < samplesToUpload.length; i++) {
-        for (var j = 0; j < samplesToUpload[i].length; j++) {
-          if (
-            samplesToUpload[i][j].key != undefined &&
-            samplesToUpload[i][j].key == "name"
-          ) {
-            let name = samplesToUpload[i][j].value;
-            sampleNames.push(name);
-          }
-        }
-      }
-
-      let alreadyUploadedSamples = [];
-      for (var i = 0; i < sampleNames.length; i++) {
-        let url = `https://sesardev.geosamples.org/samples/user_code/${usercode}?sample_name=${sampleNames[i]}`;
-
-        try {
-          const response = await axios.get(url);
-
-          if (response.data.igsn_list.length != 0) {
-            var removeIndex = samplesToUpload
-              .map(function(item) {
-                return item.name;
-              })
-              .indexOf(sampleNames[i]);
-
-            samplesToUpload.splice(removeIndex, 1);
-          }
-        } catch (error) {
-          console.log(error);
-        }
       }
 
       //convert samples to xml scheme
@@ -224,7 +255,16 @@ export const fetchSamples = (igsn) => async (dispatch) => {
     `https://sesardev.geosamples.org/webservices/display.php?igsn=${igsn}`
   );
 
-  dispatch({ type: FETCH_SAMPLES, payload: response });
+  const sampleIgsn = response.data.sample.igsn;
+  const sampleName = response.data.sample.name;
+  const latitudes = response.data.sample.latitude;
+  const longitudes = response.data.sample.longitude;
+  const elevations = response.data.sample.elevation;
+
+  dispatch({
+    type: FETCH_SAMPLES,
+    payload: [sampleIgsn, sampleName, latitudes, longitudes, elevations],
+  });
 };
 
 export const fetchSamplesSuccessful = () => async (dispatch) => {
@@ -359,4 +399,59 @@ const loadCSV = (files, map, logic, callback) => {
       reader.readAsText(file);
     })(files[i]); // end closure
   }
+};
+
+// ==============================================================================
+//
+// ==============================================================================
+
+export const onUploadProceed = (
+  sourceMap,
+  uploadSamples,
+  user,
+  selectedSamples
+) => async (dispatch) => {
+  readSourceMap(sourceMap, (err, map, logic, combinations) => {
+    let combinedSamples = combineFields(combinations, map, uploadSamples);
+    dispatch(
+      upload(
+        user.username,
+        user.password,
+        user.usercode,
+        combinedSamples,
+        selectedSamples
+      )
+    );
+  });
+};
+
+const combineFields = (combinations, map, uploadSamples) => {
+  for (let i = 0; i < uploadSamples.length; i++) {
+    for (let key in map) {
+      if (Array.isArray(map[key])) {
+        let filter = uploadSamples[i].filter((value) =>
+          map[key].includes(value.originalKey)
+        );
+
+        let inverse = uploadSamples[i].filter(
+          (value) => !map[key].includes(value.originalKey)
+        );
+        if (filter.length > 1) {
+          let reduction = filter.reduce(
+            (acc, field) => acc.concat([field.value]),
+            []
+          );
+          if (combinations[key]) {
+            let newField = { key, value: combinations[key](reduction) };
+            inverse.push(newField);
+            uploadSamples[i] = inverse;
+          }
+        } else if (filter.length == 1) {
+          inverse.concat(filter);
+          uploadSamples[i] = inverse;
+        }
+      }
+    }
+  }
+  return uploadSamples;
 };
