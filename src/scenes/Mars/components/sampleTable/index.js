@@ -19,27 +19,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
+import PublishIcon from "@material-ui/icons/Publish";
 import FilterListIcon from "@material-ui/icons/FilterList";
-
-/*function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Donut", 452, 25.0, 51, 4.9),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Honeycomb", 408, 3.2, 87, 6.5),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0),
-  createData("KitKat", 518, 26.0, 65, 7.0),
-  createData("Lollipop", 392, 0.2, 98, 0.0),
-  createData("Marshmallow", 318, 0, 81, 2.0),
-  createData("Nougat", 360, 19.0, 9, 37.0),
-  createData("Oreo", 437, 18.0, 63, 4.0),
-];*/
+import _ from "lodash";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -151,8 +133,18 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const {
+    numSelected,
+    samples,
+    sampleIndicies,
+    user,
+    mapFile,
+    onUpload,
+  } = props;
 
+  const handleClick = (props) => (event) => {
+    onUpload(mapFile, samples, user, sampleIndicies);
+  };
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -180,9 +172,9 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
+        <Tooltip title="Upload">
+          <IconButton aria-label="upload" onClick={handleClick(props)}>
+            <PublishIcon />
           </IconButton>
         </Tooltip>
       ) : (
@@ -199,12 +191,6 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
-
-function EnhancedTableCell(props) {
-  return Object.entries(props.data).map(([key, value]) => (
-    <TableCell key={key}>{value}</TableCell>
-  ));
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -228,17 +214,21 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  container: {
+    maxHeight: 700,
+  },
 }));
 
 export default function SampleTable(props) {
   const classes = useStyles();
   const rows = props.originalValues;
-  const [order, setOrder] = React.useState("asc");
+  const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("igsn");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [sampleIndicies, setSampleIndicies] = React.useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -255,24 +245,39 @@ export default function SampleTable(props) {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
+  const handleClick = (event, name, originalValues) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
+    let indicies = [];
 
+    let index = 0;
+    for (let i = 0; i < originalValues.length; i++) {
+      if (_.isEqual(name, originalValues[i]) === true) {
+        index = i;
+      }
+    }
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
+      indicies = indicies.concat(sampleIndicies, index);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
+      indicies = indicies.concat(sampleIndicies.slice(1));
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
+      indicies = indicies.concat(sampleIndicies.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
       );
+      indicies = indicies.concat(
+        sampleIndicies.slice(0, selectedIndex),
+        sampleIndicies.slice(selectedIndex + 1)
+      );
     }
 
     setSelected(newSelected);
+    setSampleIndicies(indicies);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -296,9 +301,17 @@ export default function SampleTable(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          samples={props.samples}
+          sampleIndicies={sampleIndicies}
+          user={props.user}
+          mapFile={props.mapFile}
+          onUpload={props.onUpload}
+        />
+        <TableContainer className={classes.container}>
           <Table
+            stickyHeader
             className={classes.table}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
@@ -318,13 +331,15 @@ export default function SampleTable(props) {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.SAMPLE);
+                  const isItemSelected = isSelected(row);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.SAMPLE)}
+                      onClick={(event) =>
+                        handleClick(event, row, props.originalValues)
+                      }
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -337,15 +352,17 @@ export default function SampleTable(props) {
                           inputProps={{ "aria-labelledby": labelId }}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.igsn}
-                      </TableCell>
-                      <EnhancedTableCell data={row} />
+                      {Object.entries(row).map(([key, value]) => (
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          key={key}
+                        >
+                          {value}
+                        </TableCell>
+                      ))}
                     </TableRow>
                   );
                 })}

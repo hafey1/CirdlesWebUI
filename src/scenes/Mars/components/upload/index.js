@@ -13,7 +13,6 @@ function mapStateToProps(state) {
     originalValues: state.mars.originalValues,
     sesarKeys: state.mars.sesarKeys,
     user: state.mars,
-    valuesWithoutIgsn: state.mars.valuesWithoutIgsn,
   };
 }
 

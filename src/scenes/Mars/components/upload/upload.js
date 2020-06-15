@@ -1,24 +1,9 @@
 import React, { Component } from "react";
-import MUIDataTable from "mui-datatables";
 import "../../../../styles/mars.scss";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
 
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableContainer from "@material-ui/core/TableContainer";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import * as localForage from "localforage";
 import _ from "lodash";
-import SampleTable from "../sampleTable/index";
+import SampleTable from "../sampleTable";
 
 class Upload extends Component {
   constructor(props) {
@@ -63,7 +48,9 @@ class Upload extends Component {
                 originalKeys={this.props.originalKeys}
                 originalValues={this.props.originalValues}
                 samples={this.props.samples}
-                valuesWithoutIgsn={this.props.valuesWithoutIgsn}
+                onUpload={this.props.onUpload}
+                user={this.props.user}
+                mapFile={this.props.mapFile}
               />
             </div>
           </div>
@@ -88,7 +75,6 @@ class Upload extends Component {
   }
 
   render() {
-    console.log(this.props);
     return <div>{this.renderTable()}</div>;
   }
 }
