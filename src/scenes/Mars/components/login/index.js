@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { signInAction } from "../../../../actions/mars";
 import marsbackground from "img/marsBackground.jpg";
 import "../../../../styles/mars.scss";
+import Button from "@material-ui/core/Button";
 
 class LogIn extends Component {
   onSubmit = (formProps) => {
@@ -17,28 +18,53 @@ class LogIn extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <Form onSubmit={handleSubmit(this.onSubmit)}>
-        <fieldset>
-          <label>Username</label>
-          <Field
-            name="username"
-            type="text"
-            component="input"
-            autoComplete="none"
-          />
-        </fieldset>
-        <fieldset>
-          <label>Password</label>
-          <Field
-            name="password"
-            type="password"
-            component="input"
-            autoComplete="none"
-          />
-        </fieldset>
-        <div>{this.props.errorMessage}</div>
-        <button>Log In!</button>
-      </Form>
+      <div
+        style={{
+          backgroundImage: `url(${marsbackground})`,
+          height: "100%",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          alignItems: "center",
+          color: "white",
+        }}
+      >
+        <Form
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            alignItems: "center",
+          }}
+          onSubmit={handleSubmit(this.onSubmit)}
+        >
+          <h2>GeoPass Login</h2>
+          <fieldset>
+            <label style={{ fontWeight: "bold" }}>Username</label>
+            <br></br>
+            <Field
+              name="username"
+              type="text"
+              component="input"
+              autoComplete="none"
+            />
+          </fieldset>
+          <br></br>
+          <fieldset>
+            <label style={{ fontWeight: "bold" }}>Password</label>
+            <br></br>
+            <Field
+              name="password"
+              type="password"
+              component="input"
+              autoComplete="none"
+            />
+          </fieldset>
+          <div>{this.props.errorMessage}</div>
+          <br></br>
+          <button className="btn btn-primary">Log In</button>
+        </Form>
+      </div>
     );
   }
 }

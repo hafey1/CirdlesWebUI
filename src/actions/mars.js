@@ -29,7 +29,6 @@ import { actionTypes } from "redux-form";
 // ==============================================================================
 export const signInAction = (formProps, callback) => async (dispatch) => {
   try {
-    console.log(formProps);
     const formData = new FormData();
     formData.append("username", formProps.username);
     formData.append("password", formProps.password);
@@ -40,7 +39,6 @@ export const signInAction = (formProps, callback) => async (dispatch) => {
     let options = { ignoreComment: true, alwaysChildren: true };
     let resJSON = await jsCON.xml2js(response.data, options);
     let usercode = resJSON.elements[0].elements[1].elements[0].elements[0].text;
-    console.log(usercode);
     dispatch({
       type: AUTHENTICATED,
       username: formProps.username,
@@ -121,19 +119,12 @@ export function initializeSamples(sampleArray) {
     originalValues = [...originalValues, keyValue];
   }
 
-  const valuesWithoutIgsn = originalValues;
-  const key = "igsn";
-  for (let i = 0; i < valuesWithoutIgsn.length; i++) {
-    delete valuesWithoutIgsn[i][key];
-  }
-
   return {
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
     originalKeys: originalKeys,
     originalValues: originalValues,
     seasarKeys: seasarKeys,
-    valuesWithoutIgsn: valuesWithoutIgsn,
   };
 }
 
@@ -166,6 +157,7 @@ export const uploadSuccess = (results, selectedSamples) => async (
     };
   }
 
+  await dispatch(initializeSamples(samples));
   dispatch({
     type: UPLOAD_SUCCESS,
     results,

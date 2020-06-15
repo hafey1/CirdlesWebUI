@@ -16,7 +16,6 @@ import {
 export default function(state = {}, action) {
   switch (action.type) {
     case AUTHENTICATED:
-      console.log("hello");
       return {
         authenticated: true,
         username: action.username,
@@ -43,7 +42,6 @@ export default function(state = {}, action) {
       return { ...state, mapFile: action.mapFile };
     case INITIALIZE_SAMPLES:
       console.log("<==== Samples Ready ====>");
-      console.log(action.valuesWithoutIgsn);
       return {
         ...state,
         samples: action.sampleArray,
@@ -51,13 +49,11 @@ export default function(state = {}, action) {
         originalKeys: action.originalKeys,
         originalValues: action.originalValues,
         sesarKeys: action.sesarKeys,
-        valuesWithoutIgsn: action.valuesWithoutIgsn,
       };
     case UPLOAD_REQUEST:
       console.log("<==== Upload Requested ====>");
       return { ...state, loading: true };
     case UPLOAD_SUCCESS:
-      console.log("ACTION", action);
       console.log("<==== Upload Succcessful ====>");
       return {
         ...state,
@@ -74,8 +70,6 @@ export default function(state = {}, action) {
         loading: true,
       };
     case FETCH_SAMPLES:
-      console.log(state);
-
       return {
         ...state,
         mySamplesList: [...state.mySamplesList, action.payload],
