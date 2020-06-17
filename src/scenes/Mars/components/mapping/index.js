@@ -12,28 +12,33 @@ function mapStateToProps(state) {
     mapFile: state.mars.mapFile,
     sourceFiles: state.mars.sourceFiles,
     user: state.mars,
-    uploadSamples: state.mars.samples
+    uploadSamples: state.mars.samples,
   };
 }
 
 //Actions from actions/index.js will be set as props in Mapping.jsx
 function mapDistatchToProps(dispatch) {
   return {
-    onProceed: (sourceMap, sourceFiles) => {
+    /*onProceed: (sourceMap, sourceFiles) => {
       let worker = new Worker();
       worker.postMessage({ type: "map", sourceMap, sourceFormat, sourceFiles });
       worker.onmessage = function(e) {
+        console.log(e.data);
         dispatch(actions.initializeSamples(e.data));
       };
+    },*/
+
+    onProceed: (sourceMap, sourceFiles, callback) => {
+      dispatch(actions.onProceedMapping(sourceMap, sourceFiles, callback));
     },
 
-    onChangeMapFileAction: file => {
+    onChangeMapFileAction: (file) => {
       dispatch(actions.onChangeMapFileAction(file));
     },
 
-    onChangeSourceFileAction: files => {
+    onChangeSourceFileAction: (files) => {
       dispatch(actions.onChangeSourceFileAction(files));
-    }
+    },
   };
 }
 

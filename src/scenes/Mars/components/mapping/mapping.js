@@ -33,11 +33,11 @@ class Mapping extends Component {
     for (var i = 0; i < sourceFilesList.length; i++) {
       sourceFiles[i] = sourceFilesList[i];
     }
-    console.log(sourceFiles);
 
     localForage.setItem("mapFile", mapFile);
-    this.props.onProceed(mapFile, sourceFiles);
-    this.props.history.push("upload");
+    this.props.onProceed(mapFile, sourceFiles, () => {
+      this.props.history.push("upload");
+    });
   }
 
   handleSubmit(event) {
@@ -57,11 +57,6 @@ class Mapping extends Component {
   }
 
   render() {
-    if (this.props.uploadSamples) {
-      this.props.history.push("upload");
-    }
-    console.log(this.props);
-
     return (
       <div className="upload">
         <Panel name="Mapping Setup">

@@ -6,14 +6,16 @@ import PropTypes from "prop-types";
   if they are authenticated*/
 export default function(ComposedComponent) {
   class NotAuthentication extends Component {
-    componentWillMount() {
-      if (this.props.authenticated) {
-        this.props.history.push("/mars/mysamples");
-      }
+    componentDidMount() {
+      this.sendToSamples();
     }
 
-    componentWillUpdate(nextProps) {
-      if (nextProps.authenticated) {
+    componentDidUpdate() {
+      this.sendToSamples();
+    }
+
+    sendToSamples() {
+      if (this.props.authenticated) {
         this.props.history.push("/mars/mysamples");
       }
     }
@@ -23,7 +25,7 @@ export default function(ComposedComponent) {
     }
   }
   NotAuthentication.PropTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   function mapStateToProps(state) {

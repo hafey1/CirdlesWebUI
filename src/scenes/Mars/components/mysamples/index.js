@@ -87,6 +87,9 @@ class MySamples extends Component {
     };
 
     let theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      },
       overrides: {
         MUIDataTableSelectCell: {
           root: {
@@ -96,7 +99,7 @@ class MySamples extends Component {
       },
     });
 
-    if (this.props.sampleLoading === true) {
+    if (this.props.loading === true || this.props.loading == undefined) {
       return (
         <div className="outerDiv">
           <div className="d-flex justify-content-center">
@@ -110,9 +113,9 @@ class MySamples extends Component {
           </div>
         </div>
       );
-    } else if (this.props.sampleLoading === false) {
+    } else if (this.props.loading === false) {
       var columns = ["IGSN", "Name", "Latitude", "Longitude", "Elevation"];
-      var data = this.props.mySamplesList;
+
       return (
         <div style={{ width: "100%", height: "100%" }}>
           <div className="centercontainer">
@@ -156,7 +159,7 @@ function mapStateToProps(state) {
   return {
     usercode: state.mars.usercode,
     mySamplesList: state.mars.mySamplesList,
-    sampleLoading: state.mars.sampleLoading,
+    loading: state.mars.loading,
   };
 }
 

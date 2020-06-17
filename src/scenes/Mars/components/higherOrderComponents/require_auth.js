@@ -6,14 +6,16 @@ import PropTypes from "prop-types";
   if they are not authenticated*/
 export default function(ComposedComponent) {
   class Authentication extends Component {
-    componentWillMount() {
-      if (!this.props.authenticated) {
-        this.props.history.push("/mars/login");
-      }
+    componentDidMount() {
+      this.sendToLogIn();
     }
 
-    componentWillUpdate(nextProps) {
-      if (!nextProps.authenticated) {
+    componentDidUpdate() {
+      this.sendToLogIn();
+    }
+
+    sendToLogIn() {
+      if (!this.props.authenticated) {
         this.props.history.push("/mars/login");
       }
     }
@@ -24,7 +26,7 @@ export default function(ComposedComponent) {
   }
 
   Authentication.PropTypes = {
-    router: PropTypes.object
+    router: PropTypes.object,
   };
 
   function mapStateToProps(state) {

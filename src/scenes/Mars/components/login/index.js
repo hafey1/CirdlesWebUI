@@ -1,69 +1,69 @@
-import { connect } from "react-redux";
 import React, { Component } from "react";
+import { reduxForm, Field, Form } from "redux-form";
+import { compose } from "redux";
+import { connect } from "react-redux";
 import { signInAction } from "../../../../actions/mars";
-import { Form, Field, reduxForm } from "redux-form";
 import marsbackground from "img/marsBackground.jpg";
 import "../../../../styles/mars.scss";
-const renderField = ({ input, label, type, meta: { touched, error } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} placeholder={label} type={type} />
-      {touched && error && <span>{error}</span>}
-    </div>
-  </div>
-);
+import Button from "@material-ui/core/Button";
 
 class LogIn extends Component {
-  //Send login info to redux actions
-
-  submit = values => {
-    this.props.signInAction(values, this.props.history);
+  onSubmit = (formProps) => {
+    this.props.signInAction(formProps, () => {
+      this.props.history.push("/mars/mysamples");
+    });
   };
-
-  errorMessage() {
-    if (this.props.errorMessage) {
-      return <div className="info-red">{this.props.errorMessage}</div>;
-    }
-  }
-
-  renderPassword() {
-    return (
-      <div>
-        <input />
-        <input />
-      </div>
-    );
-  }
 
   render() {
     const { handleSubmit } = this.props;
+
     return (
       <div
-        className="inoutform"
-        style={{ backgroundImage: `url(${marsbackground})` }}
+        style={{
+          backgroundImage: `url(${marsbackground})`,
+          height: "100%",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          alignItems: "center",
+          color: "white",
+        }}
       >
-        <div className="container">
+        <Form
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            alignItems: "center",
+          }}
+          onSubmit={handleSubmit(this.onSubmit)}
+        >
           <h2>GeoPass Login</h2>
-          <Form onSubmit={handleSubmit(this.submit)}>
+          <fieldset>
+            <label style={{ fontWeight: "bold" }}>Username</label>
+            <br></br>
             <Field
               name="username"
-              component={renderField}
               type="text"
-              placeholder="username"
+              component="input"
+              autoComplete="none"
             />
+          </fieldset>
+          <br></br>
+          <fieldset>
+            <label style={{ fontWeight: "bold" }}>Password</label>
+            <br></br>
             <Field
               name="password"
-              component={renderField}
               type="password"
-              placeholder="password"
+              component="input"
+              autoComplete="none"
             />
-            <button type="submit" className="btn btn-primary btn-md inbutton">
-              Login
-            </button>
-          </Form>
-          {this.errorMessage()}
-        </div>
+          </fieldset>
+          <div>{this.props.errorMessage}</div>
+          <br></br>
+          <button className="btn btn-primary">Log In</button>
+        </Form>
       </div>
     );
   }
@@ -73,11 +73,10 @@ function mapStateToProps(state) {
   return { errorMessage: state.mars.error };
 }
 
-const reduxFormSignIn = reduxForm({
-  form: "signin"
-})(LogIn);
-
-export default connect(
-  mapStateToProps,
-  { signInAction }
-)(reduxFormSignIn);
+export default compose(
+  connect(
+    mapStateToProps,
+    { signInAction }
+  ),
+  reduxForm({ form: "signin" })
+)(LogIn);

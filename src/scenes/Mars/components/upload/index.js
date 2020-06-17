@@ -7,29 +7,22 @@ function mapStateToProps(state) {
   return {
     mapFile: state.mars.mapFile,
     sourceFiles: state.mars.sourceFiles,
+    samples: state.mars.samples,
+    loading: state.mars.loading,
+    originalKeys: state.mars.originalKeys,
+    originalValues: state.mars.originalValues,
+    sesarKeys: state.mars.sesarKeys,
     user: state.mars,
-    uploadSamples: state.mars.samples,
-    loading: state.mars.loading
   };
 }
 
 function mapDistatchToProps(dispatch) {
   return {
     onUpload: (sourceMap, uploadSamples, user, selectedSamples) => {
-      let worker = new Worker();
-      worker.postMessage({ type: "combine", sourceMap, uploadSamples });
-      worker.onmessage = e => {
-        dispatch(
-          actions.upload(
-            user.username,
-            user.password,
-            user.usercode,
-            e.data,
-            selectedSamples
-          )
-        );
-      };
-    }
+      dispatch(
+        actions.onUploadProceed(sourceMap, uploadSamples, user, selectedSamples)
+      );
+    },
   };
 }
 
