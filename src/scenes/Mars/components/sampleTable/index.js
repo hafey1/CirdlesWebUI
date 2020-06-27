@@ -25,6 +25,8 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
+import { CsvBuilder } from "filefy";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 import _ from "lodash";
 
@@ -147,11 +149,25 @@ const EnhancedTableToolbar = (props) => {
     user,
     mapFile,
     onUpload,
+    originalValues,
+    originalKeys,
   } = props;
 
+  var values = [];
+  for (let i = 0; i < originalValues.length; i++) {
+    values[i] = Object.values(originalValues[i]);
+  }
   const handleClick = (props) => (event) => {
     onUpload(mapFile, samples, user, sampleIndicies);
   };
+
+  function handleExport(values) {
+    var csvBuilder = new CsvBuilder("samples.csv")
+      .setDelimeter(",")
+      .setColumns(originalKeys)
+      .addRows(values)
+      .exportFile();
+  }
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -185,9 +201,12 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
+        <Tooltip title="Download CSV">
+          <IconButton
+            aria-label="filter list"
+            onClick={() => handleExport(values)}
+          >
+            <GetAppIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -246,8 +265,6 @@ function CreateRows(props) {
   }
 
   let sampleRow = samples[index];
-
-  console.log("index: ", sampleRow);
   return (
     <React.Fragment>
       <TableRow
@@ -323,7 +340,6 @@ function CreateRows(props) {
 }
 
 export default function SampleTable(props) {
-  console.log("Props: ", props);
   const classes = useStyles();
   const rows = props.originalValues;
   const [order, setOrder] = React.useState("desc");
@@ -418,6 +434,8 @@ export default function SampleTable(props) {
           user={props.user}
           mapFile={props.mapFile}
           onUpload={props.onUpload}
+          originalValues={props.originalValues}
+          originalKeys={props.originalKeys}
         />
         <TableContainer className={classes.container}>
           <Table

@@ -16,6 +16,7 @@
     "bootstrap": "^4.4.1",
     "d3-dsv": "^1.2.0",
     "downloadjs": "^1.4.7",
+    "filefy": "^0.1.10",
     "js-beautify": "^1.10.3",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
