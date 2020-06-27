@@ -180,15 +180,64 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       //Start upload request
       dispatch(uploadRequest());
 
+      console.log(selectedSamples);
       let samplesToUpload = [];
       for (let i = 0; i < selectedSamples.length; i++) {
         let index = selectedSamples[i];
         samplesToUpload[i] = samples[index];
+        console.log(samplesToUpload);
+      }
+
+      let sampleNames = [];
+      for (let i = 0; i < samplesToUpload.length; i++) {
+        for (let j = 0; j < samplesToUpload[i].length; j++) {
+          if (samplesToUpload[i][j].key == "name") {
+            sampleNames[i] = samplesToUpload[i][j].value;
+          }
+        }
+      }
+
+      console.log("SAMPLE NAMES: ", sampleNames);
+      let duplicateSamples = [];
+      let filteredSamples = [];
+      let filteredIndex = [];
+      for (let i = 0; i < samplesToUpload.length; i++) {
+        let sampleToCheck = sampleNames[i];
+
+        try {
+          const response = await axios.get(
+            `https://sesardev.geosamples.org/samples/user_code/${usercode}?sample_name=${sampleToCheck}`
+          );
+          if (response.data.total_counts == 0) {
+            filteredSamples.push(samplesToUpload[i]);
+            filteredIndex.push(selectedSamples[i]);
+          } else {
+            duplicateSamples.push(sampleToCheck);
+          }
+        } catch (err) {
+          console.log("Error Response: ");
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+          if (err.response.status == 404) {
+            filteredSamples.push(samplesToUpload[i]);
+            filteredIndex.push(selectedSamples[i]);
+          }
+        }
+      }
+
+      if (duplicateSamples.length !== 0) {
+        alert(
+          `The following sample(s) have the SAME NAME as samples already registered to your usercode and WILL NOT be uploaded: \n ${duplicateSamples}`
+        );
+      }
+
+      if (filteredIndex.length === 0) {
+        dispatch({ type: UPLOAD_FAILURE, error });
       }
 
       //convert samples to xml scheme
-      let xmlSample = toXML(samplesToUpload, usercode);
-
+      let xmlSample = toXML(filteredSamples, usercode);
       //TODO: Validate each sample
       //create form data to use in the POST request
       let formData = new FormData();
@@ -207,7 +256,7 @@ export function upload(username, password, usercode, samples, selectedSamples) {
 
       //convert the response data from xml to JSON
       convert.xmlDataToJSON(res.data, { explicitArray: true }).then((json) => {
-        dispatch(uploadSuccess(json.results.sample, selectedSamples));
+        dispatch(uploadSuccess(json.results.sample, filteredIndex));
       });
     } catch (error) {
       console.log(error);

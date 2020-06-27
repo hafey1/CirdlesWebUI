@@ -21,6 +21,13 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PublishIcon from "@material-ui/icons/Publish";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import Collapse from "@material-ui/core/Collapse";
+import Box from "@material-ui/core/Box";
+import { CsvBuilder } from "filefy";
+import GetAppIcon from "@material-ui/icons/GetApp";
+
 import _ from "lodash";
 
 function descendingComparator(a, b, orderBy) {
@@ -68,6 +75,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
+        <TableCell />
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -80,6 +88,7 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell}
             padding={"default"}
+            align={"right"}
             sortDirection={orderBy === headCell ? order : false}
           >
             <TableSortLabel
@@ -140,11 +149,25 @@ const EnhancedTableToolbar = (props) => {
     user,
     mapFile,
     onUpload,
+    originalValues,
+    originalKeys,
   } = props;
 
+  var values = [];
+  for (let i = 0; i < originalValues.length; i++) {
+    values[i] = Object.values(originalValues[i]);
+  }
   const handleClick = (props) => (event) => {
     onUpload(mapFile, samples, user, sampleIndicies);
   };
+
+  function handleExport(values) {
+    var csvBuilder = new CsvBuilder("samples.csv")
+      .setDelimeter(",")
+      .setColumns(originalKeys)
+      .addRows(values)
+      .exportFile();
+  }
   return (
     <Toolbar
       className={clsx(classes.root, {
@@ -178,9 +201,12 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
+        <Tooltip title="Download CSV">
+          <IconButton
+            aria-label="filter list"
+            onClick={() => handleExport(values)}
+          >
+            <GetAppIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -219,6 +245,100 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function CreateRows(props) {
+  const {
+    row,
+    isItemSelected,
+    labelId,
+    originalValues,
+    handleClick,
+    sampleIndicies,
+    samples,
+  } = props;
+  const [open, setOpen] = React.useState(false);
+
+  let index = 0;
+  for (let i = 0; i < originalValues.length; i++) {
+    if (_.isEqual(row, originalValues[i]) === true) {
+      index = i;
+    }
+  }
+
+  let sampleRow = samples[index];
+  return (
+    <React.Fragment>
+      <TableRow
+        hover
+        role="checkbox"
+        aria-checked={isItemSelected}
+        tabIndex={-1}
+        key={row.SAMPLE}
+        selected={isItemSelected}
+      >
+        <TableCell padding="checkbox">
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell padding="checkbox">
+          <Checkbox
+            checked={isItemSelected}
+            inputProps={{ "aria-labelledby": labelId }}
+            onClick={(event) => handleClick(event, row, originalValues)}
+          />
+        </TableCell>
+        {Object.entries(row).map(([key, value]) => (
+          <TableCell
+            component="th"
+            id={labelId}
+            scope="row"
+            style={{ paddingBottom: 0, paddingTop: 0 }}
+            key={key}
+            align={"right"}
+          >
+            {value}
+          </TableCell>
+        ))}
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom component="div">
+                Mapping
+              </Typography>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Original Field</TableCell>
+                    <TableCell>Original Value</TableCell>
+                    <TableCell>SESAR Field</TableCell>
+                    <TableCell>SESAR Value</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {sampleRow.map((sample) => (
+                    <TableRow>
+                      <TableCell>{sample.originalKey}</TableCell>
+                      <TableCell>{sample.originalValue}</TableCell>
+                      <TableCell>{sample.key}</TableCell>
+                      <TableCell>{sample.value}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
+}
+
 export default function SampleTable(props) {
   const classes = useStyles();
   const rows = props.originalValues;
@@ -238,11 +358,17 @@ export default function SampleTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.SAMPLE);
+      const newSelecteds = rows.map((n) => n);
       setSelected(newSelecteds);
+      let indicies = [];
+      for (var i = 0; i < rows.length; i++) {
+        indicies = indicies.concat(sampleIndicies, i);
+      }
+      setSampleIndicies(indicies);
       return;
     }
     setSelected([]);
+    setSampleIndicies([]);
   };
 
   const handleClick = (event, name, originalValues) => {
@@ -308,6 +434,8 @@ export default function SampleTable(props) {
           user={props.user}
           mapFile={props.mapFile}
           onUpload={props.onUpload}
+          originalValues={props.originalValues}
+          originalKeys={props.originalKeys}
         />
         <TableContainer className={classes.container}>
           <Table
@@ -335,35 +463,15 @@ export default function SampleTable(props) {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
-                      hover
-                      onClick={(event) =>
-                        handleClick(event, row, props.originalValues)
-                      }
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.SAMPLE}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </TableCell>
-                      {Object.entries(row).map(([key, value]) => (
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                          key={key}
-                        >
-                          {value}
-                        </TableCell>
-                      ))}
-                    </TableRow>
+                    <CreateRows
+                      row={row}
+                      isItemSelected={isItemSelected}
+                      labelId={labelId}
+                      originalValues={props.originalValues}
+                      handleClick={handleClick}
+                      sampleIndicies={sampleIndicies}
+                      samples={props.samples}
+                    />
                   );
                 })}
               {emptyRows > 0 && (
