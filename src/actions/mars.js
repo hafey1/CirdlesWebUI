@@ -389,10 +389,6 @@ const loadCSV = (files, map, logic, callback) => {
             samples[i] = [];
           }
           for (let key in map) {
-            console.log("KEY", key);
-            console.log(map[key]);
-            console.log(d[map[key]]);
-            console.log(d[key]);
             if (Array.isArray(map[key])) {
               for (let j = 0; j < map[key].length; j++) {
                 if (d[map[key][j]] != undefined) {
@@ -413,7 +409,7 @@ const loadCSV = (files, map, logic, callback) => {
               samples[i].push(createField(key, d[map[key]], map[key], logic));
               delete d[map[key]];
             } else if (map[key] === "<METADATA>") {
-              samples[i].push(createField(key, d[map[key]], map[key], logic));
+              samples[i].push(createField(key, d[map[key]], undefined, logic));
             }
           }
           // Get the unmapped samples
