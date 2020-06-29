@@ -79,7 +79,7 @@ export function onChangeMapFileAction(mapFile) {
 }
 
 //Upload Actions
-export function initializeSamples(sampleArray) {
+export const initializeSamples = (sampleArray) => async (dispatch) => {
   var seasarKeys = new Set();
   var originalValues = [];
   var originalKeys = [];
@@ -119,14 +119,15 @@ export function initializeSamples(sampleArray) {
     originalValues = [...originalValues, keyValue];
   }
 
-  return {
+  console.log("samples array", sampleArray);
+  await dispatch({
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
     originalKeys: originalKeys,
     originalValues: originalValues,
     seasarKeys: seasarKeys,
-  };
-}
+  });
+};
 
 // ==============================================================================
 // UPLOAD ACTIONS
@@ -143,6 +144,7 @@ export const uploadSuccess = (results, selectedSamples) => async (
   getState
 ) => {
   let samples = getState().mars.samples;
+  console.log(samples);
   for (let i = 0; i < results.length; i++) {
     let index = selectedSamples[i];
 
@@ -157,12 +159,52 @@ export const uploadSuccess = (results, selectedSamples) => async (
     };
   }
 
-  await dispatch(initializeSamples(samples));
+  var seasarKeys = new Set();
+  var originalValues = [];
+  var originalKeys = [];
+
+  for (let i = 0; i < samples.length; i++) {
+    for (let j = 0; j < samples[i].length; j++) {
+      let sampleData = samples[i];
+      let row = samples[i][j];
+      if (row.key !== undefined) {
+        seasarKeys.add(row.key);
+      }
+      originalKeys = [
+        ...new Set(
+          sampleData.map((item) => {
+            return item.originalKey;
+          })
+        ),
+      ];
+    }
+  }
+
+  for (let i = 0; i < samples.length; i++) {
+    var keyValue = {};
+    for (let j = 0; j < originalKeys.length; j++) {
+      var keyData = originalKeys[j];
+      var data = samples[i]
+        .filter((x) => {
+          return x.originalKey === originalKeys[j];
+        })
+        .map((x) => {
+          return x.originalValue;
+        });
+      keyValue[keyData] = data[0];
+    }
+    originalValues = [...originalValues, keyValue];
+  }
+
+  console.log("samples", samples);
+  //await dispatch(initializeSamples(samples));
   dispatch({
     type: UPLOAD_SUCCESS,
     results,
     selectedSamples,
     samples,
+    originalKeys,
+    originalValues,
   });
 };
 
@@ -276,11 +318,17 @@ export const fetchUsercodeAndSamples = (usercode) => async (
 
   var igsn_list = getState().mars.igsnResponseList.igsn_list;
 
+  var count = 0;
   igsn_list.forEach(async (element) => {
     await dispatch(fetchSamples(element));
+    count++;
+    console.log(count);
+    if (count == igsn_list.length) {
+      dispatch(fetchSamplesSuccessful());
+    }
   });
 
-  await dispatch(fetchSamplesSuccessful());
+  console.log(count, igsn_list.length);
 };
 
 export const fetchUsercode = (usercode) => async (dispatch) => {
@@ -308,8 +356,8 @@ export const fetchSamples = (igsn) => async (dispatch) => {
   });
 };
 
-export const fetchSamplesSuccessful = () => async (dispatch) => {
-  dispatch({ type: FETCH_SAMPLES_SUCCESS, payload: "Success" });
+export const fetchSamplesSuccessful = () => {
+  return { type: FETCH_SAMPLES_SUCCESS, payload: "Success" };
 };
 
 // ==============================================================================
@@ -463,7 +511,8 @@ export const onUploadProceed = (
   selectedSamples
 ) => async (dispatch) => {
   readSourceMap(sourceMap, (err, map, logic, combinations) => {
-    let combinedSamples = combineFields(combinations, map, uploadSamples);
+    let sampleCopy = [...uploadSamples];
+    let combinedSamples = combineFields(combinations, map, sampleCopy);
     dispatch(
       upload(
         user.username,

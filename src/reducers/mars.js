@@ -55,9 +55,13 @@ export default function(state = {}, action) {
       return { ...state, loading: true };
     case UPLOAD_SUCCESS:
       console.log("<==== Upload Succcessful ====>");
+      console.log(action.samples);
       return {
         ...state,
         loading: false,
+        samples: action.samples,
+        originalKeys: action.originalKeys,
+        originalValues: action.originalValues,
       };
     case UPLOAD_FAILURE:
       console.log("<==== Upload Failure ====>");

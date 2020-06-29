@@ -69,6 +69,7 @@ class MySamples extends Component {
   }
 
   render() {
+    console.log(this.props);
     const options = {
       filter: true,
       filterType: "dropdown",
