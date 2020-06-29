@@ -34,6 +34,7 @@ class Upload extends Component {
   }
 
   renderTable() {
+    console.log(this.props.samples);
     if (
       this.props.originalValues !== undefined &&
       this.props.originalKeys !== undefined &&

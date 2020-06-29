@@ -354,6 +354,7 @@ const readSourceData = (format, files, map, logic, callback) => {
 };
 
 const createField = (key, originalValue, originalKey, logic) => {
+  //console.log(key, originalValue, originalKey);
   if (!key) {
     return {
       originalKey,
@@ -388,18 +389,31 @@ const loadCSV = (files, map, logic, callback) => {
             samples[i] = [];
           }
           for (let key in map) {
+            console.log("KEY", key);
+            console.log(map[key]);
+            console.log(d[map[key]]);
+            console.log(d[key]);
             if (Array.isArray(map[key])) {
               for (let j = 0; j < map[key].length; j++) {
-                if (d[map[key][j]]) {
-                  samples[i].push(
-                    createField(key, d[map[key][j]], map[key][j], logic)
-                  );
+                if (d[map[key][j]] != undefined) {
+                  if (d[map[key][j]] == "") {
+                    samples[i].push(
+                      createField(key, "Not Provided", map[key][j], logic)
+                    );
+                  } else {
+                    samples[i].push(
+                      createField(key, d[map[key][j]], map[key][j], logic)
+                    );
+                  }
+
                   delete d[map[key][i]];
                 }
               }
             } else if (d[map[key]]) {
               samples[i].push(createField(key, d[map[key]], map[key], logic));
               delete d[map[key]];
+            } else if (map[key] === "<METADATA>") {
+              samples[i].push(createField(key, d[map[key]], map[key], logic));
             }
           }
           // Get the unmapped samples
@@ -467,23 +481,31 @@ export const onUploadProceed = (
 };
 
 const combineFields = (combinations, map, uploadSamples) => {
+  // console.log("Combinations", combinations);
+  //console.log("Map", map);
+  // console.log("Upload Samples", uploadSamples);
   for (let i = 0; i < uploadSamples.length; i++) {
     for (let key in map) {
+      //   console.log("KEY", key);
+      //  console.log(Array.isArray(map[key]));
       if (Array.isArray(map[key])) {
         let filter = uploadSamples[i].filter((value) =>
           map[key].includes(value.originalKey)
         );
-
+        //   console.log("Filter: ", filter);
         let inverse = uploadSamples[i].filter(
           (value) => !map[key].includes(value.originalKey)
         );
+
         if (filter.length > 1) {
           let reduction = filter.reduce(
             (acc, field) => acc.concat([field.value]),
             []
           );
+          //  console.log("Reduction", reduction);
           if (combinations[key]) {
             let newField = { key, value: combinations[key](reduction) };
+            //  console.log("Field", newField);
             inverse.push(newField);
             uploadSamples[i] = inverse;
           }
