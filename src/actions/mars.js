@@ -119,7 +119,6 @@ export const initializeSamples = (sampleArray) => async (dispatch) => {
     originalValues = [...originalValues, keyValue];
   }
 
-  console.log("samples array", sampleArray);
   await dispatch({
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
@@ -144,7 +143,7 @@ export const uploadSuccess = (results, selectedSamples) => async (
   getState
 ) => {
   let samples = getState().mars.samples;
-  console.log(samples);
+
   for (let i = 0; i < results.length; i++) {
     let index = selectedSamples[i];
 
@@ -196,7 +195,6 @@ export const uploadSuccess = (results, selectedSamples) => async (
     originalValues = [...originalValues, keyValue];
   }
 
-  console.log("samples", samples);
   //await dispatch(initializeSamples(samples));
   dispatch({
     type: UPLOAD_SUCCESS,
@@ -222,12 +220,10 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       //Start upload request
       dispatch(uploadRequest());
 
-      console.log(selectedSamples);
       let samplesToUpload = [];
       for (let i = 0; i < selectedSamples.length; i++) {
         let index = selectedSamples[i];
         samplesToUpload[i] = samples[index];
-        console.log(samplesToUpload);
       }
 
       let sampleNames = [];
@@ -239,7 +235,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
         }
       }
 
-      console.log("SAMPLE NAMES: ", sampleNames);
       let duplicateSamples = [];
       let filteredSamples = [];
       let filteredIndex = [];
@@ -322,13 +317,10 @@ export const fetchUsercodeAndSamples = (usercode) => async (
   igsn_list.forEach(async (element) => {
     await dispatch(fetchSamples(element));
     count++;
-    console.log(count);
     if (count == igsn_list.length) {
       dispatch(fetchSamplesSuccessful());
     }
   });
-
-  console.log(count, igsn_list.length);
 };
 
 export const fetchUsercode = (usercode) => async (dispatch) => {
@@ -402,7 +394,6 @@ const readSourceData = (format, files, map, logic, callback) => {
 };
 
 const createField = (key, originalValue, originalKey, logic) => {
-  //console.log(key, originalValue, originalKey);
   if (!key) {
     return {
       originalKey,
@@ -526,18 +517,13 @@ export const onUploadProceed = (
 };
 
 const combineFields = (combinations, map, uploadSamples) => {
-  // console.log("Combinations", combinations);
-  //console.log("Map", map);
-  // console.log("Upload Samples", uploadSamples);
   for (let i = 0; i < uploadSamples.length; i++) {
     for (let key in map) {
-      //   console.log("KEY", key);
-      //  console.log(Array.isArray(map[key]));
       if (Array.isArray(map[key])) {
         let filter = uploadSamples[i].filter((value) =>
           map[key].includes(value.originalKey)
         );
-        //   console.log("Filter: ", filter);
+
         let inverse = uploadSamples[i].filter(
           (value) => !map[key].includes(value.originalKey)
         );
@@ -547,10 +533,10 @@ const combineFields = (combinations, map, uploadSamples) => {
             (acc, field) => acc.concat([field.value]),
             []
           );
-          //  console.log("Reduction", reduction);
+
           if (combinations[key]) {
             let newField = { key, value: combinations[key](reduction) };
-            //  console.log("Field", newField);
+
             inverse.push(newField);
             uploadSamples[i] = inverse;
           }

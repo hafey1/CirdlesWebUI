@@ -57,6 +57,14 @@ class Mapping extends Component {
   }
 
   render() {
+    if (this.props.uploadSamples) {
+      var res = confirm(
+        "Would you like to create a new mapping? \n Previous mapping data will be loss"
+      );
+      if (res == false) {
+        this.props.history.push("upload");
+      }
+    }
     return (
       <div className="upload">
         <Panel name="Mapping Setup">
