@@ -10,6 +10,7 @@ class Upload extends Component {
     super(props);
     this.state = {
       samples: [],
+      mapFile: null,
     };
 
     this.renderTable = this.renderTable.bind(this);
@@ -17,8 +18,9 @@ class Upload extends Component {
     this.getMapFile = this.getMapFile.bind(this);
   }
 
-  getMapFile() {
-    return localForage.getItem("mapFile");
+  async getMapFile() {
+    let file = await localForage.getItem("mapFile");
+    return file;
   }
 
   async handleOnUpload(selectedRows) {
@@ -28,6 +30,7 @@ class Upload extends Component {
       selectedSamples = [...selectedSamples, selectedRows.data[i].index];
     }
     let mapFile = await this.getMapFile();
+    console.log(mapFile);
     if (selectedSamples.length > 0) {
       this.props.onUpload(
         mapFile,
@@ -38,8 +41,15 @@ class Upload extends Component {
     }
   }
 
+  async componentDidMount() {
+    const mapFile = await this.getMapFile();
+    this.setState({ mapFile: mapFile });
+  }
+
   renderTable() {
-    console.log(this.props.samples);
+    let mapFile = this.state.mapFile;
+    console.log(mapFile);
+
     if (
       this.props.originalValues !== undefined &&
       this.props.originalKeys !== undefined &&
@@ -56,7 +66,7 @@ class Upload extends Component {
                 samples={this.props.samples}
                 onUpload={this.props.onUpload}
                 user={this.props.user}
-                mapFile={() => this.getMapFile}
+                mapFile={mapFile}
               />
             </div>
           </div>
