@@ -30,7 +30,6 @@ class Upload extends Component {
       selectedSamples = [...selectedSamples, selectedRows.data[i].index];
     }
     let mapFile = await this.getMapFile();
-    console.log(mapFile);
     if (selectedSamples.length > 0) {
       this.props.onUpload(
         mapFile,
@@ -48,8 +47,6 @@ class Upload extends Component {
 
   renderTable() {
     let mapFile = this.state.mapFile;
-    console.log(mapFile);
-
     if (
       this.props.originalValues !== undefined &&
       this.props.originalKeys !== undefined &&
