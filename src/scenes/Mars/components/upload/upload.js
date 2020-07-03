@@ -14,15 +14,20 @@ class Upload extends Component {
 
     this.renderTable = this.renderTable.bind(this);
     this.handleOnUpload = this.handleOnUpload.bind(this);
+    this.getMapFile = this.getMapFile.bind(this);
   }
 
-  handleOnUpload(selectedRows) {
+  getMapFile() {
+    return localForage.getItem("mapFile");
+  }
+
+  async handleOnUpload(selectedRows) {
     //create an array of the indices of samples that were selected to be uploaded
     let selectedSamples = [];
     for (let i = 0; i < selectedRows.data.length; i++) {
       selectedSamples = [...selectedSamples, selectedRows.data[i].index];
     }
-    let mapFile = this.props.mapFile;
+    let mapFile = await this.getMapFile();
     if (selectedSamples.length > 0) {
       this.props.onUpload(
         mapFile,
@@ -51,7 +56,7 @@ class Upload extends Component {
                 samples={this.props.samples}
                 onUpload={this.props.onUpload}
                 user={this.props.user}
-                mapFile={this.props.mapFile}
+                mapFile={() => this.getMapFile}
               />
             </div>
           </div>
