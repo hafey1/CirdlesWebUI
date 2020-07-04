@@ -340,7 +340,6 @@ function CreateRows(props) {
 }
 
 export default function SampleTable(props) {
-  console.log(props);
   const classes = useStyles();
   const rows = props.originalValues;
   const [order, setOrder] = React.useState("desc");

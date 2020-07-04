@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import "../../../../styles/mars.scss";
-
-import * as localForage from "localforage";
 import _ from "lodash";
+import * as localForage from "localforage";
 import SampleTable from "../sampleTable";
+import "../../../../styles/mars.scss";
 
 class Upload extends Component {
   constructor(props) {
@@ -40,6 +39,8 @@ class Upload extends Component {
     }
   }
 
+  /* This needs to be async because we need to await until local 
+  forage promise is resolved in order to get the value for the map file */
   async componentDidMount() {
     const mapFile = await this.getMapFile();
     this.setState({ mapFile: mapFile });
@@ -93,55 +94,3 @@ class Upload extends Component {
 }
 
 export default Upload;
-
-/*
- <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {this.props.originalKeys.map((keyHeader) => (
-                        <TableCell key={keyHeader}>{keyHeader}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {this.props.originalValues.map((row, index) => (
-                      <TableRow key={index}>
-                        {Object.entries(row).map(([key, value]) => (
-                          <TableCell key={key}>{value}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              */
-
-/* <TableRow
-             hover
-             onClick={(event) => handleClick(event, row.name)}
-             role="checkbox"
-             aria-checked={isItemSelected}
-             tabIndex={-1}
-             key={index}
-             selected={isItemSelected}
-           >
-             <TableCell padding="checkbox">
-               <Checkbox
-                 checked={isItemSelected}
-                 inputProps={{ "aria-labelledby": labelId }}
-               />
-             </TableCell>
-             <TableCell
-               component="th"
-               id={labelId}
-               scope="row"
-               padding="none"
-             >
-               {row.name}
-             </TableCell>
-             <TableCell align="right">{row.calories}</TableCell>
-             <TableCell align="right">{row.fat}</TableCell>
-             <TableCell align="right">{row.carbs}</TableCell>
-             <TableCell align="right">{row.protein}</TableCell>
-           </TableRow>*/

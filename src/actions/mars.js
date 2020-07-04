@@ -5,7 +5,7 @@ import toXML from "../scenes/Mars/components/toXML";
 import FormData from "form-data";
 import convert from "xml-to-json-promise";
 import { SESAR_LOGIN } from "../constants/api";
-import _ from "lodash";
+import _, { sample } from "lodash";
 import { csvParse } from "d3-dsv";
 
 import {
@@ -407,6 +407,16 @@ const createField = (key, originalValue, originalKey, logic) => {
     value: logic[key] ? logic[key](originalValue, originalKey) : originalValue,
   };
 };
+
+const metaField = (key, logic) => {
+  let value = logic[key]();
+  return {
+    originalKey: key,
+    originalValue: value,
+    key,
+    value,
+  };
+};
 // Load CSV files by merging them
 const loadCSV = (files, map, logic, callback) => {
   let samples = [];
@@ -447,14 +457,20 @@ const loadCSV = (files, map, logic, callback) => {
             } else if (d[map[key]]) {
               samples[i].push(createField(key, d[map[key]], map[key], logic));
               delete d[map[key]];
-            } else if (map[key] === "<METADATA>") {
-              samples[i].push(createField(key, d[map[key]], undefined, logic));
             }
           }
           // Get the unmapped samples
           for (let key in d) {
             if (d[key]) {
               samples[i].push(createField(undefined, d[key], key, logic));
+            }
+          }
+
+          for (let key in map) {
+            if (map[key] === "<METADATA>") {
+              let data = metaField(key, logic);
+              samples[i] = [...samples[i], data];
+              // samples[i].push(createField(key, d[map[key]], undefined, logic));
             }
           }
         });
