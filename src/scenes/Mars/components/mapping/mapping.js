@@ -3,13 +3,22 @@ import Panel from "../panel";
 import Modal from "../modal";
 import "../../../../styles/mars.scss";
 import * as localForage from "localforage";
+import Button from "@material-ui/core/Button";
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import { instanceOf } from "prop-types";
 
 class Mapping extends Component {
   constructor(props) {
     super(props);
     this.state = {
       samples: false,
-      mapFile: "",
+      mapFile: null,
+      open: true,
     };
 
     this.onChangeSourceFiles = this.onChangeSourceFiles.bind(this);
@@ -19,6 +28,14 @@ class Mapping extends Component {
     this.sourceFiles = React.createRef();
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleContinue = () => {
+    this.props.history.push("upload");
+  };
 
   onChangeSourceFiles(fileList) {
     let sourceFiles = [];
@@ -58,12 +75,50 @@ class Mapping extends Component {
 
   render() {
     if (this.props.uploadSamples) {
-      var res = confirm(
-        "Would you like to create a new mapping? \n Previous mapping data will be loss"
+      return (
+        <div className="upload">
+          <Panel name="Mapping Setup">
+            <form onSubmit={this.handleSubmit}>
+              <label className="text">
+                Select your Mapping File
+                <input
+                  className="inputs"
+                  type="file"
+                  accept="text/javascript"
+                  ref={this.mapFile}
+                />
+              </label>
+
+              <label className="text">
+                Select your sourceFiles
+                <input
+                  className="inputs"
+                  type="file"
+                  accept="text/csv"
+                  multiple
+                  ref={this.sourceFiles}
+                />
+              </label>
+              <button className="btn btn-primary" type="submit">
+                Proceed to Mapping
+              </button>
+            </form>
+          </Panel>
+          <Dialog open={this.state.open}>
+            <DialogTitle>{"Make New Mapping?"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Would you like to make a new map? All previous mapping data will
+                be loss.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose}>Yes</Button>
+              <Button onClick={this.handleContinue}>No</Button>
+            </DialogActions>
+          </Dialog>
+        </div>
       );
-      if (res == false) {
-        this.props.history.push("upload");
-      }
     }
     return (
       <div className="upload">

@@ -23,6 +23,7 @@ import {
   FETCH_SAMPLES_SUCCESS,
 } from "./types";
 import { actionTypes } from "redux-form";
+import * as localForage from "localforage";
 
 // ==============================================================================
 // SIGN IN AND SIGNOUT ACTIONS
@@ -54,8 +55,11 @@ export const signInAction = (formProps, callback) => async (dispatch) => {
   }
 };
 
+async function removeStorage() {
+  await localForage.clear();
+}
 export function signOutAction() {
-  localStorage.clear();
+  removeStorage();
   return {
     type: UNAUTHENTICATED,
   };
