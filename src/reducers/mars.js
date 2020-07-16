@@ -33,6 +33,14 @@ export default function(state = {}, action) {
         error: "",
         sampleLoading: true,
         mySamplesList: [],
+        samples: [],
+        originalKeys: [],
+        originalValues: [],
+        sesarKeys: [],
+        pureKeys: [],
+        pureValues: [],
+        pureSesar: [],
+        pureSamples: [],
       };
     case AUTHENTICATION_ERROR:
       return { ...state, error: action.payload, mySamplesList: [] };

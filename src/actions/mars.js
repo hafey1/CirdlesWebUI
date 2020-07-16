@@ -95,8 +95,6 @@ export const initializeSamples = (sampleArray, pureSamples) => async (
   var pureKeys = [];
   var pureValues = [];
 
-  console.log("Pure", pureSamples);
-
   for (let i = 0; i < uploadSamples.length; i++) {
     for (let j = 0; j < uploadSamples[i].length; j++) {
       let sampleData = uploadSamples[i];
@@ -306,8 +304,6 @@ export const uploadSuccess = (results, selectedSamples) => async (
     pureValues = [...pureValues, keyValue];
   }
 
-  console.log("Upload result", pureSamples);
-  //await dispatch(initializeSamples(samples));
   dispatch({
     type: UPLOAD_SUCCESS,
     results,
@@ -336,8 +332,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       //Start upload request
       dispatch(uploadRequest());
 
-      console.log("S", samples);
-      console.log("SS", selectedSamples);
       let samplesToUpload = [];
       for (let i = 0; i < selectedSamples.length; i++) {
         let index = selectedSamples[i];
@@ -390,8 +384,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       if (filteredIndex.length === 0) {
         dispatch({ type: UPLOAD_FAILURE, error });
       }
-
-      console.log(" Filtered", filteredSamples);
       //convert samples to xml scheme
       let xmlSample = toXML(filteredSamples, usercode);
       //TODO: Validate each sample
@@ -403,8 +395,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
         "content",
         new XMLSerializer().serializeToString(xmlSample)
       );
-
-      console.log(formData);
       //POST request
       const res = await axios.post(
         "https://sesardev.geosamples.org/webservices/upload.php",
@@ -609,7 +599,7 @@ const loadCSV = async (files, map, logic, callback) => {
 
   let unionKeys = _.keysIn(union[0]);
   let keyCopies = [...unionKeys];
-  console.log("Union Keys", unionKeys);
+
   for (let i = 0; i < union.length; i++) {
     let row = union[i];
 
@@ -665,7 +655,7 @@ const loadCSV = async (files, map, logic, callback) => {
       }
     }
   }
-  console.log("Delete", keyCopies);
+
   for (let i = 0; i < union.length; i++) {
     let row = union[i];
 
@@ -684,9 +674,6 @@ const loadCSV = async (files, map, logic, callback) => {
       }
     }
   }
-
-  console.log("samples", mappedSamples);
-  console.log("p", pureSamples);
   callback(null, mappedSamples, pureSamples);
 };
 

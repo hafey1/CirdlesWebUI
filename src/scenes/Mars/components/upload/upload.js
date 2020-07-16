@@ -47,7 +47,12 @@ class Upload extends Component {
   }
 
   renderTable() {
-    let mapFile = this.state.mapFile;
+    let mapFile;
+    if (this.state.mapFile == null) {
+      mapFile = this.props.mapFile;
+    } else {
+      mapFile = this.state.mapFile;
+    }
     if (
       this.props.originalValues !== undefined &&
       this.props.originalKeys !== undefined &&
@@ -92,7 +97,6 @@ class Upload extends Component {
   }
 
   render() {
-    console.log("Props", this.props);
     return <div>{this.renderTable()}</div>;
   }
 }
