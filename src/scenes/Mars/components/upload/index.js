@@ -11,6 +11,9 @@ function mapStateToProps(state) {
     loading: state.mars.loading,
     originalKeys: state.mars.originalKeys,
     originalValues: state.mars.originalValues,
+    pureSamples: state.mars.pureSamples,
+    pureKeys: state.mars.pureKeys,
+    pureValues: state.mars.pureValues,
     sesarKeys: state.mars.sesarKeys,
     user: state.mars,
   };

@@ -62,6 +62,9 @@ class Upload extends Component {
                 originalKeys={this.props.originalKeys}
                 originalValues={this.props.originalValues}
                 samples={this.props.samples}
+                pureKeys={this.props.pureKeys}
+                pureValues={this.props.pureValues}
+                pureSamples={this.props.pureSamples}
                 onUpload={this.props.onUpload}
                 user={this.props.user}
                 mapFile={mapFile}
@@ -89,6 +92,7 @@ class Upload extends Component {
   }
 
   render() {
+    console.log("Props", this.props);
     return <div>{this.renderTable()}</div>;
   }
 }

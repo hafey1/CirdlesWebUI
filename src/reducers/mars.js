@@ -42,6 +42,7 @@ export default function(state = {}, action) {
       return { ...state, mapFile: action.mapFile };
     case INITIALIZE_SAMPLES:
       console.log("<==== Samples Ready ====>");
+      console.log(action);
       return {
         ...state,
         samples: action.sampleArray,
@@ -49,6 +50,10 @@ export default function(state = {}, action) {
         originalKeys: action.originalKeys,
         originalValues: action.originalValues,
         sesarKeys: action.sesarKeys,
+        pureKeys: action.pureKeys,
+        pureValues: action.pureValues,
+        pureSesar: action.pureSesar,
+        pureSamples: action.pureSamples,
       };
     case UPLOAD_REQUEST:
       console.log("<==== Upload Requested ====>");
@@ -61,6 +66,10 @@ export default function(state = {}, action) {
         samples: action.samples,
         originalKeys: action.originalKeys,
         originalValues: action.originalValues,
+        pureKeys: action.pureKeys,
+        pureValues: action.pureValues,
+        pureSesar: action.pureSesar,
+        pureSamples: action.pureSamples,
       };
     case UPLOAD_FAILURE:
       console.log("<==== Upload Failure ====>");
