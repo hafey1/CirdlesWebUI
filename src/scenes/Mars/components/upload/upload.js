@@ -47,7 +47,12 @@ class Upload extends Component {
   }
 
   renderTable() {
-    let mapFile = this.state.mapFile;
+    let mapFile;
+    if (this.state.mapFile == null) {
+      mapFile = this.props.mapFile;
+    } else {
+      mapFile = this.state.mapFile;
+    }
     if (
       this.props.originalValues !== undefined &&
       this.props.originalKeys !== undefined &&
@@ -62,6 +67,9 @@ class Upload extends Component {
                 originalKeys={this.props.originalKeys}
                 originalValues={this.props.originalValues}
                 samples={this.props.samples}
+                pureKeys={this.props.pureKeys}
+                pureValues={this.props.pureValues}
+                pureSamples={this.props.pureSamples}
                 onUpload={this.props.onUpload}
                 user={this.props.user}
                 mapFile={mapFile}

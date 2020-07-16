@@ -7,6 +7,7 @@ import convert from "xml-to-json-promise";
 import { SESAR_LOGIN } from "../constants/api";
 import _, { sample } from "lodash";
 import { csvParse } from "d3-dsv";
+import { csv } from "d3-fetch";
 
 import {
   AUTHENTICATED,
@@ -83,11 +84,16 @@ export function onChangeMapFileAction(mapFile) {
 }
 
 //Upload Actions
-export const initializeSamples = (sampleArray) => async (dispatch) => {
+export const initializeSamples = (sampleArray, pureSamples) => async (
+  dispatch
+) => {
   var seasarKeys = new Set();
   var originalValues = [];
   var originalKeys = [];
   var uploadSamples = sampleArray;
+  var pureSesar = new Set();
+  var pureKeys = [];
+  var pureValues = [];
 
   for (let i = 0; i < uploadSamples.length; i++) {
     for (let j = 0; j < uploadSamples[i].length; j++) {
@@ -105,6 +111,25 @@ export const initializeSamples = (sampleArray) => async (dispatch) => {
       ];
     }
   }
+
+  for (let i = 0; i < pureSamples.length; i++) {
+    for (let j = 0; j < pureSamples[i].length; j++) {
+      let sampleData = pureSamples[i];
+      let dataRow = pureSamples[i][j];
+      if (dataRow.key !== undefined) {
+        pureSesar.add(dataRow.key);
+      }
+      pureKeys = [
+        ...new Set(
+          sampleData.map((data) => {
+            return data.originalKey;
+          })
+        ),
+      ];
+    }
+  }
+
+  pureSesar = [...pureSesar];
   seasarKeys = [...seasarKeys];
 
   for (let i = 0; i < uploadSamples.length; i++) {
@@ -123,12 +148,32 @@ export const initializeSamples = (sampleArray) => async (dispatch) => {
     originalValues = [...originalValues, keyValue];
   }
 
+  for (let i = 0; i < pureSamples.length; i++) {
+    var keyValue = {};
+    for (let j = 0; j < pureKeys.length; j++) {
+      var keyData = pureKeys[j];
+      var data = pureSamples[i]
+        .filter((x) => {
+          return x.originalKey === pureKeys[j];
+        })
+        .map((x) => {
+          return x.originalValue;
+        });
+      keyValue[keyData] = data[0];
+    }
+    pureValues = [...pureValues, keyValue];
+  }
+
   await dispatch({
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
     originalKeys: originalKeys,
     originalValues: originalValues,
     seasarKeys: seasarKeys,
+    pureKeys,
+    pureSesar,
+    pureValues,
+    pureSamples,
   });
 };
 
@@ -147,6 +192,7 @@ export const uploadSuccess = (results, selectedSamples) => async (
   getState
 ) => {
   let samples = getState().mars.samples;
+  let pureSamples = getState().mars.pureSamples;
 
   for (let i = 0; i < results.length; i++) {
     let index = selectedSamples[i];
@@ -155,11 +201,31 @@ export const uploadSuccess = (results, selectedSamples) => async (
     for each sample, the sample is equal to its
     previous version with IGSN added to the end*/
 
-    samples[index][0] = {
-      ...samples[index][0],
-      originalValue: results[i].igsn[0],
-      value: results[i].igsn[0],
-    };
+    for (let j = 0; j < samples[index].length; j++) {
+      if (
+        samples[index][j].originalKey == "IGSN" ||
+        samples[index][j].originalKey == "igsn"
+      ) {
+        samples[index][j] = {
+          ...samples[index][j],
+          originalValue: results[i].igsn[0],
+          value: results[i].igsn[0],
+        };
+      }
+    }
+
+    for (let j = 0; j < pureSamples[index].length; j++) {
+      if (
+        pureSamples[index][j].originalKey == "IGSN" ||
+        pureSamples[index][j].originalKey == "igsn"
+      ) {
+        pureSamples[index][j] = {
+          ...pureSamples[index][j],
+          originalValue: results[i].igsn[0],
+          value: results[i].igsn[0],
+        };
+      }
+    }
   }
 
   var seasarKeys = new Set();
@@ -199,7 +265,45 @@ export const uploadSuccess = (results, selectedSamples) => async (
     originalValues = [...originalValues, keyValue];
   }
 
-  //await dispatch(initializeSamples(samples));
+  var pureSesar = new Set();
+  var pureKeys = [];
+  var pureValues = [];
+
+  for (let i = 0; i < pureSamples.length; i++) {
+    for (let j = 0; j < pureSamples[i].length; j++) {
+      let sampleData = pureSamples[i];
+      let dataRow = pureSamples[i][j];
+      if (dataRow.key !== undefined) {
+        pureSesar.add(dataRow.key);
+      }
+      pureKeys = [
+        ...new Set(
+          sampleData.map((data) => {
+            return data.originalKey;
+          })
+        ),
+      ];
+    }
+  }
+
+  pureSesar = [...pureSesar];
+
+  for (let i = 0; i < pureSamples.length; i++) {
+    var keyValue = {};
+    for (let j = 0; j < pureKeys.length; j++) {
+      var keyData = pureKeys[j];
+      var data = pureSamples[i]
+        .filter((x) => {
+          return x.originalKey === pureKeys[j];
+        })
+        .map((x) => {
+          return x.originalValue;
+        });
+      keyValue[keyData] = data[0];
+    }
+    pureValues = [...pureValues, keyValue];
+  }
+
   dispatch({
     type: UPLOAD_SUCCESS,
     results,
@@ -207,6 +311,10 @@ export const uploadSuccess = (results, selectedSamples) => async (
     samples,
     originalKeys,
     originalValues,
+    pureKeys,
+    pureSesar,
+    pureValues,
+    pureSamples,
   });
 };
 
@@ -276,7 +384,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       if (filteredIndex.length === 0) {
         dispatch({ type: UPLOAD_FAILURE, error });
       }
-
       //convert samples to xml scheme
       let xmlSample = toXML(filteredSamples, usercode);
       //TODO: Validate each sample
@@ -288,7 +395,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
         "content",
         new XMLSerializer().serializeToString(xmlSample)
       );
-
       //POST request
       const res = await axios.post(
         "https://sesardev.geosamples.org/webservices/upload.php",
@@ -300,7 +406,7 @@ export function upload(username, password, usercode, samples, selectedSamples) {
         dispatch(uploadSuccess(json.results.sample, filteredIndex));
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
       dispatch({ type: UPLOAD_FAILURE, error });
     }
   };
@@ -365,9 +471,15 @@ export const onProceedMapping = (sourceMap, sourceFiles, callback) => async (
   let sourceFormat = ".csv";
 
   readSourceMap(sourceMap, (err, map, logic) => {
-    readSourceData(sourceFormat, sourceFiles, map, logic, (err, samples) => {
-      dispatch(initializeSamples(samples));
-    });
+    readSourceData(
+      sourceFormat,
+      sourceFiles,
+      map,
+      logic,
+      (err, samples, pureSamples) => {
+        dispatch(initializeSamples(samples, pureSamples));
+      }
+    );
   });
   callback();
 };
@@ -397,11 +509,34 @@ const readSourceData = (format, files, map, logic, callback) => {
   }
 };
 
-const createField = (key, originalValue, originalKey, logic) => {
+const createField = (key, originalValue, originalKey, logic, pure) => {
   if (!key) {
     return {
       originalKey,
       originalValue,
+    };
+  }
+  if (
+    (originalValue == "Not Provided" || originalValue == "") &&
+    key == "collection_end_date"
+  ) {
+    return {
+      originalKey,
+      originalValue,
+      key,
+      value: "",
+    };
+  }
+  if (
+    (originalValue == "Not Provided" || originalValue == "") &&
+    key != "igsn" &&
+    pure == false
+  ) {
+    return {
+      originalKey,
+      originalValue: "Not Provided",
+      key,
+      value: "",
     };
   }
   return {
@@ -415,100 +550,131 @@ const createField = (key, originalValue, originalKey, logic) => {
 const metaField = (key, logic) => {
   let value = logic[key]();
   return {
-    originalKey: key,
-    originalValue: value,
     key,
     value,
   };
 };
-// Load CSV files by merging them
-const loadCSV = (files, map, logic, callback) => {
+
+const readUploadedFileAsText = (file) => {
+  const reader = new FileReader();
+
+  return new Promise((resolve, reject) => {
+    reader.onerror = () => {
+      reader.abort();
+      reject(new DOMException("Problem with input file"));
+    };
+
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+
+    reader.readAsText(file);
+  });
+};
+
+const loadCSV = async (files, map, logic, callback) => {
   let samples = [];
-  let counter = 0;
+  let count = 0;
+  let union = [];
+
+  let mappedSamples = [];
+  let pureSamples = [];
 
   for (let i = 0; i < files.length; i++) {
-    // closure reads each file and fires callback when completed
-    ((file) => {
-      // create a fileReader for each file
-      let reader = new FileReader();
+    try {
+      const fileContents = await readUploadedFileAsText(files[i]);
+      const sampleCSV = csvParse(fileContents);
+      samples = [...samples, sampleCSV];
+      count++;
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
 
-      // Because FileReader is asynchronous, there is no guaranteed order in
-      // which each file will fire the onloadend event
-      reader.onloadend = (e) => {
-        // csvParse is a D3 function that loads a csv string. It takes a function
-        // which handles the logic for mapping each individual sample
-        csvParse(e.target.result, (d, i) => {
-          if (!samples[i]) {
-            samples[i] = [];
-          }
-          for (let key in map) {
-            if (Array.isArray(map[key])) {
-              for (let j = 0; j < map[key].length; j++) {
-                if (d[map[key][j]] != undefined) {
-                  if (d[map[key][j]] == "") {
-                    samples[i].push(
-                      createField(key, "Not Provided", map[key][j], logic)
-                    );
-                  } else {
-                    samples[i].push(
-                      createField(key, d[map[key][j]], map[key][j], logic)
-                    );
-                  }
+  if (count == files.length) {
+    for (let i = 0; i < samples.length; i++) {
+      union = _.merge(samples[i], union);
+    }
+  }
 
-                  delete d[map[key][i]];
-                }
-              }
-            } else if (d[map[key]]) {
-              samples[i].push(createField(key, d[map[key]], map[key], logic));
-              delete d[map[key]];
-            }
-          }
-          // Get the unmapped samples
-          for (let key in d) {
-            if (d[key]) {
-              samples[i].push(createField(undefined, d[key], key, logic));
-            }
-          }
+  let unionKeys = _.keysIn(union[0]);
+  let keyCopies = [...unionKeys];
 
-          for (let key in map) {
-            if (map[key] === "<METADATA>") {
-              let data = metaField(key, logic);
-              samples[i] = [...samples[i], data];
-              // samples[i].push(createField(key, d[map[key]], undefined, logic));
-            }
-          }
-        });
+  for (let i = 0; i < union.length; i++) {
+    let row = union[i];
 
-        // the counter helps us know when all the files have been loaded by counting
-        // the number of loadend events that are fired
-        counter++;
-        if (counter == files.length) {
-          // filter repeats with hash tables
-          for (let i = 0; i < samples.length; i++) {
-            let seen = {};
-            samples[i] = samples[i].filter((field) =>
-              seen.hasOwnProperty(field.originalKey)
-                ? false
-                : (seen[field.originalKey] = true)
+    if (!mappedSamples[i] && !pureSamples[i]) {
+      mappedSamples[i] = [];
+      pureSamples[i] = [];
+    }
+
+    for (let key in map) {
+      if (Array.isArray(map[key])) {
+        for (let j = 0; j < map[key].length; j++) {
+          if (row[map[key][j]] == "" || row[map[key][j]] == null) {
+            mappedSamples[i].push(
+              createField(key, "Not Provided", map[key][j], logic, false)
+            );
+            pureSamples[i].push(createField(key, "", map[key][j], logic, true));
+          } else {
+            mappedSamples[i].push(
+              createField(key, row[map[key][j]], map[key][j], logic, false)
+            );
+            pureSamples[i].push(
+              createField(key, row[map[key][j]], map[key][j], logic, true)
             );
           }
-          for (let i = 0; i < samples.length; i++) {
-            let igsn = [
-              {
-                originalKey: "igsn",
-                originalValue: "",
-                key: "igsn",
-                value: "",
-              },
-            ]; //IGSN for each sample
-            samples[i] = igsn.concat(samples[i]);
+          const index = keyCopies.indexOf(map[key][j]);
+          if (index > -1) {
+            keyCopies.splice(index, 1);
           }
-          callback(null, samples);
         }
-      };
-      reader.readAsText(file);
-    })(files[i]); // end closure
+      } else if (row[map[key]] != undefined) {
+        if (row[map[key]] == "" || row[map[key]] == null) {
+          mappedSamples[i].push(createField(key, "", map[key], logic, false));
+          pureSamples[i].push(createField(key, "", map[key], logic, true));
+        } else {
+          mappedSamples[i].push(
+            createField(key, row[map[key]], map[key], logic, false)
+          );
+          pureSamples[i].push(
+            createField(key, row[map[key]], map[key], logic, true)
+          );
+        }
+        const index = keyCopies.indexOf(map[key]);
+        if (index > -1) {
+          keyCopies.splice(index, 1);
+        }
+      }
+    }
+
+    for (let key in map) {
+      if (map[key] === "<METADATA>") {
+        let data = metaField(key, logic);
+        mappedSamples[i] = [...mappedSamples[i], data];
+      }
+    }
   }
+
+  for (let i = 0; i < union.length; i++) {
+    let row = union[i];
+
+    for (let j = 0; j < keyCopies.length; j++) {
+      let key = keyCopies[j];
+      if (row[key] == "" || row[key] == undefined || row[key] == null) {
+        mappedSamples[i].push(
+          createField(undefined, "Not Provided", key, logic, false)
+        );
+        pureSamples[i].push(createField(undefined, "", key, logic, true));
+      } else {
+        mappedSamples[i].push(
+          createField(undefined, row[key], key, logic, false)
+        );
+        pureSamples[i].push(createField(undefined, row[key], key, logic, true));
+      }
+    }
+  }
+  callback(null, mappedSamples, pureSamples);
 };
 
 // ==============================================================================

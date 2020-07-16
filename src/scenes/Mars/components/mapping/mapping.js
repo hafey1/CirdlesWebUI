@@ -109,7 +109,7 @@ class Mapping extends Component {
             <DialogContent>
               <DialogContentText>
                 Would you like to make a new map? All previous mapping data will
-                be loss.
+                be lost.
               </DialogContentText>
             </DialogContent>
             <DialogActions>

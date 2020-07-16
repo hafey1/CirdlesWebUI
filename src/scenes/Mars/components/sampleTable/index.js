@@ -151,11 +151,13 @@ const EnhancedTableToolbar = (props) => {
     onUpload,
     originalValues,
     originalKeys,
+    pureValues,
+    pureKeys,
   } = props;
 
   var values = [];
-  for (let i = 0; i < originalValues.length; i++) {
-    values[i] = Object.values(originalValues[i]);
+  for (let i = 0; i < pureValues.length; i++) {
+    values[i] = Object.values(pureValues[i]);
   }
   const handleClick = (props) => (event) => {
     onUpload(mapFile, samples, user, sampleIndicies);
@@ -164,7 +166,7 @@ const EnhancedTableToolbar = (props) => {
   function handleExport(values) {
     var csvBuilder = new CsvBuilder("samples.csv")
       .setDelimeter(",")
-      .setColumns(originalKeys)
+      .setColumns(pureKeys)
       .addRows(values)
       .exportFile();
   }
@@ -272,7 +274,7 @@ function CreateRows(props) {
         role="checkbox"
         aria-checked={isItemSelected}
         tabIndex={-1}
-        key={row.SAMPLE}
+        key={row[0]}
         selected={isItemSelected}
       >
         <TableCell padding="checkbox">
@@ -343,7 +345,7 @@ export default function SampleTable(props) {
   const classes = useStyles();
   const rows = props.originalValues;
   const [order, setOrder] = React.useState("desc");
-  const [orderBy, setOrderBy] = React.useState("igsn");
+  const [orderBy, setOrderBy] = React.useState("IGSN");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -436,6 +438,8 @@ export default function SampleTable(props) {
           onUpload={props.onUpload}
           originalValues={props.originalValues}
           originalKeys={props.originalKeys}
+          pureValues={props.pureValues}
+          pureKeys={props.pureKeys}
         />
         <TableContainer className={classes.container}>
           <Table

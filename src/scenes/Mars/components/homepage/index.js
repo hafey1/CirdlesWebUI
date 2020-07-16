@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import marsbackground from "img/marsBackground.jpg";
 import "../../../../styles/mars.scss";
 
+/* This class displays the home page*/
 class HomePage extends Component {
   render() {
     return (

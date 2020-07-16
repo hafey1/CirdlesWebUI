@@ -5,6 +5,7 @@ import { signOutAction } from "../../../../actions/mars";
 import SimpleMenu from "../simpleMenu";
 
 class Header extends Component {
+  /* This function returns header links based on if the user is loged in or not */
   renderLinks() {
     if (this.props.authenticated) {
       return (
