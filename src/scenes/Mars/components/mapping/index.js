@@ -19,15 +19,6 @@ function mapStateToProps(state) {
 //Actions from actions/index.js will be set as props in Mapping.jsx
 function mapDistatchToProps(dispatch) {
   return {
-    /*onProceed: (sourceMap, sourceFiles) => {
-      let worker = new Worker();
-      worker.postMessage({ type: "map", sourceMap, sourceFormat, sourceFiles });
-      worker.onmessage = function(e) {
-        console.log(e.data);
-        dispatch(actions.initializeSamples(e.data));
-      };
-    },*/
-
     onProceed: (sourceMap, sourceFiles, callback) => {
       dispatch(actions.onProceedMapping(sourceMap, sourceFiles, callback));
     },

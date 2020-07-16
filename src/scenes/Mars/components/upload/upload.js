@@ -1,28 +1,34 @@
 import React, { Component } from "react";
-import "../../../../styles/mars.scss";
-
-import * as localForage from "localforage";
 import _ from "lodash";
+import * as localForage from "localforage";
 import SampleTable from "../sampleTable";
+import "../../../../styles/mars.scss";
 
 class Upload extends Component {
   constructor(props) {
     super(props);
     this.state = {
       samples: [],
+      mapFile: null,
     };
 
     this.renderTable = this.renderTable.bind(this);
     this.handleOnUpload = this.handleOnUpload.bind(this);
+    this.getMapFile = this.getMapFile.bind(this);
   }
 
-  handleOnUpload(selectedRows) {
+  async getMapFile() {
+    let file = await localForage.getItem("mapFile");
+    return file;
+  }
+
+  async handleOnUpload(selectedRows) {
     //create an array of the indices of samples that were selected to be uploaded
     let selectedSamples = [];
     for (let i = 0; i < selectedRows.data.length; i++) {
       selectedSamples = [...selectedSamples, selectedRows.data[i].index];
     }
-    let mapFile = this.props.mapFile;
+    let mapFile = await this.getMapFile();
     if (selectedSamples.length > 0) {
       this.props.onUpload(
         mapFile,
@@ -33,7 +39,20 @@ class Upload extends Component {
     }
   }
 
+  /* This needs to be async because we need to await until local 
+  forage promise is resolved in order to get the value for the map file */
+  async componentDidMount() {
+    const mapFile = await this.getMapFile();
+    this.setState({ mapFile: mapFile });
+  }
+
   renderTable() {
+    let mapFile;
+    if (this.state.mapFile == null) {
+      mapFile = this.props.mapFile;
+    } else {
+      mapFile = this.state.mapFile;
+    }
     if (
       this.props.originalValues !== undefined &&
       this.props.originalKeys !== undefined &&
@@ -48,9 +67,12 @@ class Upload extends Component {
                 originalKeys={this.props.originalKeys}
                 originalValues={this.props.originalValues}
                 samples={this.props.samples}
+                pureKeys={this.props.pureKeys}
+                pureValues={this.props.pureValues}
+                pureSamples={this.props.pureSamples}
                 onUpload={this.props.onUpload}
                 user={this.props.user}
-                mapFile={this.props.mapFile}
+                mapFile={mapFile}
               />
             </div>
           </div>
@@ -80,55 +102,3 @@ class Upload extends Component {
 }
 
 export default Upload;
-
-/*
- <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {this.props.originalKeys.map((keyHeader) => (
-                        <TableCell key={keyHeader}>{keyHeader}</TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {this.props.originalValues.map((row, index) => (
-                      <TableRow key={index}>
-                        {Object.entries(row).map(([key, value]) => (
-                          <TableCell key={key}>{value}</TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              */
-
-/* <TableRow
-             hover
-             onClick={(event) => handleClick(event, row.name)}
-             role="checkbox"
-             aria-checked={isItemSelected}
-             tabIndex={-1}
-             key={index}
-             selected={isItemSelected}
-           >
-             <TableCell padding="checkbox">
-               <Checkbox
-                 checked={isItemSelected}
-                 inputProps={{ "aria-labelledby": labelId }}
-               />
-             </TableCell>
-             <TableCell
-               component="th"
-               id={labelId}
-               scope="row"
-               padding="none"
-             >
-               {row.name}
-             </TableCell>
-             <TableCell align="right">{row.calories}</TableCell>
-             <TableCell align="right">{row.fat}</TableCell>
-             <TableCell align="right">{row.carbs}</TableCell>
-             <TableCell align="right">{row.protein}</TableCell>
-           </TableRow>*/
