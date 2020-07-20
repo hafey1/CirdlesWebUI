@@ -509,7 +509,14 @@ const readSourceData = (format, files, map, logic, callback) => {
   }
 };
 
-const createField = (key, originalValue, originalKey, logic, pure) => {
+const createField = (
+  key,
+  originalValue,
+  originalKey,
+  logic,
+  pure,
+  arrayCheck
+) => {
   if (!key) {
     return {
       originalKey,
@@ -530,7 +537,8 @@ const createField = (key, originalValue, originalKey, logic, pure) => {
   if (
     (originalValue == "Not Provided" || originalValue == "") &&
     key != "igsn" &&
-    pure == false
+    pure == false &&
+    arrayCheck != true
   ) {
     return {
       originalKey,
@@ -549,6 +557,10 @@ const createField = (key, originalValue, originalKey, logic, pure) => {
 
 const metaField = (key, logic) => {
   let value = logic[key]();
+  if (value == "" || value == undefined || value == null) {
+    value = "Not Provided";
+  }
+
   return {
     key,
     value,
@@ -613,15 +625,31 @@ const loadCSV = async (files, map, logic, callback) => {
         for (let j = 0; j < map[key].length; j++) {
           if (row[map[key][j]] == "" || row[map[key][j]] == null) {
             mappedSamples[i].push(
-              createField(key, "Not Provided", map[key][j], logic, false)
-            );
-            pureSamples[i].push(createField(key, "", map[key][j], logic, true));
-          } else {
-            mappedSamples[i].push(
-              createField(key, row[map[key][j]], map[key][j], logic, false)
+              createField(key, "Not Provided", map[key][j], logic, false, true)
             );
             pureSamples[i].push(
-              createField(key, row[map[key][j]], map[key][j], logic, true)
+              createField(key, "", map[key][j], logic, true, false)
+            );
+          } else {
+            mappedSamples[i].push(
+              createField(
+                key,
+                row[map[key][j]],
+                map[key][j],
+                logic,
+                false,
+                true
+              )
+            );
+            pureSamples[i].push(
+              createField(
+                key,
+                row[map[key][j]],
+                map[key][j],
+                logic,
+                true,
+                false
+              )
             );
           }
           const index = keyCopies.indexOf(map[key][j]);
@@ -631,14 +659,18 @@ const loadCSV = async (files, map, logic, callback) => {
         }
       } else if (row[map[key]] != undefined) {
         if (row[map[key]] == "" || row[map[key]] == null) {
-          mappedSamples[i].push(createField(key, "", map[key], logic, false));
-          pureSamples[i].push(createField(key, "", map[key], logic, true));
-        } else {
           mappedSamples[i].push(
-            createField(key, row[map[key]], map[key], logic, false)
+            createField(key, "", map[key], logic, false, false)
           );
           pureSamples[i].push(
-            createField(key, row[map[key]], map[key], logic, true)
+            createField(key, "", map[key], logic, true, false)
+          );
+        } else {
+          mappedSamples[i].push(
+            createField(key, row[map[key]], map[key], logic, false, false)
+          );
+          pureSamples[i].push(
+            createField(key, row[map[key]], map[key], logic, true, false)
           );
         }
         const index = keyCopies.indexOf(map[key]);

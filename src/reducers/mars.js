@@ -50,7 +50,6 @@ export default function(state = {}, action) {
       return { ...state, mapFile: action.mapFile };
     case INITIALIZE_SAMPLES:
       console.log("<==== Samples Ready ====>");
-      console.log(action);
       return {
         ...state,
         samples: action.sampleArray,
