@@ -73,6 +73,7 @@ class Upload extends Component {
                 onUpload={this.props.onUpload}
                 user={this.props.user}
                 mapFile={mapFile}
+                fileName={this.props.fileName}
               />
             </div>
           </div>

@@ -153,6 +153,7 @@ const EnhancedTableToolbar = (props) => {
     originalKeys,
     pureValues,
     pureKeys,
+    fileName,
   } = props;
 
   var values = [];
@@ -164,7 +165,7 @@ const EnhancedTableToolbar = (props) => {
   };
 
   function handleExport(values) {
-    var csvBuilder = new CsvBuilder("samples.csv")
+    var csvBuilder = new CsvBuilder(fileName.trim() + ".csv")
       .setDelimeter(",")
       .setColumns(pureKeys)
       .addRows(values)
@@ -440,6 +441,7 @@ export default function SampleTable(props) {
           originalKeys={props.originalKeys}
           pureValues={props.pureValues}
           pureKeys={props.pureKeys}
+          fileName={props.fileName}
         />
         <TableContainer className={classes.container}>
           <Table
