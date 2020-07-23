@@ -16,6 +16,7 @@ function mapStateToProps(state) {
     pureValues: state.mars.pureValues,
     sesarKeys: state.mars.sesarKeys,
     user: state.mars,
+    fileName: state.mars.fileName,
   };
 }
 

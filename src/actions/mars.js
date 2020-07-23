@@ -84,7 +84,7 @@ export function onChangeMapFileAction(mapFile) {
 }
 
 //Upload Actions
-export const initializeSamples = (sampleArray, pureSamples) => async (
+export const initializeSamples = (sampleArray, pureSamples, fileName) => async (
   dispatch
 ) => {
   var seasarKeys = new Set();
@@ -94,6 +94,8 @@ export const initializeSamples = (sampleArray, pureSamples) => async (
   var pureSesar = new Set();
   var pureKeys = [];
   var pureValues = [];
+
+  console.log("FILENAME: ", fileName);
 
   for (let i = 0; i < uploadSamples.length; i++) {
     for (let j = 0; j < uploadSamples[i].length; j++) {
@@ -174,6 +176,7 @@ export const initializeSamples = (sampleArray, pureSamples) => async (
     pureSesar,
     pureValues,
     pureSamples,
+    fileName,
   });
 };
 
@@ -476,8 +479,8 @@ export const onProceedMapping = (sourceMap, sourceFiles, callback) => async (
       sourceFiles,
       map,
       logic,
-      (err, samples, pureSamples) => {
-        dispatch(initializeSamples(samples, pureSamples));
+      (err, samples, pureSamples, fileName) => {
+        dispatch(initializeSamples(samples, pureSamples, fileName));
       }
     );
   });
@@ -567,6 +570,17 @@ const metaField = (key, logic) => {
   };
 };
 
+const metaAddField = (key, logic) => {
+  let value = logic[key]();
+  if (value == "" || value == undefined || value == null) {
+    value = "Not Provided";
+  }
+
+  let dataString = "" + key + ":" + value + " ";
+
+  return dataString;
+};
+
 const readUploadedFileAsText = (file) => {
   const reader = new FileReader();
 
@@ -585,6 +599,7 @@ const readUploadedFileAsText = (file) => {
 };
 
 const loadCSV = async (files, map, logic, callback) => {
+  let fileName = [];
   let samples = [];
   let count = 0;
   let union = [];
@@ -618,6 +633,7 @@ const loadCSV = async (files, map, logic, callback) => {
     if (!mappedSamples[i] && !pureSamples[i]) {
       mappedSamples[i] = [];
       pureSamples[i] = [];
+      fileName[i] = [];
     }
 
     for (let key in map) {
@@ -681,9 +697,16 @@ const loadCSV = async (files, map, logic, callback) => {
     }
 
     for (let key in map) {
-      if (map[key] === "<METADATA>") {
+      if (map[key] === "<METADATA>" || map[key] === "<METADATA_ADD>") {
         let data = metaField(key, logic);
         mappedSamples[i] = [...mappedSamples[i], data];
+      }
+    }
+
+    for (let key in map) {
+      if (map[key] === "<METADATA_ADD>") {
+        let data = metaAddField(key, logic);
+        fileName[i] = [...fileName[i], data];
       }
     }
   }
@@ -706,7 +729,7 @@ const loadCSV = async (files, map, logic, callback) => {
       }
     }
   }
-  callback(null, mappedSamples, pureSamples);
+  callback(null, mappedSamples, pureSamples, fileName[0][0]);
 };
 
 // ==============================================================================

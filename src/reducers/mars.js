@@ -61,6 +61,7 @@ export default function(state = {}, action) {
         pureValues: action.pureValues,
         pureSesar: action.pureSesar,
         pureSamples: action.pureSamples,
+        fileName: action.fileName,
       };
     case UPLOAD_REQUEST:
       console.log("<==== Upload Requested ====>");
