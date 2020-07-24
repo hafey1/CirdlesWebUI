@@ -50,7 +50,6 @@ export default function(state = {}, action) {
       return { ...state, mapFile: action.mapFile };
     case INITIALIZE_SAMPLES:
       console.log("<==== Samples Ready ====>");
-      console.log(action);
       return {
         ...state,
         samples: action.sampleArray,
@@ -62,6 +61,7 @@ export default function(state = {}, action) {
         pureValues: action.pureValues,
         pureSesar: action.pureSesar,
         pureSamples: action.pureSamples,
+        fileName: action.fileName,
       };
     case UPLOAD_REQUEST:
       console.log("<==== Upload Requested ====>");

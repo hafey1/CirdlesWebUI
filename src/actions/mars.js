@@ -84,7 +84,7 @@ export function onChangeMapFileAction(mapFile) {
 }
 
 //Upload Actions
-export const initializeSamples = (sampleArray, pureSamples) => async (
+export const initializeSamples = (sampleArray, pureSamples, fileName) => async (
   dispatch
 ) => {
   var seasarKeys = new Set();
@@ -94,6 +94,8 @@ export const initializeSamples = (sampleArray, pureSamples) => async (
   var pureSesar = new Set();
   var pureKeys = [];
   var pureValues = [];
+
+  console.log("FILENAME: ", fileName);
 
   for (let i = 0; i < uploadSamples.length; i++) {
     for (let j = 0; j < uploadSamples[i].length; j++) {
@@ -174,6 +176,7 @@ export const initializeSamples = (sampleArray, pureSamples) => async (
     pureSesar,
     pureValues,
     pureSamples,
+    fileName,
   });
 };
 
@@ -476,8 +479,8 @@ export const onProceedMapping = (sourceMap, sourceFiles, callback) => async (
       sourceFiles,
       map,
       logic,
-      (err, samples, pureSamples) => {
-        dispatch(initializeSamples(samples, pureSamples));
+      (err, samples, pureSamples, fileName) => {
+        dispatch(initializeSamples(samples, pureSamples, fileName));
       }
     );
   });
@@ -509,7 +512,14 @@ const readSourceData = (format, files, map, logic, callback) => {
   }
 };
 
-const createField = (key, originalValue, originalKey, logic, pure) => {
+const createField = (
+  key,
+  originalValue,
+  originalKey,
+  logic,
+  pure,
+  arrayCheck
+) => {
   if (!key) {
     return {
       originalKey,
@@ -530,7 +540,8 @@ const createField = (key, originalValue, originalKey, logic, pure) => {
   if (
     (originalValue == "Not Provided" || originalValue == "") &&
     key != "igsn" &&
-    pure == false
+    pure == false &&
+    arrayCheck != true
   ) {
     return {
       originalKey,
@@ -549,10 +560,25 @@ const createField = (key, originalValue, originalKey, logic, pure) => {
 
 const metaField = (key, logic) => {
   let value = logic[key]();
+  if (value == "" || value == undefined || value == null) {
+    value = "Not Provided";
+  }
+
   return {
     key,
     value,
   };
+};
+
+const metaAddField = (key, logic) => {
+  let value = logic[key]();
+  if (value == "" || value == undefined || value == null) {
+    value = "Not Provided";
+  }
+
+  let dataString = "" + key + ":" + value + " ";
+
+  return dataString;
 };
 
 const readUploadedFileAsText = (file) => {
@@ -573,6 +599,7 @@ const readUploadedFileAsText = (file) => {
 };
 
 const loadCSV = async (files, map, logic, callback) => {
+  let fileName = [];
   let samples = [];
   let count = 0;
   let union = [];
@@ -606,6 +633,7 @@ const loadCSV = async (files, map, logic, callback) => {
     if (!mappedSamples[i] && !pureSamples[i]) {
       mappedSamples[i] = [];
       pureSamples[i] = [];
+      fileName[i] = [];
     }
 
     for (let key in map) {
@@ -613,15 +641,31 @@ const loadCSV = async (files, map, logic, callback) => {
         for (let j = 0; j < map[key].length; j++) {
           if (row[map[key][j]] == "" || row[map[key][j]] == null) {
             mappedSamples[i].push(
-              createField(key, "Not Provided", map[key][j], logic, false)
-            );
-            pureSamples[i].push(createField(key, "", map[key][j], logic, true));
-          } else {
-            mappedSamples[i].push(
-              createField(key, row[map[key][j]], map[key][j], logic, false)
+              createField(key, "Not Provided", map[key][j], logic, false, true)
             );
             pureSamples[i].push(
-              createField(key, row[map[key][j]], map[key][j], logic, true)
+              createField(key, "", map[key][j], logic, true, false)
+            );
+          } else {
+            mappedSamples[i].push(
+              createField(
+                key,
+                row[map[key][j]],
+                map[key][j],
+                logic,
+                false,
+                true
+              )
+            );
+            pureSamples[i].push(
+              createField(
+                key,
+                row[map[key][j]],
+                map[key][j],
+                logic,
+                true,
+                false
+              )
             );
           }
           const index = keyCopies.indexOf(map[key][j]);
@@ -631,14 +675,18 @@ const loadCSV = async (files, map, logic, callback) => {
         }
       } else if (row[map[key]] != undefined) {
         if (row[map[key]] == "" || row[map[key]] == null) {
-          mappedSamples[i].push(createField(key, "", map[key], logic, false));
-          pureSamples[i].push(createField(key, "", map[key], logic, true));
-        } else {
           mappedSamples[i].push(
-            createField(key, row[map[key]], map[key], logic, false)
+            createField(key, "", map[key], logic, false, false)
           );
           pureSamples[i].push(
-            createField(key, row[map[key]], map[key], logic, true)
+            createField(key, "", map[key], logic, true, false)
+          );
+        } else {
+          mappedSamples[i].push(
+            createField(key, row[map[key]], map[key], logic, false, false)
+          );
+          pureSamples[i].push(
+            createField(key, row[map[key]], map[key], logic, true, false)
           );
         }
         const index = keyCopies.indexOf(map[key]);
@@ -649,9 +697,16 @@ const loadCSV = async (files, map, logic, callback) => {
     }
 
     for (let key in map) {
-      if (map[key] === "<METADATA>") {
+      if (map[key] === "<METADATA>" || map[key] === "<METADATA_ADD>") {
         let data = metaField(key, logic);
         mappedSamples[i] = [...mappedSamples[i], data];
+      }
+    }
+
+    for (let key in map) {
+      if (map[key] === "<METADATA_ADD>") {
+        let data = metaAddField(key, logic);
+        fileName[i] = [...fileName[i], data];
       }
     }
   }
@@ -674,7 +729,7 @@ const loadCSV = async (files, map, logic, callback) => {
       }
     }
   }
-  callback(null, mappedSamples, pureSamples);
+  callback(null, mappedSamples, pureSamples, fileName[0][0]);
 };
 
 // ==============================================================================
