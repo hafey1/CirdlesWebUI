@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button, Modal, Backdrop, Fade, Typography } from "@material-ui/core";
+import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
 
-function SimpleMenu() {
+function NavModal() {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -19,7 +19,7 @@ function SimpleMenu() {
           fontSize: "16px",
           textTransform: "none",
           color: "#007bff",
-          marginTop: "2px"
+          marginTop: "2px",
         }}
         onClick={handleOpen}
       >
@@ -29,7 +29,7 @@ function SimpleMenu() {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -38,7 +38,7 @@ function SimpleMenu() {
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
-          timeout: 500
+          timeout: 500,
         }}
       >
         <Fade in={open}>
@@ -46,7 +46,7 @@ function SimpleMenu() {
             style={{
               width: "50%",
               backgroundColor: "#f8f9fa",
-              border: "2px solid #000"
+              border: "2px solid #000",
             }}
           >
             <h2 id="transition-modal-title">MARS</h2>
@@ -65,4 +65,4 @@ function SimpleMenu() {
   );
 }
 
-export default SimpleMenu;
+export default NavModal;

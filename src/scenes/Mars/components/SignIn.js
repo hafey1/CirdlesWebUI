@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { reduxForm, Field, Form } from "redux-form";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { signInAction } from "../../../../actions/mars";
-import marsbackground from "img/marsBackground.jpg";
-import "../../../../styles/mars.scss";
-import Button from "@material-ui/core/Button";
+import { signInAction } from "../../../actions";
+import "../../../styles/mars.scss";
 
-class LogIn extends Component {
+//This component allows the user to sign into MARS
+class SignIn extends Component {
+  //This function dispatches the signInAction() function to allow the user to sign in
   onSubmit = (formProps) => {
     this.props.signInAction(formProps, () => {
       this.props.history.push("/mars/mysamples");
@@ -16,33 +16,15 @@ class LogIn extends Component {
 
   render() {
     const { handleSubmit } = this.props;
-
     return (
-      <div
-        style={{
-          backgroundImage: `url(${marsbackground})`,
-          height: "100%",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          alignItems: "center",
-          color: "white",
-        }}
-      >
-        <Form
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            alignItems: "center",
-          }}
-          onSubmit={handleSubmit(this.onSubmit)}
-        >
-          <h2>GeoPass Login</h2>
+      <div className="signin">
+        <Form className="signin-form" onSubmit={handleSubmit(this.onSubmit)}>
+          <h2>GeoPass Sign In</h2>
           <fieldset>
-            <label style={{ fontWeight: "bold" }}>Username</label>
+            <label className="signin-label">Username</label>
             <br></br>
             <Field
+              className="signin-input"
               name="username"
               type="text"
               component="input"
@@ -51,9 +33,10 @@ class LogIn extends Component {
           </fieldset>
           <br></br>
           <fieldset>
-            <label style={{ fontWeight: "bold" }}>Password</label>
+            <label className="signin-label">Password</label>
             <br></br>
             <Field
+              className="signin-input"
               name="password"
               type="password"
               component="input"
@@ -62,7 +45,7 @@ class LogIn extends Component {
           </fieldset>
           <div>{this.props.errorMessage}</div>
           <br></br>
-          <button className="btn btn-primary">Log In</button>
+          <button className="btn btn-primary signin-button">Sign In</button>
         </Form>
       </div>
     );
@@ -79,4 +62,4 @@ export default compose(
     { signInAction }
   ),
   reduxForm({ form: "signin" })
-)(LogIn);
+)(SignIn);

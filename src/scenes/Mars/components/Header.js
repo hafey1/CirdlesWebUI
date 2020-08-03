@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { signOutAction } from "../../../../actions/mars";
-import SimpleMenu from "../simpleMenu";
+import { signOutAction } from "../../../actions/mars";
+import NavModal from "./NavModal";
 
 class Header extends Component {
-  /* This function returns header links based on if the user is loged in or not */
+  //This function returns header links based on if the user is loged in or not
   renderLinks() {
     if (this.props.authenticated) {
       return (
@@ -32,11 +32,11 @@ class Header extends Component {
               className="btn btn-primary btn-md nav-link"
               onClick={() => this.props.signOutAction()}
             >
-              Log Out
+              Sign Out
             </button>
           </li>
           <li className="nav-item">
-            <SimpleMenu />
+            <NavModal />
           </li>
           <li className="nav-item">
             <a
@@ -57,14 +57,14 @@ class Header extends Component {
             <Link
               style={{ marginTop: ".5rem" }}
               className="nav-link"
-              to="/mars/login"
+              to="/mars/signin"
             >
-              Log In
+              Sign In
             </Link>
           </li>
           <li className="nav-item">
             <div className="nav-link">
-              <SimpleMenu />
+              <NavModal />
             </div>
           </li>
           <li className="nav-item">

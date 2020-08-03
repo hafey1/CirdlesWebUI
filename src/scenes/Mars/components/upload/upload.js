@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import * as localForage from "localforage";
-import SampleTable from "../sampleTable";
+import SampleTable from "../SampleTable";
 import "../../../../styles/mars.scss";
 
 class Upload extends Component {
