@@ -1,12 +1,9 @@
 import { connect } from "react-redux";
-//import worker from "../sandbox.worker";
-import Worker from "../sandbox.worker.js";
 import * as actions from "../../../../actions/mars";
-import Mapping from "./mapping";
+import Mapping from "./Mapping";
 
 const sourceFormat = ".csv";
 
-//Properties from application state will be set as props in Mapping.jsx
 function mapStateToProps(state) {
   return {
     mapFile: state.mars.mapFile,
@@ -16,7 +13,6 @@ function mapStateToProps(state) {
   };
 }
 
-//Actions from actions/index.js will be set as props in Mapping.jsx
 function mapDistatchToProps(dispatch) {
   return {
     onProceed: (sourceMap, sourceFiles, callback) => {

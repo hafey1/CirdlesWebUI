@@ -2,21 +2,21 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-/*This component redirects the user to signIn
-  if they are not authenticated*/
+/*This component redirects the user to Upload
+  if they are authenticated*/
 export default function(ComposedComponent) {
-  class Authentication extends Component {
+  class NotAuthentication extends Component {
     componentDidMount() {
-      this.sendToLogIn();
+      this.sendToSamples();
     }
 
     componentDidUpdate() {
-      this.sendToLogIn();
+      this.sendToSamples();
     }
 
-    sendToLogIn() {
-      if (!this.props.authenticated) {
-        this.props.history.push("/mars/login");
+    sendToSamples() {
+      if (this.props.authenticated) {
+        this.props.history.push("/mars/mysamples");
       }
     }
 
@@ -24,8 +24,7 @@ export default function(ComposedComponent) {
       return <ComposedComponent {...this.props} />;
     }
   }
-
-  Authentication.PropTypes = {
+  NotAuthentication.propTypes = {
     router: PropTypes.object,
   };
 
@@ -33,5 +32,5 @@ export default function(ComposedComponent) {
     return { authenticated: state.mars.authenticated };
   }
 
-  return connect(mapStateToProps)(Authentication);
+  return connect(mapStateToProps)(NotAuthentication);
 }

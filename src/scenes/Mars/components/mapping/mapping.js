@@ -1,32 +1,51 @@
 import React, { Component } from "react";
-import Panel from "../panel";
-import Modal from "../modal";
+import Panel from "../Panel";
 import "../../../../styles/mars.scss";
 import * as localForage from "localforage";
 import Button from "@material-ui/core/Button";
-
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { instanceOf } from "prop-types";
 
 class Mapping extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      samples: false,
-      mapFile: null,
       open: true,
+      mapFile: null,
+      sourceFiles: null,
+      mapFileName: "Select File",
+      sourceFileName: "Select File(s)",
     };
-
-    this.onChangeSourceFiles = this.onChangeSourceFiles.bind(this);
-    this.handleProceed = this.handleProceed.bind(this);
 
     this.mapFile = React.createRef();
     this.sourceFiles = React.createRef();
+
+    this.handleProceed = this.handleProceed.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleMappingInputChange = this.handleMappingInputChange.bind(this);
+    this.handleSourceInputChange = this.handleSourceInputChange.bind(this);
+    this.onChangeSourceFiles = this.onChangeSourceFiles.bind(this);
+    this.renderTable = this.renderTable.bind(this);
+    this.shouldRenderDialog = this.shouldRenderDialog.bind(this);
+  }
+
+  async componentDidMount() {
+    try {
+      const mapFile = await localForage.getItem("mapFile");
+      // This code runs once the value has been loaded
+      // from the offline store.
+
+      if (mapFile != null) {
+        this.setState({ mapFileName: mapFile.name });
+        this.setState({ mapFile: mapFile });
+      }
+    } catch (err) {
+      // This code runs if there were any errors.
+      console.log("Error", err);
+    }
   }
 
   handleClose = () => {
@@ -37,73 +56,127 @@ class Mapping extends Component {
     this.props.history.push("upload");
   };
 
-  onChangeSourceFiles(fileList) {
+  getSourceFiles(fileList) {
     let sourceFiles = [];
     for (var i = 0; i < fileList.length; i++) {
       sourceFiles[i] = fileList[i];
     }
+    return sourceFiles;
+  }
+
+  onChangeSourceFiles(fileList) {
+    let sourceFiles = this.getSourceFiles(fileList);
     this.props.onChangeSourceFileAction(sourceFiles);
   }
 
-  handleProceed(mapFile, sourceFilesList) {
-    let sourceFiles = [];
-    for (var i = 0; i < sourceFilesList.length; i++) {
-      sourceFiles[i] = sourceFilesList[i];
-    }
-
+  onChangeMapFile(mapFile) {
     localForage.setItem("mapFile", mapFile);
+    this.props.onChangeMapFileAction(mapFile);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    let mapFile = this.state.mapFile;
+    let sourceFilesList = this.sourceFiles.current.files;
+
+    if (mapFile === null || mapFile === undefined) {
+      alert("Please Select a Mapfile to Continue");
+    } else if (this.sourceFiles.current.files.length === 0) {
+      alert("Please Select at least 1 Source File to Continue");
+    } else {
+      this.onChangeMapFile(mapFile);
+      this.onChangeSourceFiles(sourceFilesList);
+      this.handleProceed(mapFile, sourceFilesList);
+    }
+  }
+
+  handleProceed(mapFile, fileList) {
+    let sourceFiles = this.getSourceFiles(fileList);
     this.props.onProceed(mapFile, sourceFiles, () => {
       this.props.history.push("upload");
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    let mapFile = this.mapFile.current.files[0];
-    let sourceFilesList = this.sourceFiles.current.files;
+  handleMappingInputChange(event) {
+    const mapFile = event.target.files[0];
+    const mapFileName = mapFile.name;
 
-    if (this.mapFile.current.files.length === 0) {
-      alert("Please Select a Mapfile to Continue");
-    } else if (this.sourceFiles.current.files.length === 0) {
-      alert("Please Select at least 1 Source File to Continue");
-    } else {
-      this.onChangeSourceFiles(sourceFilesList);
-      this.props.onChangeMapFileAction(mapFile);
-      this.handleProceed(mapFile, sourceFilesList);
-    }
+    localForage.setItem("mapFile", mapFile);
+
+    this.setState({ mapFile: mapFile });
+    this.setState({ mapFileName: mapFileName });
+
+    event.preventDefault();
   }
 
-  render() {
-    if (this.props.uploadSamples) {
-      return (
-        <div className="upload">
-          <Panel name="Mapping Setup">
-            <form onSubmit={this.handleSubmit}>
-              <label className="text">
-                Select your Mapping File
-                <input
-                  className="inputs"
-                  type="file"
-                  accept="text/javascript"
-                  ref={this.mapFile}
-                />
-              </label>
+  handleSourceInputChange(event) {
+    const sourceFiles = event.target.files;
+    var fileStringName = "";
+    if (sourceFiles.length > 0) {
+      for (let i = 0; i < sourceFiles.length; i++) {
+        fileStringName = fileStringName + sourceFiles[i].name + ", ";
+      }
 
-              <label className="text">
-                Select your sourceFiles
-                <input
-                  className="inputs"
-                  type="file"
-                  accept="text/csv"
-                  multiple
-                  ref={this.sourceFiles}
-                />
+      fileStringName = fileStringName.slice(0, fileStringName.length - 2);
+    }
+    this.setState({ sourceFileName: fileStringName });
+    console.log("SF", sourceFiles);
+    event.preventDefault();
+  }
+
+  renderTable() {
+    return (
+      <div className="mapping-panel__container">
+        <Panel className="mapping-panel" name="Mapping Setup">
+          <form className="mapping-form" onSubmit={this.handleSubmit}>
+            <div className="mapping-panel__tags">Select a Mapping File</div>
+
+            <div className="mapping-input__container custom-file">
+              <input
+                type="file"
+                className="mapping-input custom-file-input"
+                id="inputGroupFile01"
+                accept="text/javascript"
+                ref={this.mapFile}
+                onChange={this.handleMappingInputChange}
+              />
+              <label className="custom-file-label" htmlFor="inputGroupFile01">
+                {this.state.mapFileName}
               </label>
-              <button className="btn btn-primary" type="submit">
+            </div>
+
+            <div className="mapping-panel__tags">Select Source File(s)</div>
+
+            <div className="mapping-input__container custom-file">
+              <input
+                type="file"
+                className="mapping-input custom-file-input"
+                id="inputGroupFile02"
+                accept="text/csv"
+                multiple
+                ref={this.sourceFiles}
+                onChange={this.handleSourceInputChange}
+              />
+              <label className="custom-file-label" htmlFor="inputGroupFile02">
+                {this.state.sourceFileName}
+              </label>
+            </div>
+
+            <div className="mapping-button__container">
+              <button className="mapping-button btn btn-primary" type="submit">
                 Proceed to Mapping
               </button>
-            </form>
-          </Panel>
+            </div>
+          </form>
+        </Panel>
+      </div>
+    );
+  }
+  shouldRenderDialog() {
+    if (this.props.uploadSamples) {
+      return (
+        <div className="mapping">
+          {this.renderTable()}
           <Dialog open={this.state.open}>
             <DialogTitle>{"Make New Mapping?"}</DialogTitle>
             <DialogContent>
@@ -119,38 +192,12 @@ class Mapping extends Component {
           </Dialog>
         </div>
       );
+    } else {
+      return <div className="mapping">{this.renderTable()}</div>;
     }
-    return (
-      <div className="upload">
-        <Panel name="Mapping Setup">
-          <form onSubmit={this.handleSubmit}>
-            <label className="text">
-              Select your Mapping File
-              <input
-                className="inputs"
-                type="file"
-                accept="text/javascript"
-                ref={this.mapFile}
-              />
-            </label>
-
-            <label className="text">
-              Select your sourceFiles
-              <input
-                className="inputs"
-                type="file"
-                accept="text/csv"
-                multiple
-                ref={this.sourceFiles}
-              />
-            </label>
-            <button className="btn btn-primary" type="submit">
-              Proceed to Mapping
-            </button>
-          </form>
-        </Panel>
-      </div>
-    );
+  }
+  render() {
+    return this.shouldRenderDialog();
   }
 }
 

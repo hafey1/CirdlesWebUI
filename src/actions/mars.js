@@ -1,14 +1,15 @@
-// @flow
-import axios from "axios";
-import * as jsCON from "xml-js";
-import toXML from "../scenes/Mars/components/toXML";
 import FormData from "form-data";
 import convert from "xml-to-json-promise";
-import { SESAR_LOGIN } from "../constants/api";
 import _, { sample } from "lodash";
 import { csvParse } from "d3-dsv";
 import { csv } from "d3-fetch";
+import axios from "axios";
+import * as jsCON from "xml-js";
+import localForage from "localforage";
+import toXML from "../scenes/Mars/components/toXML";
+//TODO: import toXML file
 
+// Action Types
 import {
   AUTHENTICATED,
   UNAUTHENTICATED,
@@ -23,32 +24,44 @@ import {
   FETCH_SAMPLES,
   FETCH_SAMPLES_SUCCESS,
 } from "./types";
-import { actionTypes } from "redux-form";
-import * as localForage from "localforage";
+
+import {
+  SESAR_LOGIN,
+  SESAR_SAMPLE_PROFILE,
+  SESAR_USER_SAMPLES,
+} from "../constants/api";
 
 // ==============================================================================
-// SIGN IN AND SIGNOUT ACTIONS
+// Sign in and SignOut actions
 // ==============================================================================
+
 export const signInAction = (formProps, callback) => async (dispatch) => {
   try {
+    //Create new form data and append both username and password to the form data
     const formData = new FormData();
     formData.append("username", formProps.username);
     formData.append("password", formProps.password);
-    const response = await axios.post(
-      "https://sesardev.geosamples.org/webservices/credentials_service_v2.php",
-      formData
-    );
+
+    //Wait for the api call to finish
+    const response = await axios.post(SESAR_LOGIN, formData);
     let options = { ignoreComment: true, alwaysChildren: true };
+
+    //Wait for the response data to be parsed to JSON and then get the user code
     let resJSON = await jsCON.xml2js(response.data, options);
     let usercode = resJSON.elements[0].elements[1].elements[0].elements[0].text;
+
+    //Dispatch an action with type AUTHENTICATED if everything above was succesfull
     dispatch({
       type: AUTHENTICATED,
       username: formProps.username,
       usercode: usercode,
       password: formProps.password,
     });
+
+    //Return callback
     callback();
   } catch (e) {
+    //Dispatch an action with type AUTHENTICATION_ERROR if an error occured
     dispatch({
       type: AUTHENTICATION_ERROR,
       payload: "Invalid email or password",
@@ -56,10 +69,12 @@ export const signInAction = (formProps, callback) => async (dispatch) => {
   }
 };
 
+//This function is an async function that removes everything from localForage
 async function removeStorage() {
   await localForage.clear();
 }
 export function signOutAction() {
+  //Remove everything from localForage and dispatch an action with type UNAUTHENTICATED
   removeStorage();
   return {
     type: UNAUTHENTICATED,
@@ -67,8 +82,62 @@ export function signOutAction() {
 }
 
 // ==============================================================================
-// MAPPING ACTIONS
+// MySamples Actions
 // ==============================================================================
+export const fetchUsercodeAndSamples = (usercode) => async (
+  dispatch,
+  getState
+) => {
+  //Wait for fetchUserCode() to finish
+  await dispatch(fetchUsercode(usercode));
+
+  //Grab igsn_list from state
+  var igsn_list = getState().mars.igsnResponseList.igsn_list;
+
+  //For each igsn in igsn_list run fetchSamples()
+  var count = 0;
+  igsn_list.forEach(async (element) => {
+    await dispatch(fetchSamples(element));
+    count++;
+
+    // Might be able to remove this
+    if (count == igsn_list.length) {
+      dispatch(fetchSamplesSuccessful());
+    }
+  });
+};
+
+//TODO: Change Api Links
+export const fetchUsercode = (usercode) => async (dispatch) => {
+  const response = await axios.get(SESAR_USER_SAMPLES + `${usercode}`);
+
+  dispatch({ type: FETCH_USER, payload: response.data });
+};
+
+export const fetchSamples = (igsn) => async (dispatch) => {
+  const response = await axios.get(SESAR_SAMPLE_PROFILE + `${igsn}`);
+
+  //Grab key data to display in table
+  const sampleIgsn = response.data.sample.igsn;
+  const sampleName = response.data.sample.name;
+  const latitudes = response.data.sample.latitude;
+  const longitudes = response.data.sample.longitude;
+  const elevations = response.data.sample.elevation;
+
+  dispatch({
+    type: FETCH_SAMPLES,
+    payload: [sampleIgsn, sampleName, latitudes, longitudes, elevations],
+  });
+};
+
+export const fetchSamplesSuccessful = () => {
+  return { type: FETCH_SAMPLES_SUCCESS, payload: "Success" };
+};
+
+// ==============================================================================
+// Mapping Actions
+// ==============================================================================
+
 export function onChangeSourceFileAction(sourceFiles) {
   return {
     type: CHANGE_SOURCE_FILE,
@@ -83,249 +152,72 @@ export function onChangeMapFileAction(mapFile) {
   };
 }
 
-//Upload Actions
 export const initializeSamples = (sampleArray, pureSamples, fileName) => async (
   dispatch
 ) => {
-  var seasarKeys = new Set();
-  var originalValues = [];
-  var originalKeys = [];
-  var uploadSamples = sampleArray;
-  var pureSesar = new Set();
-  var pureKeys = [];
-  var pureValues = [];
-
-  console.log("FILENAME: ", fileName);
-
-  for (let i = 0; i < uploadSamples.length; i++) {
-    for (let j = 0; j < uploadSamples[i].length; j++) {
-      let sampleData = uploadSamples[i];
-      let dataRow = uploadSamples[i][j];
-      if (dataRow.key !== undefined) {
-        seasarKeys.add(dataRow.key);
-      }
-      originalKeys = [
-        ...new Set(
-          sampleData.map((data) => {
-            return data.originalKey;
-          })
-        ),
-      ];
-    }
-  }
-
-  for (let i = 0; i < pureSamples.length; i++) {
-    for (let j = 0; j < pureSamples[i].length; j++) {
-      let sampleData = pureSamples[i];
-      let dataRow = pureSamples[i][j];
-      if (dataRow.key !== undefined) {
-        pureSesar.add(dataRow.key);
-      }
-      pureKeys = [
-        ...new Set(
-          sampleData.map((data) => {
-            return data.originalKey;
-          })
-        ),
-      ];
-    }
-  }
-
-  pureSesar = [...pureSesar];
-  seasarKeys = [...seasarKeys];
-
-  for (let i = 0; i < uploadSamples.length; i++) {
-    var keyValue = {};
-    for (let j = 0; j < originalKeys.length; j++) {
-      var keyData = originalKeys[j];
-      var data = uploadSamples[i]
-        .filter((x) => {
-          return x.originalKey === originalKeys[j];
-        })
-        .map((x) => {
-          return x.originalValue;
-        });
-      keyValue[keyData] = data[0];
-    }
-    originalValues = [...originalValues, keyValue];
-  }
-
-  for (let i = 0; i < pureSamples.length; i++) {
-    var keyValue = {};
-    for (let j = 0; j < pureKeys.length; j++) {
-      var keyData = pureKeys[j];
-      var data = pureSamples[i]
-        .filter((x) => {
-          return x.originalKey === pureKeys[j];
-        })
-        .map((x) => {
-          return x.originalValue;
-        });
-      keyValue[keyData] = data[0];
-    }
-    pureValues = [...pureValues, keyValue];
-  }
-
+  const sampleData = getKeysAndValues(sampleArray);
+  const pureSampleData = getKeysAndValues(pureSamples);
   await dispatch({
     type: INITIALIZE_SAMPLES,
     sampleArray: sampleArray,
-    originalKeys: originalKeys,
-    originalValues: originalValues,
-    seasarKeys: seasarKeys,
-    pureKeys,
-    pureSesar,
-    pureValues,
-    pureSamples,
+    originalKeys: sampleData.sampleKeys,
+    originalValues: sampleData.sampleValues,
+    seasarKeys: sampleData.seasarKeys,
+    pureKeys: pureSampleData.sampleKeys,
+    pureSesar: pureSampleData.seasarKeys,
+    pureValues: pureSampleData.sampleValues,
+    pureSamples: pureSamples,
     fileName,
   });
 };
 
-// ==============================================================================
-// UPLOAD ACTIONS
-// ==============================================================================
-export function uploadRequest() {
-  return {
-    type: UPLOAD_REQUEST,
-  };
-}
-
-// All samples uploaded correctly
-export const uploadSuccess = (results, selectedSamples) => async (
-  dispatch,
-  getState
+export const onProceedMapping = (sourceMap, sourceFiles, callback) => async (
+  dispatch
 ) => {
-  let samples = getState().mars.samples;
-  let pureSamples = getState().mars.pureSamples;
+  let sourceFormat = ".csv";
 
-  for (let i = 0; i < results.length; i++) {
-    let index = selectedSamples[i];
-
-    /*IGSN for each sample
-    for each sample, the sample is equal to its
-    previous version with IGSN added to the end*/
-
-    for (let j = 0; j < samples[index].length; j++) {
-      if (
-        samples[index][j].originalKey == "IGSN" ||
-        samples[index][j].originalKey == "igsn"
-      ) {
-        samples[index][j] = {
-          ...samples[index][j],
-          originalValue: results[i].igsn[0],
-          value: results[i].igsn[0],
-        };
+  readSourceMap(sourceMap, (err, map, logic) => {
+    readSourceData(
+      sourceFormat,
+      sourceFiles,
+      map,
+      logic,
+      (err, samples, pureSamples, fileName) => {
+        dispatch(initializeSamples(samples, pureSamples, fileName));
       }
-    }
+    );
+  });
+  callback();
+};
 
-    for (let j = 0; j < pureSamples[index].length; j++) {
-      if (
-        pureSamples[index][j].originalKey == "IGSN" ||
-        pureSamples[index][j].originalKey == "igsn"
-      ) {
-        pureSamples[index][j] = {
-          ...pureSamples[index][j],
-          originalValue: results[i].igsn[0],
-          value: results[i].igsn[0],
-        };
-      }
-    }
-  }
+// ==============================================================================
+// Upload Actions
+// ==============================================================================
 
-  var seasarKeys = new Set();
-  var originalValues = [];
-  var originalKeys = [];
-
-  for (let i = 0; i < samples.length; i++) {
-    for (let j = 0; j < samples[i].length; j++) {
-      let sampleData = samples[i];
-      let row = samples[i][j];
-      if (row.key !== undefined) {
-        seasarKeys.add(row.key);
-      }
-      originalKeys = [
-        ...new Set(
-          sampleData.map((item) => {
-            return item.originalKey;
-          })
-        ),
-      ];
-    }
-  }
-
-  for (let i = 0; i < samples.length; i++) {
-    var keyValue = {};
-    for (let j = 0; j < originalKeys.length; j++) {
-      var keyData = originalKeys[j];
-      var data = samples[i]
-        .filter((x) => {
-          return x.originalKey === originalKeys[j];
-        })
-        .map((x) => {
-          return x.originalValue;
-        });
-      keyValue[keyData] = data[0];
-    }
-    originalValues = [...originalValues, keyValue];
-  }
-
-  var pureSesar = new Set();
-  var pureKeys = [];
-  var pureValues = [];
-
-  for (let i = 0; i < pureSamples.length; i++) {
-    for (let j = 0; j < pureSamples[i].length; j++) {
-      let sampleData = pureSamples[i];
-      let dataRow = pureSamples[i][j];
-      if (dataRow.key !== undefined) {
-        pureSesar.add(dataRow.key);
-      }
-      pureKeys = [
-        ...new Set(
-          sampleData.map((data) => {
-            return data.originalKey;
-          })
-        ),
-      ];
-    }
-  }
-
-  pureSesar = [...pureSesar];
-
-  for (let i = 0; i < pureSamples.length; i++) {
-    var keyValue = {};
-    for (let j = 0; j < pureKeys.length; j++) {
-      var keyData = pureKeys[j];
-      var data = pureSamples[i]
-        .filter((x) => {
-          return x.originalKey === pureKeys[j];
-        })
-        .map((x) => {
-          return x.originalValue;
-        });
-      keyValue[keyData] = data[0];
-    }
-    pureValues = [...pureValues, keyValue];
-  }
-
-  dispatch({
-    type: UPLOAD_SUCCESS,
-    results,
-    selectedSamples,
-    samples,
-    originalKeys,
-    originalValues,
-    pureKeys,
-    pureSesar,
-    pureValues,
-    pureSamples,
+export const onUploadProceed = (
+  sourceMap,
+  uploadSamples,
+  user,
+  selectedSamples
+) => async (dispatch) => {
+  readSourceMap(sourceMap, (err, map, logic, combinations) => {
+    let sampleCopy = [...uploadSamples];
+    let combinedSamples = combineFields(combinations, map, sampleCopy);
+    dispatch(
+      upload(
+        user.username,
+        user.password,
+        user.usercode,
+        combinedSamples,
+        selectedSamples
+      )
+    );
   });
 };
 
-// Not all samples uploaded correctly
-export function uploadFailure(error) {
+export function uploadRequest() {
   return {
-    type: UPLOAD_FAILURE,
-    error,
+    type: UPLOAD_REQUEST,
   };
 }
 
@@ -368,6 +260,7 @@ export function upload(username, password, usercode, samples, selectedSamples) {
           }
         } catch (err) {
           console.log("Error Response: ");
+          console.log(err);
           console.log(err.response.data);
           console.log(err.response.status);
           console.log(err.response.headers);
@@ -389,7 +282,6 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       }
       //convert samples to xml scheme
       let xmlSample = toXML(filteredSamples, usercode);
-      //TODO: Validate each sample
       //create form data to use in the POST request
       let formData = new FormData();
       formData.append("username", username);
@@ -415,76 +307,149 @@ export function upload(username, password, usercode, samples, selectedSamples) {
   };
 }
 
-// ==============================================================================
-// MYSAMPLES ACTIONS
-// ==============================================================================
-export const fetchUsercodeAndSamples = (usercode) => async (
+export const uploadSuccess = (results, selectedSamples) => async (
   dispatch,
   getState
 ) => {
-  await dispatch(fetchUsercode(usercode));
+  let samples = getState().mars.samples;
+  let pureSamples = getState().mars.pureSamples;
 
-  var igsn_list = getState().mars.igsnResponseList.igsn_list;
+  setIGSN(results, samples, selectedSamples);
+  setIGSN(results, pureSamples, selectedSamples);
 
-  var count = 0;
-  igsn_list.forEach(async (element) => {
-    await dispatch(fetchSamples(element));
-    count++;
-    if (count == igsn_list.length) {
-      dispatch(fetchSamplesSuccessful());
-    }
-  });
-};
-
-export const fetchUsercode = (usercode) => async (dispatch) => {
-  const response = await axios.get(
-    `https://sesardev.geosamples.org/samples/user_code/${usercode}`
-  );
-
-  dispatch({ type: FETCH_USER, payload: response.data });
-};
-
-export const fetchSamples = (igsn) => async (dispatch) => {
-  const response = await axios.get(
-    `https://sesardev.geosamples.org/webservices/display.php?igsn=${igsn}`
-  );
-
-  const sampleIgsn = response.data.sample.igsn;
-  const sampleName = response.data.sample.name;
-  const latitudes = response.data.sample.latitude;
-  const longitudes = response.data.sample.longitude;
-  const elevations = response.data.sample.elevation;
+  const sampleData = getKeysAndValues(samples);
+  const pureSampleData = getKeysAndValues(pureSamples);
 
   dispatch({
-    type: FETCH_SAMPLES,
-    payload: [sampleIgsn, sampleName, latitudes, longitudes, elevations],
+    type: UPLOAD_SUCCESS,
+    results,
+    selectedSamples,
+    samples,
+    pureSamples,
+    originalKeys: sampleData.sampleKeys,
+    originalValues: sampleData.sampleValues,
+    seasarKeys: sampleData.seasarKeys,
+    pureKeys: pureSampleData.sampleKeys,
+    pureSesar: pureSampleData.seasarKeys,
+    pureValues: pureSampleData.sampleValues,
   });
 };
 
-export const fetchSamplesSuccessful = () => {
-  return { type: FETCH_SAMPLES_SUCCESS, payload: "Success" };
-};
+export function uploadFailure(error) {
+  return {
+    type: UPLOAD_FAILURE,
+    error,
+  };
+}
 
 // ==============================================================================
-// READ & MERGE CSVs ACTIONS
+// Helper Actions
 // ==============================================================================
-export const onProceedMapping = (sourceMap, sourceFiles, callback) => async (
-  dispatch
-) => {
-  let sourceFormat = ".csv";
 
-  readSourceMap(sourceMap, (err, map, logic) => {
-    readSourceData(
-      sourceFormat,
-      sourceFiles,
-      map,
-      logic,
-      (err, samples, pureSamples, fileName) => {
-        dispatch(initializeSamples(samples, pureSamples, fileName));
+function setIGSN(results, samples, selectedSamples) {
+  for (let i = 0; i < results.length; i++) {
+    let index = selectedSamples[i];
+
+    /*IGSN for each sample
+    for each sample, the sample is equal to its
+    previous version with IGSN added to the end*/
+
+    for (let j = 0; j < samples[index].length; j++) {
+      if (
+        samples[index][j].originalKey == "IGSN" ||
+        samples[index][j].originalKey == "igsn"
+      ) {
+        samples[index][j] = {
+          ...samples[index][j],
+          originalValue: results[i].igsn[0],
+          value: results[i].igsn[0],
+        };
       }
-    );
-  });
-  callback();
+    }
+  }
+
+  return samples;
+}
+
+function getKeysAndValues(samples) {
+  var seasarKeys = new Set();
+  var sampleValues = [];
+  var sampleKeys = [];
+
+  for (let i = 0; i < samples.length; i++) {
+    for (let j = 0; j < samples[i].length; j++) {
+      let sampleData = samples[i];
+      let dataRow = samples[i][j];
+      if (dataRow.key !== undefined) {
+        seasarKeys.add(dataRow.key);
+      }
+      sampleKeys = [
+        ...new Set(
+          sampleData.map((data) => {
+            return data.originalKey;
+          })
+        ),
+      ];
+    }
+  }
+
+  seasarKeys = [...seasarKeys];
+
+  for (let i = 0; i < samples.length; i++) {
+    var keyValue = {};
+    for (let j = 0; j < sampleKeys.length; j++) {
+      var keyData = sampleKeys[j];
+      var data = samples[i]
+        .filter((x) => {
+          return x.originalKey === sampleKeys[j];
+        })
+        .map((x) => {
+          return x.originalValue;
+        });
+      keyValue[keyData] = data[0];
+    }
+    sampleValues = [...sampleValues, keyValue];
+  }
+
+  return {
+    seasarKeys,
+    sampleKeys,
+    sampleValues,
+  };
+}
+
+const combineFields = (combinations, map, uploadSamples) => {
+  for (let i = 0; i < uploadSamples.length; i++) {
+    for (let key in map) {
+      if (Array.isArray(map[key])) {
+        let filter = uploadSamples[i].filter((value) =>
+          map[key].includes(value.originalKey)
+        );
+
+        let inverse = uploadSamples[i].filter(
+          (value) => !map[key].includes(value.originalKey)
+        );
+
+        if (filter.length > 1) {
+          let reduction = filter.reduce(
+            (acc, field) => acc.concat([field.value]),
+            []
+          );
+
+          if (combinations[key]) {
+            let newField = { key, value: combinations[key](reduction) };
+
+            inverse.push(newField);
+            uploadSamples[i] = inverse;
+          }
+        } else if (filter.length == 1) {
+          inverse.concat(filter);
+          uploadSamples[i] = inverse;
+        }
+      }
+    }
+  }
+  return uploadSamples;
 };
 
 const readSourceMap = (mapFile, callback) => {
@@ -730,63 +695,4 @@ const loadCSV = async (files, map, logic, callback) => {
     }
   }
   callback(null, mappedSamples, pureSamples, fileName[0][0]);
-};
-
-// ==============================================================================
-//
-// ==============================================================================
-
-export const onUploadProceed = (
-  sourceMap,
-  uploadSamples,
-  user,
-  selectedSamples
-) => async (dispatch) => {
-  readSourceMap(sourceMap, (err, map, logic, combinations) => {
-    let sampleCopy = [...uploadSamples];
-    let combinedSamples = combineFields(combinations, map, sampleCopy);
-    dispatch(
-      upload(
-        user.username,
-        user.password,
-        user.usercode,
-        combinedSamples,
-        selectedSamples
-      )
-    );
-  });
-};
-
-const combineFields = (combinations, map, uploadSamples) => {
-  for (let i = 0; i < uploadSamples.length; i++) {
-    for (let key in map) {
-      if (Array.isArray(map[key])) {
-        let filter = uploadSamples[i].filter((value) =>
-          map[key].includes(value.originalKey)
-        );
-
-        let inverse = uploadSamples[i].filter(
-          (value) => !map[key].includes(value.originalKey)
-        );
-
-        if (filter.length > 1) {
-          let reduction = filter.reduce(
-            (acc, field) => acc.concat([field.value]),
-            []
-          );
-
-          if (combinations[key]) {
-            let newField = { key, value: combinations[key](reduction) };
-
-            inverse.push(newField);
-            uploadSamples[i] = inverse;
-          }
-        } else if (filter.length == 1) {
-          inverse.concat(filter);
-          uploadSamples[i] = inverse;
-        }
-      }
-    }
-  }
-  return uploadSamples;
 };

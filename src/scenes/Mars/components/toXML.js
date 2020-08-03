@@ -27,10 +27,10 @@ const toXML = (samples, usercode) => {
 
     //TEST: ADD REQUIRED attributes
     /*sampleNode
-      .appendChild(
-        document.createElementNS("http://app.geosamples.org", "sample_type")
-      )
-      .appendChild(document.createTextNode("Core"));*/
+        .appendChild(
+          document.createElementNS("http://app.geosamples.org", "sample_type")
+        )
+        .appendChild(document.createTextNode("Core"));*/
     sampleNode
       .appendChild(
         document.createElementNS("http://app.geosamples.org", "material")

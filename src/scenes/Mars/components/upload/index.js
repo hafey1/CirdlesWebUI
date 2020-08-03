@@ -1,7 +1,6 @@
 import { connect } from "react-redux";
-import Worker from "../sandbox.worker.js";
 import * as actions from "../../../../actions/mars";
-import Upload from "./upload";
+import Upload from "./Upload";
 
 function mapStateToProps(state) {
   return {
