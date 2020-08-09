@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { signOutAction } from "../../../actions/mars";
 import NavModal from "./NavModal";
+import "../../../styles/mars.scss";
 
 class Header extends Component {
   //This function returns header links based on if the user is loged in or not
@@ -85,7 +86,7 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar top-nav fixed-top navbar-light bg-light">
           <Link className="navbar-brand" to="/mars">
             MARS BETA
           </Link>

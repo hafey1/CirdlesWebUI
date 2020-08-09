@@ -106,14 +106,16 @@ class MySamples extends Component {
 
       return (
         <div className="mysamples-table__container">
-          <MuiThemeProvider theme={theme}>
-            <MUIDataTable
-              title={"My Samples from SESAR Development Server"}
-              data={this.props.mySamplesList}
-              columns={columns}
-              options={options}
-            />
-          </MuiThemeProvider>
+          <div className="mysamples-table">
+            <MuiThemeProvider theme={theme}>
+              <MUIDataTable
+                title={"My Samples from SESAR Development Server"}
+                data={this.props.mySamplesList}
+                columns={columns}
+                options={options}
+              />
+            </MuiThemeProvider>
+          </div>
         </div>
       );
     }
