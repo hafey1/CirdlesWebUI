@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import * as localForage from "localforage";
-import SampleTable from "../sampleTable";
+import SampleTable from "../SampleTable";
 import "../../../../styles/mars.scss";
 
 class Upload extends Component {
@@ -59,7 +59,7 @@ class Upload extends Component {
       this.props.loading == false
     ) {
       return (
-        <div style={{ width: "100%", height: "90%" }}>
+        <div style={{ width: "100%", height: "100%" }}>
           <div className="centercontainer">
             <div className="left"></div>
             <div className="center">
@@ -98,7 +98,7 @@ class Upload extends Component {
   }
 
   render() {
-    return <div>{this.renderTable()}</div>;
+    return <div className="upload">{this.renderTable()}</div>;
   }
 }
 

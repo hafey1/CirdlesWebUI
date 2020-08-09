@@ -22,7 +22,6 @@ export default function(state = {}, action) {
         usercode: action.usercode,
         password: action.password,
         error: "",
-        sampleLoading: true,
         mySamplesList: [],
       };
     case UNAUTHENTICATED:
@@ -31,7 +30,6 @@ export default function(state = {}, action) {
         usercode: "",
         username: "",
         error: "",
-        sampleLoading: true,
         mySamplesList: [],
         samples: [],
         originalKeys: [],
@@ -93,7 +91,6 @@ export default function(state = {}, action) {
       return {
         ...state,
         mySamplesList: [...state.mySamplesList, action.payload],
-        sampleLoading: false,
       };
 
     case FETCH_SAMPLES_SUCCESS:

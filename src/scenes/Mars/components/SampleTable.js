@@ -18,16 +18,13 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import DeleteIcon from "@material-ui/icons/Delete";
 import PublishIcon from "@material-ui/icons/Publish";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
 import { CsvBuilder } from "filefy";
 import GetAppIcon from "@material-ui/icons/GetApp";
-
 import _ from "lodash";
 
 function descendingComparator(a, b, orderBy) {
@@ -84,9 +81,9 @@ function EnhancedTableHead(props) {
             inputProps={{ "aria-label": "select all samples" }}
           />
         </TableCell>
-        {originalKeys.map((headCell) => (
+        {originalKeys.map((headCell, index) => (
           <TableCell
-            key={headCell}
+            key={index}
             padding={"default"}
             align={"right"}
             sortDirection={orderBy === headCell ? order : false}
@@ -275,7 +272,7 @@ function CreateRows(props) {
         role="checkbox"
         aria-checked={isItemSelected}
         tabIndex={-1}
-        key={row[0]}
+        key={index}
         selected={isItemSelected}
       >
         <TableCell padding="checkbox">
@@ -324,8 +321,8 @@ function CreateRows(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {sampleRow.map((sample) => (
-                    <TableRow>
+                  {sampleRow.map((sample, index) => (
+                    <TableRow key={index}>
                       <TableCell>{sample.originalKey}</TableCell>
                       <TableCell>{sample.originalValue}</TableCell>
                       <TableCell>{sample.key}</TableCell>
@@ -498,10 +495,6 @@ export default function SampleTable(props) {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </div>
   );
 }
