@@ -96,8 +96,18 @@
 
 .mysamples-table__container {
   height: 100%;
-  padding: 20px;
+  padding: 80px 20px 20px 20px;
   width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin: auto;
+}
+
+.mysamples-table {
+  margin: auto;
+  width: 95%;
+  height: 90%;
 }
 
 // =======================================
@@ -163,6 +173,7 @@
   height: 100%;
   position: absolute;
   width: 100%;
+  padding-top: 58px;
 }
 
 .mapping-panel__container {
@@ -196,11 +207,33 @@
   width: 90% !important;
 }
 .mapping-input {
-  padding-bottom: 20px !important;
+  padding-bottom: 40px !important;
 }
 
 .mapping-button {
   margin: 20px;
   width: 90% !important;
+  height: 100%;
   padding: none !important;
+  font-size: large !important;
+  font-weight: bold !important;
+}
+
+.mapping-button__container {
+  margin-top: 2rem;
+  height: 5rem;
+}
+
+.top-nav {
+  margin-top: 56px;
+}
+
+.upload {
+  height: 100%;
+  padding: 80px 20px 20px 20px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin: auto;
 }
