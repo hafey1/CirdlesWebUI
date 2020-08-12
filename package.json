@@ -18,6 +18,7 @@
     "d3-fetch": "^1.2.0",
     "downloadjs": "^1.4.7",
     "filefy": "^0.1.10",
+    "js-alert": "^1.0.4",
     "js-beautify": "^1.11.0",
     "localforage": "^1.7.4",
     "lodash": "^4.17.19",

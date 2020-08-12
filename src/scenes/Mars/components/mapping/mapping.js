@@ -120,7 +120,6 @@ class Mapping extends Component {
       fileStringName = fileStringName.slice(0, fileStringName.length - 2);
     }
     this.setState({ sourceFileName: fileStringName });
-    console.log("SF", sourceFiles);
     event.preventDefault();
   }
 
