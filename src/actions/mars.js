@@ -258,12 +258,8 @@ export function upload(username, password, usercode, samples, selectedSamples) {
             filteredSamples.push(samplesToUpload[i]);
             filteredIndex.push(selectedSamples[i]);
           } else {
-            filteredSamples.push(samplesToUpload[i]);
-            filteredIndex.push(selectedSamples[i]);
-            console.log(response.data.igsn_list);
             duplicateIGSNS = response.data.igsn_list;
             let duplicatePushData = `${sampleToCheck}: ${duplicateIGSNS}`;
-            console.log(duplicatePushData);
             duplicateSamples.push(duplicatePushData);
           }
         } catch (err) {
