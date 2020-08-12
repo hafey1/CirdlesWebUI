@@ -7,6 +7,7 @@ import axios from "axios";
 import * as jsCON from "xml-js";
 import localForage from "localforage";
 import toXML from "../scenes/Mars/components/toXML";
+import JSAlert from "js-alert";
 //TODO: import toXML file
 
 // Action Types
@@ -247,6 +248,7 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       let filteredIndex = [];
       for (let i = 0; i < samplesToUpload.length; i++) {
         let sampleToCheck = sampleNames[i];
+        let duplicateIGSNS = [];
 
         try {
           const response = await axios.get(
@@ -256,7 +258,13 @@ export function upload(username, password, usercode, samples, selectedSamples) {
             filteredSamples.push(samplesToUpload[i]);
             filteredIndex.push(selectedSamples[i]);
           } else {
-            duplicateSamples.push(sampleToCheck);
+            filteredSamples.push(samplesToUpload[i]);
+            filteredIndex.push(selectedSamples[i]);
+            console.log(response.data.igsn_list);
+            duplicateIGSNS = response.data.igsn_list;
+            let duplicatePushData = `${sampleToCheck}: ${duplicateIGSNS}`;
+            console.log(duplicatePushData);
+            duplicateSamples.push(duplicatePushData);
           }
         } catch (err) {
           console.log("Error Response: ");
@@ -272,9 +280,16 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       }
 
       if (duplicateSamples.length !== 0) {
-        alert(
-          `The following sample(s) have the SAME NAME as samples already registered to your usercode and WILL NOT be uploaded: \n ${duplicateSamples}`
+        JSAlert.alert(
+          "The following samples share names will samples already registered and WILL NOT be uploaded",
+          "Duplicate Samples!"
         );
+        for (let i = 0; i < duplicateSamples.length; i++) {
+          JSAlert.alert(
+            `Duplicate Sample ${i + 1} of ${duplicateSamples.length}`,
+            `${duplicateSamples[i]}`
+          );
+        }
       }
 
       if (filteredIndex.length === 0) {
