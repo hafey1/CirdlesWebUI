@@ -303,6 +303,7 @@ export function upload(username, password, usercode, samples, selectedSamples) {
       if (filteredIndex.length === 0) {
         dispatch({ type: UPLOAD_FAILURE, error });
       }
+
       //convert samples to xml scheme
       let xmlSample = toXML(filteredSamples, usercode);
       //create form data to use in the POST request
@@ -503,14 +504,16 @@ const combineFields = (combinations, map, uploadSamples) => {
         );
 
         if (filter.length > 1) {
-          let reduction = filter.reduce(
-            (acc, field) => acc.concat([field.value]),
-            []
-          );
+          var reduction = filter.reduce(function(acc, field) {
+            if (field.value.includes("Not Provided")) {
+              return acc;
+            }
+            return acc.concat([field.value]);
+            //return acc;
+          }, []);
 
           if (combinations[key]) {
             let newField = { key, value: combinations[key](reduction) };
-
             inverse.push(newField);
             uploadSamples[i] = inverse;
           }
