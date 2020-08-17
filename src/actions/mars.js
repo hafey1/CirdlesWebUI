@@ -243,9 +243,12 @@ export function upload(username, password, usercode, samples, selectedSamples) {
         }
       }
 
+      let duplicateWarnings = [];
       let duplicateSamples = [];
       let filteredSamples = [];
       let filteredIndex = [];
+      let duplicateSamplesIndex = [];
+      let duplicateIGSNList = [];
       for (let i = 0; i < samplesToUpload.length; i++) {
         let sampleToCheck = sampleNames[i];
         let duplicateIGSNS = [];
@@ -259,8 +262,13 @@ export function upload(username, password, usercode, samples, selectedSamples) {
             filteredIndex.push(selectedSamples[i]);
           } else {
             duplicateIGSNS = response.data.igsn_list;
-            let duplicatePushData = `${sampleToCheck}: ${duplicateIGSNS}`;
-            duplicateSamples.push(duplicatePushData);
+            let duplicateString = `${sampleToCheck}: ${duplicateIGSNS}`;
+            duplicateWarnings.push(duplicateString);
+            if (response.data.total_counts == 1) {
+              duplicateIGSNList.push(response.data.igsn_list[0]);
+              duplicateSamplesIndex.push(selectedSamples[i]);
+              duplicateSamples.push(samplesToUpload[i]);
+            }
           }
         } catch (err) {
           console.log("Error Response: ");
@@ -274,16 +282,20 @@ export function upload(username, password, usercode, samples, selectedSamples) {
           }
         }
       }
-
-      if (duplicateSamples.length !== 0) {
+      if (duplicateSamplesIndex.length != 0) {
+        await dispatch(
+          duplicateSuccess(duplicateIGSNList, duplicateSamplesIndex)
+        );
+      }
+      if (duplicateWarnings.length !== 0) {
         JSAlert.alert(
           "The following samples share names will samples already registered and WILL NOT be uploaded",
           "Duplicate Samples!"
         );
-        for (let i = 0; i < duplicateSamples.length; i++) {
+        for (let i = 0; i < duplicateWarnings.length; i++) {
           JSAlert.alert(
-            `Duplicate Sample ${i + 1} of ${duplicateSamples.length}`,
-            `${duplicateSamples[i]}`
+            `Duplicate Sample ${i + 1} of ${duplicateWarnings.length}`,
+            `${duplicateWarnings[i]}`
           );
         }
       }
@@ -318,6 +330,32 @@ export function upload(username, password, usercode, samples, selectedSamples) {
   };
 }
 
+export const duplicateSuccess = (results, selectedSamples) => async (
+  dispatch,
+  getState
+) => {
+  let samples = getState().mars.samples;
+  let pureSamples = getState().mars.pureSamples;
+  setDuplicateIGSN(results, samples, selectedSamples);
+  setDuplicateIGSN(results, pureSamples, selectedSamples);
+
+  const sampleData = getKeysAndValues(samples);
+  const pureSampleData = getKeysAndValues(pureSamples);
+
+  await dispatch({
+    type: UPLOAD_SUCCESS,
+    results,
+    selectedSamples,
+    samples,
+    pureSamples,
+    originalKeys: sampleData.sampleKeys,
+    originalValues: sampleData.sampleValues,
+    seasarKeys: sampleData.seasarKeys,
+    pureKeys: pureSampleData.sampleKeys,
+    pureSesar: pureSampleData.seasarKeys,
+    pureValues: pureSampleData.sampleValues,
+  });
+};
 export const uploadSuccess = (results, selectedSamples) => async (
   dispatch,
   getState
@@ -356,7 +394,30 @@ export function uploadFailure(error) {
 // ==============================================================================
 // Helper Actions
 // ==============================================================================
+function setDuplicateIGSN(results, samples, selectedSamples) {
+  for (let i = 0; i < results.length; i++) {
+    let index = selectedSamples[i];
 
+    /*IGSN for each sample
+    for each sample, the sample is equal to its
+    previous version with IGSN added to the end*/
+
+    for (let j = 0; j < samples[index].length; j++) {
+      if (
+        samples[index][j].originalKey == "IGSN" ||
+        samples[index][j].originalKey == "igsn"
+      ) {
+        samples[index][j] = {
+          ...samples[index][j],
+          originalValue: results[i],
+          value: results[i],
+        };
+      }
+    }
+  }
+
+  return samples;
+}
 function setIGSN(results, samples, selectedSamples) {
   for (let i = 0; i < results.length; i++) {
     let index = selectedSamples[i];
