@@ -177,11 +177,10 @@ class Mapping extends Component {
         <div className="mapping">
           {this.renderTable()}
           <Dialog open={this.state.open}>
-            <DialogTitle>{"Make New Mapping?"}</DialogTitle>
+            <DialogTitle>{"Load More Data?"}</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Would you like to make a new map? All previous mapping data will
-                be lost.
+                Would you like to load more data? Previous data may be lost.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
