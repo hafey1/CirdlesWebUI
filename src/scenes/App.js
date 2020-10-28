@@ -5,6 +5,7 @@ import Home from "./Home";
 import Squid from "./Squid";
 import Ambapo from "./Ambapo";
 import Topsoil from "./Topsoil";
+import Squidink from "./Squidink";
 import Mars from "./Mars";
 import squidLogo from "../img/logos/Squid.svg";
 import ambapoLogo from "../img/logos/Ambapo.svg";
@@ -14,6 +15,7 @@ import { colors } from "constants";
 
 import "styles/index.scss";
 import { maxHeaderSize } from "http";
+
 
 const routes = [
   {
@@ -47,6 +49,11 @@ const routes = [
     component: Mars,
     logo: marslogo,
   },
+  {
+    path: "/squidink",
+    title: "SQUIDINK TRIAL PAGE",
+    component: Squidink
+  }
 ];
 
 const Header = ({ title, logo }) => {
@@ -81,6 +88,12 @@ const Header = ({ title, logo }) => {
           </NavLink>
           <NavLink className="nav-item nav-link ml-4" to="/mars">
             MARS
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/squidink">
+            SQUIDINK
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/portedsquid">
+            portedsquid
           </NavLink>
         </div>
       </div>
@@ -132,5 +145,4 @@ const styles = {
     backgroundColor: colors.primary,
   },
 };
-
 export default App;
