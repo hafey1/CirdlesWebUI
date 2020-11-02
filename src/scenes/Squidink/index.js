@@ -7,7 +7,8 @@ import { connect } from "react-redux";
 import Header from "./components/Header";
 import Landing from "./components/landing";
 import SignIn from "./components/login";
-import Register from "./components/register"
+import Register from "./components/register";
+import Dashboard from "./components/Dashboard"
 //import SignIn from "./components/SignIn";
 //import MySamples from "./components/MySamples";
 //import Mapping from "./components/mapping";
@@ -26,18 +27,12 @@ class SquidInkPage extends Component {
                     <Route exact path="/squidink" component={Landing} />
                     <Route exact path="/squidink/login" component={SignIn} />
                     <Route exact path="/squidink/register" component={Register} />
+                    <Route exact path="/squidink/dashboard" component={Dashboard} />
                 </main>
             </div>
         );
     }
 }
-function mapStateToProps(state) {
-    return {
-        authenticated: state.mars.authenticated,
-        mapFile: state.mars.mapFile,
-    };
-}
 
-export default connect(
-    mapStateToProps
-)(SquidInkPage);
+
+export default connect()(SquidInkPage);

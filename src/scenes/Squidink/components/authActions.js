@@ -20,35 +20,33 @@ export const registerUser = (newUser, history) => dispatch => {
             })
         );
 };
-export const sendRequest = (newUser) => dispatch => {
+export const sendRequest = (newUser, history) => dispatch => {
     axios
         .post("http://localhost:8080/Services/squidinktester", newUser)
         .then(res => console.log("done: " + JSON.stringify(res.data)))
 
 };
 // Login - get user token
-export const loginUser = userData => dispatch => {
+export const loginUser = (userData, history) => dispatch => {
     axios
         .post("http://localhost:8080/Services/squidinklogin", userData)
         .then(res => {
-          // // Save to localStorage
-
-          // // Set token to localStorage
-           const { token } = res.data;
-           localStorage.setItem("jwtToken", token);
+            console.log(res.data)
+           // Set token to localStorage
+           localStorage.setItem("jwtToken", res.data);
            // Set token to Auth header
-           setAuthToken(token);
-           // Decode token to get user data
-           const decoded = jwt_decode(token);
-           // Set current user
-           dispatch(setCurrentUser(decoded));
-        })
+           setAuthToken(res.data);
+           // Set current user to decoded token
+           dispatch(setCurrentUser(jwt_decode(res.data)));
+        }).then(push => history.push("/squidink/dashboard"))
+    { /*
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
             })
         );
+   */ }
 };
 
 // Set logged in user

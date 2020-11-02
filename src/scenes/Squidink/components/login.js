@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser } from "./authActions";
+import { loginUser, sendRequest } from "./authActions";
 import classnames from "classnames";
 import Button from "@material-ui/core/Button";
 import FormControl from '@material-ui/core/FormControl';
@@ -22,24 +22,24 @@ class Login extends Component {
         };
     }
 //@TODO HANDLE AUTH CONTEXT FOR DIDMOUNT AUTOMATED ROUTING
-   //componentDidMount() {
-   //    // If logged in and user navigates to Login page, should redirect them to dashboard
-   //    if (this.props.auth.isAuthenticated) {
-   //        this.props.history.push("/dashboard");
-   //    }
-   //}
+    //componentDidMount() {
+    //    // If logged in and user navigates to Login page, should redirect them to dashboard
+    //    if (this.props.auth.isAuthenticated) {
+    //        this.props.history.push("/dashboard");
+    //    }
+    //}
 
-   //componentWillReceiveProps(nextProps) {
-   //    if (nextProps.auth.isAuthenticated) {
-   //        this.props.history.push("/dashboard");
-   //    }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.auth.isAuthenticated) {
+            this.props.history.push("/dashboard");
+        }
 
-   //    if (nextProps.errors) {
-   //        this.setState({
-   //            errors: nextProps.errors
-   //        });
-   //    }
-   //}
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
+    }
 
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
@@ -53,7 +53,7 @@ class Login extends Component {
             password: this.state.password
         };
 
-        this.props.loginUser(userData);
+        this.props.loginUser(userData, this.props.history);
     };
 
     render() {
@@ -79,7 +79,7 @@ class Login extends Component {
                                 </h2>
                             </div>
                         </Grid>
-                        {/*
+
                         <Box   borderColor="#3F51B5" border={2} justifyContent="center" display="flex" p={1} bgcolor="#e3e5e8" >
                             <form noValidate autoComplete="on" onSubmit={this.onSubmit} >
                                 <Grid item xs={12}>
@@ -95,8 +95,7 @@ class Login extends Component {
                                                    invalid: errors.email || errors.emailnotfound
                                                })}/>
                                         <FormHelperText error id="helper">{errors.email}
-                                            {errors.emailnotfound
-                                            }</FormHelperText>
+                                            {errors.emailnotfound}</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -112,8 +111,7 @@ class Login extends Component {
                                                    invalid: errors.password || errors.passwordincorrect
                                                })}/>
                                         <FormHelperText error id="helper" >{errors.password}
-                                            {errors.passwordincorrect
-                                            }</FormHelperText>
+                                            {errors.passwordincorrect}</FormHelperText>
 
                                     </FormControl>
                                 </Grid>
@@ -134,7 +132,7 @@ class Login extends Component {
                                 </div>
                             </form>
                         </Box>
-                        */}
+
                     </Grid>
                 </div>
             </div>
@@ -155,6 +153,6 @@ const mapStateToProps = state => ({
 //@TODO ROUTE REGISTERUSER ACTION TO ACTIONS SUBDIRECTORY WHICH PIPES REQUEST TO LOGIN/REGISTER SERVLET TO HANDLE ACTION CONTEXT
 export default connect(
     mapStateToProps,
-    {//loginUser
+    {loginUser, sendRequest
     }
 )(Login);

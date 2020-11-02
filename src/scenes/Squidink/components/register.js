@@ -25,12 +25,12 @@ class Register extends Component {
         };
     }
 //@TODO HANDLE AUTH CONTEXT FOR DIDMOUNT AUTOMATED ROUTING
-   //componentDidMount() {
-   //    // If logged in and user navigates to Register page, should redirect them to dashboard
-   //    if (this.props.auth.isAuthenticated) {
-   //        this.props.history.push("/dashboard");
-   //    }
-   //}
+    //componentDidMount() {
+    //    // If logged in and user navigates to Register page, should redirect them to dashboard
+    //    if (this.props.auth.isAuthenticated) {
+    //        this.props.history.push("/dashboard");
+    //    }
+    //}
 
    componentWillReceiveProps(nextProps) {
        if (nextProps.errors) {
@@ -39,9 +39,6 @@ class Register extends Component {
            });
        }
    }
-    sendRequest(){
-        this.props.sendRequest("please");
-    }
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
     };
@@ -82,7 +79,6 @@ class Register extends Component {
                                 </h2>
                             </div>
                         </Grid>
-                        <Button onClick={this.sendRequest.bind(this)}>Tester</Button>
                         <Box   borderColor="#3F51B5" border={2} justifyContent="center" display="flex" p={1} bgcolor="#e3e5e8" >
                             <form autoComplete="on" noValidate onSubmit={this.onSubmit}>
                                 <Grid item xs={12}>
@@ -191,7 +187,6 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     {
-        sendRequest,
         registerUser
     }
 )(withRouter(Register));
