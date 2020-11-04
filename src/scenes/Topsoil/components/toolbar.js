@@ -31,7 +31,7 @@ export class Toolbar extends Component<Props> {
 
         <div style={styles.toolbarTail}>
           <a
-            href="http://cirdles.org/projects/topsoil/"
+            href="https://cirdles.org/projects/topsoil/"
             target="_blank"
             className="text-center my-2"
           >

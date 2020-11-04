@@ -4,8 +4,10 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import MUIDataTable from "mui-datatables";
 import Button from "@material-ui/core/Button";
 import { fetchUsercodeAndSamples } from "../../../actions/mars";
-import { SESAR_SAMPLE_PROFILE } from "../../../constants/api";
+import { SESAR_SAMPLE_DISPLAY } from "../../../constants/api";
 import "../../../styles/mars.scss";
+
+import { SESAR_BASE_URL } from "../../../constants/api";
 
 class MySamples extends Component {
   //When the component mounts, get the user's samples and key data about those samples
@@ -36,7 +38,7 @@ class MySamples extends Component {
       let igsn = samples[i];
       var randomnumber = Math.floor(Math.random() * 100 + 1);
       window.open(
-        SESAR_SAMPLE_PROFILE + `${igsn}`,
+        SESAR_SAMPLE_DISPLAY + `${igsn}`,
         "_blank",
         "PopUp",
         randomnumber,
@@ -109,7 +111,7 @@ class MySamples extends Component {
           <div className="mysamples-table">
             <MuiThemeProvider theme={theme}>
               <MUIDataTable
-                title={"My Samples from SESAR Development Server"}
+                title={"My Samples from " + SESAR_BASE_URL.replace("https://", "")}
                 data={this.props.mySamplesList}
                 columns={columns}
                 options={options}

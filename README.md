@@ -33,7 +33,7 @@ This repository is deployed by copying the contents of the `dist/` folder (which
 This script is run every night via a cron job (more can be read about this at the [CirdlesWebServices](https://github.com/CIRDLES/CirdlesWebServices) repository)
 
 To run this script manually:
-1. ssh into [cirdlesserver.cs.cofc.edu](http://cirdlesserver.cs.cofc.edu)
+1. ssh into [cirdlesserver.cs.cofc.edu](https://cirdlesserver.cs.cofc.edu)
 2. Execute the following command (Note: you must have root privileges):
 
     ```

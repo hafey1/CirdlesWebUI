@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import * as actions from "../../../../actions/mars";
-import Upload from "./Upload";
+import Upload from "./upload";
 
 function mapStateToProps(state) {
   return {

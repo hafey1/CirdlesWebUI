@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Backdrop, Fade } from "@material-ui/core";
+import marslogo from "../../../img/logos/Mars.svg";
 
 function NavModal() {
   const [open, setOpen] = React.useState(false);
@@ -46,17 +47,24 @@ function NavModal() {
             style={{
               width: "50%",
               backgroundColor: "#f8f9fa",
-              border: "2px solid #000",
+              border: "4px solid #000",
+              padding: "10px 10px 10px 10px",
             }}
           >
-            <h2 id="transition-modal-title">MARS</h2>
+            <h2 id="transition-modal-title">About </h2>
+            <img align="center" src={marslogo} alt="MARS" width="200" height="200"></img>
             <h5>Middleware for Assisting the Registration of Samples</h5>
             <p id="transition-modal-description">
               MARS is being developed to explore the automation of registering
               legacy samples at SESAR (System for Earth Sample Registration)
-              with pertinent metadata and a IGSN (International GeoSample
+              with pertinent metadata and an IGSN (International GeoSample
               Number). The initial targeted repository is the cores collection
-              of Scripps Institution of Oceanography.
+              of Scripps Institution of Oceanography.  We are also developing
+              Mars MapMaker (MMM) to support the composition of maps between
+              a repository's meta-data fields and those of SESAR.   
+              Please visit CIRDLES.org, 
+              github.com/cirdles,
+              and send inquiries to bowring@gmail.com.
             </p>
           </div>
         </Fade>
