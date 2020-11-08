@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "https://sesardev.geosamples.org",
+  "browser": {
+    "child_process": false
+  },
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",

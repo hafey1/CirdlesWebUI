@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "./authActions";
+import { logoutUser, startContainer } from "./authActions";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 
@@ -11,12 +11,30 @@ class Dashboard extends Component {
   //  e.preventDefault();
   //  this.props.logoutUser();
   //  console.log(this.props.auth)
-//
+  //
   //};
 
+  constructor() {
+    super();
+    this.state = {
+      errors: {}
+    }
+  }
 
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
 
+  printErrors = () => {
+    this.props.startContainer(this.props.history);
+    setTimeout(function () { window.open("http://localhost:81/squid_servlet"); }, 100)
+
+  }
 
   render() {
 
@@ -42,7 +60,7 @@ class Dashboard extends Component {
                 </h2>
               </Grid>
               <Grid item xs={12} style={{ margin: "30px" }}>
-                <Button variant="outlined" color="gray" size="large">
+                <Button onClick={this.printErrors} variant="outlined" color="gray" size="large">
                   Squid Container Button
             </Button>
               </Grid>
@@ -54,10 +72,10 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.propTypes = {
-  logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
-};
+//Dashboard.propTypes = {
+//logoutUser: PropTypes.func.isRequired,
+//auth: PropTypes.object.isRequired
+//};
 
 const mapStateToProps = state => ({
   auth: state.auth
@@ -65,6 +83,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { //logoutUser
+  {
+    startContainer
   }
 )(Dashboard);
