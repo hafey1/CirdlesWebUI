@@ -45,7 +45,7 @@ class SignIn extends Component {
           </fieldset>
           <br></br>
           <fieldset>
-            <label className="signin-label">SESAR UserCode in CAPS</label>
+            <label className="signin-label">SESAR UserCode in CAPS (Optional)</label>
             <br></br>
             <Field
               className="signin-input"

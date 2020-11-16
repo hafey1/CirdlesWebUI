@@ -42,15 +42,7 @@ export const signInAction = (formProps, callback) => async (dispatch) => {
     formData.append("username", formProps.username);
     formData.append("password", formProps.password);
 
-    //Wait for the api call to finish
-    //const response = await axios.post(SESAR_LOGIN, formData);
-    //let options = { ignoreComment: true, alwaysChildren: true };
-
-    //let resJSON = jsCON.xml2js(response.data, options);
-    //let usercode = resJSON.elements[0].elements[1].elements[0].elements[0].text;
-
-    // let usercode = formProps.mapFile.getKeysAndValues.get("user_code");
-
+    // this code walks the list of user codes a user might have
     //var i;
     // var valid = new Boolean(false);
     //var myArray = resJSON.elements[0].elements[1];
@@ -64,17 +56,28 @@ export const signInAction = (formProps, callback) => async (dispatch) => {
     //  }
     // }
 
-    // force check of username and poassword
-    await axios.post(SESAR_LOGIN, formData);
+    // force check of username and password
+    const response = await axios.post(SESAR_LOGIN, formData);
+
+    // use supplied user code or if missing, lookup first one from user
+    var userCode = formProps.usercode;
+    if (userCode == "" || typeof userCode == "undefined" || userCode == null) {
+      let options = { ignoreComment: true, alwaysChildren: true };
+      let resJSON = jsCON.xml2js(response.data, options);
+      userCode = resJSON.elements[0].elements[1].elements[0].elements[0].text;
+    } else {
+      userCode = formProps.usercode;
+    }
+
     // force check of supplied user code
-    await dispatch(fetchUsercode(formProps.usercode));
+    await dispatch(fetchUsercode(userCode));
 
     // if (Boolean(valid)) {
     //Dispatch an action with type AUTHENTICATED if everything above was succesfull
     dispatch({
       type: AUTHENTICATED,
       username: formProps.username,
-      usercode: formProps.usercode,
+      usercode: userCode, //formProps.usercode,
       password: formProps.password,
     });
 
@@ -288,117 +291,134 @@ export function uploadRequest() {
 }
 
 export function upload(username, password, usercode, samples, selectedSamples) {
-  return async (dispatch) => {
-    try {
-      //Start upload request
-      dispatch(uploadRequest());
+  if (typeof usercode == "undefined") {
+    JSAlert.alert("Please supply user_code in mapping file.");
+    dispatch({ type: UPLOAD_FAILURE, error });
+  } else {
+    return async (dispatch) => {
+      try {
+        //Start upload request
+        dispatch(uploadRequest());
 
-      let samplesToUpload = [];
-      for (let i = 0; i < selectedSamples.length; i++) {
-        let index = selectedSamples[i];
-        samplesToUpload[i] = samples[index];
-      }
-
-      let sampleNames = [];
-      for (let i = 0; i < samplesToUpload.length; i++) {
-        for (let j = 0; j < samplesToUpload[i].length; j++) {
-          if (samplesToUpload[i][j].key == "name") {
-            sampleNames[i] = samplesToUpload[i][j].value;
-          }
+        let samplesToUpload = [];
+        for (let i = 0; i < selectedSamples.length; i++) {
+          let index = selectedSamples[i];
+          samplesToUpload[i] = samples[index];
         }
-      }
 
-      let duplicateWarnings = [];
-      let duplicateSamples = [];
-      let filteredSamples = [];
-      let filteredIndex = [];
-      let duplicateSamplesIndex = [];
-      let duplicateIGSNList = [];
-      for (let i = 0; i < samplesToUpload.length; i++) {
-        let sampleToCheck = sampleNames[i];
-        let duplicateIGSNS = [];
-
-        try {
-          const response = await axios.get(
-            SESAR_BASE_URL +
-              `/samples/user_code/${usercode}?sample_name=${sampleToCheck}`
-          );
-          if (response.data.total_counts == 0) {
-            filteredSamples.push(samplesToUpload[i]);
-            filteredIndex.push(selectedSamples[i]);
-          } else {
-            duplicateIGSNS = response.data.igsn_list;
-            let duplicateString = `${sampleToCheck}: ${duplicateIGSNS}`;
-            duplicateWarnings.push(duplicateString);
-            if (response.data.total_counts == 1) {
-              duplicateIGSNList.push(response.data.igsn_list[0]);
-              duplicateSamplesIndex.push(selectedSamples[i]);
-              duplicateSamples.push(samplesToUpload[i]);
+        let sampleNames = [];
+        for (let i = 0; i < samplesToUpload.length; i++) {
+          for (let j = 0; j < samplesToUpload[i].length; j++) {
+            if (samplesToUpload[i][j].key == "name") {
+              sampleNames[i] = samplesToUpload[i][j].value;
             }
           }
-        } catch (err) {
-          console.log("Error Response: ");
-          console.log(err);
-          console.log(err.response.data);
-          console.log(err.response.status);
-          console.log(err.response.headers);
-          if (err.response.status == 404) {
-            filteredSamples.push(samplesToUpload[i]);
-            filteredIndex.push(selectedSamples[i]);
-          } else if (err.response.status == 400) {
-            JSAlert.alert(
-              "The User Code " + usercode + " is invalid.  Please correct your mapping file and reload it.");
-            dispatch({ type: UPLOAD_FAILURE, error });
+        }
+
+        let duplicateWarnings = [];
+        let duplicateSamples = [];
+        let filteredSamples = [];
+        let filteredIndex = [];
+        let duplicateSamplesIndex = [];
+        let duplicateIGSNList = [];
+        for (let i = 0; i < samplesToUpload.length; i++) {
+          let sampleToCheck = sampleNames[i];
+          let duplicateIGSNS = [];
+
+          try {
+            const response = await axios.get(
+              SESAR_BASE_URL +
+                `/samples/user_code/${usercode}?sample_name=${sampleToCheck}`
+            );
+            if (response.data.total_counts == 0) {
+              filteredSamples.push(samplesToUpload[i]);
+              filteredIndex.push(selectedSamples[i]);
+            } else {
+              duplicateIGSNS = response.data.igsn_list;
+              let duplicateString = `${sampleToCheck}: ${duplicateIGSNS}`;
+              duplicateWarnings.push(duplicateString);
+              if (response.data.total_counts == 1) {
+                duplicateIGSNList.push(response.data.igsn_list[0]);
+                duplicateSamplesIndex.push(selectedSamples[i]);
+                duplicateSamples.push(samplesToUpload[i]);
+              }
+            }
+          } catch (err) {
+            console.log("Error Response: ");
+            console.log(err);
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+            if (err.response.status == 404) {
+              filteredSamples.push(samplesToUpload[i]);
+              filteredIndex.push(selectedSamples[i]);
+            } else if (err.response.status == 400) {
+              JSAlert.alert(
+                "The User Code " +
+                  usercode +
+                  " is invalid.  Please correct your mapping file and reload it."
+              );
+              dispatch({ type: UPLOAD_FAILURE, error });
+            }
           }
         }
-      }
-      if (duplicateSamplesIndex.length != 0) {
-        await dispatch(
-          duplicateSuccess(duplicateIGSNList, duplicateSamplesIndex)
-        );
-      }
-      if (duplicateWarnings.length !== 0) {
-        JSAlert.alert(
-          "The following samples share names will samples already registered and WILL NOT be uploaded",
-          "Duplicate Samples!"
-        );
-        for (let i = 0; i < duplicateWarnings.length; i++) {
-          JSAlert.alert(
-            `Duplicate Sample ${i + 1} of ${duplicateWarnings.length}`,
-            `${duplicateWarnings[i]}`
+        if (duplicateSamplesIndex.length != 0) {
+          await dispatch(
+            duplicateSuccess(duplicateIGSNList, duplicateSamplesIndex)
           );
         }
-      }
+        if (duplicateWarnings.length !== 0) {
+          JSAlert.alert(
+            "The following samples share names will samples already registered and WILL NOT be uploaded",
+            "Duplicate Samples!"
+          );
+          for (let i = 0; i < duplicateWarnings.length; i++) {
+            JSAlert.alert(
+              `Duplicate Sample ${i + 1} of ${duplicateWarnings.length}`,
+              `${duplicateWarnings[i]}`
+            );
+          }
+        }
 
-      if (filteredIndex.length === 0) {
+        if (filteredIndex.length === 0) {
+          dispatch({ type: UPLOAD_FAILURE, error });
+        }
+
+        //convert samples to xml scheme
+        let xmlSample = toXML(filteredSamples, usercode);
+        //create form data to use in the POST request
+        let formData = new FormData();
+        formData.append("username", username);
+        formData.append("password", password);
+        formData.append(
+          "content",
+          new XMLSerializer().serializeToString(xmlSample)
+        );
+        //POST request
+        const res = await axios.post(
+          SESAR_BASE_URL + "/webservices/upload.php",
+          formData
+        );
+
+        //convert the response data from xml to JSON
+        convert
+          .xmlDataToJSON(res.data, { explicitArray: true })
+          .then((json) => {
+            dispatch(uploadSuccess(json.results.sample, filteredIndex));
+          });
+      } catch (error) {
+        console.log(error.response);
+        if (error.response.status == 400) {
+          JSAlert.alert(
+            "The User Code " +
+              usercode +
+              " is invalid.  Please correct your mapping file and reload it."
+          );
+        }
         dispatch({ type: UPLOAD_FAILURE, error });
       }
-
-      //convert samples to xml scheme
-      let xmlSample = toXML(filteredSamples, usercode);
-      //create form data to use in the POST request
-      let formData = new FormData();
-      formData.append("username", username);
-      formData.append("password", password);
-      formData.append(
-        "content",
-        new XMLSerializer().serializeToString(xmlSample)
-      );
-      //POST request
-      const res = await axios.post(
-        SESAR_BASE_URL + "/webservices/upload.php",
-        formData
-      );
-
-      //convert the response data from xml to JSON
-      convert.xmlDataToJSON(res.data, { explicitArray: true }).then((json) => {
-        dispatch(uploadSuccess(json.results.sample, filteredIndex));
-      });
-    } catch (error) {
-      console.log(error.response);
-      dispatch({ type: UPLOAD_FAILURE, error });
-    }
-  };
+    };
+  }
 }
 
 export const duplicateSuccess = (results, selectedSamples) => async (
