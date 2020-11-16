@@ -43,18 +43,38 @@ export const signInAction = (formProps, callback) => async (dispatch) => {
     formData.append("password", formProps.password);
 
     //Wait for the api call to finish
-    const response = await axios.post(SESAR_LOGIN, formData);
-    let options = { ignoreComment: true, alwaysChildren: true };
+    //const response = await axios.post(SESAR_LOGIN, formData);
+    //let options = { ignoreComment: true, alwaysChildren: true };
 
-    //Wait for the response data to be parsed to JSON and then get the user code
-    let resJSON = await jsCON.xml2js(response.data, options);
-    let usercode = resJSON.elements[0].elements[1].elements[0].elements[0].text;
+    //let resJSON = jsCON.xml2js(response.data, options);
+    //let usercode = resJSON.elements[0].elements[1].elements[0].elements[0].text;
 
+    // let usercode = formProps.mapFile.getKeysAndValues.get("user_code");
+
+    //var i;
+    // var valid = new Boolean(false);
+    //var myArray = resJSON.elements[0].elements[1];
+    //for (i = 0; i < myArray.length; i++) {
+    //  if (
+    //    formProps.usercode.localeCompare(
+    //      myArray.elements[i].elements[0].text
+    //  ) == 0
+    //  ) {
+    //    valid = new Boolean(true);
+    //  }
+    // }
+
+    // force check of username and poassword
+    await axios.post(SESAR_LOGIN, formData);
+    // force check of supplied user code
+    await dispatch(fetchUsercode(formProps.usercode));
+
+    // if (Boolean(valid)) {
     //Dispatch an action with type AUTHENTICATED if everything above was succesfull
     dispatch({
       type: AUTHENTICATED,
       username: formProps.username,
-      usercode: usercode,
+      usercode: formProps.usercode,
       password: formProps.password,
     });
 
@@ -64,7 +84,7 @@ export const signInAction = (formProps, callback) => async (dispatch) => {
     //Dispatch an action with type AUTHENTICATION_ERROR if an error occured
     dispatch({
       type: AUTHENTICATION_ERROR,
-      payload: "Invalid email or password",
+      payload: "Invalid email (user name), password, or UserCode",
     });
   }
 };
@@ -84,7 +104,7 @@ export function signOutAction() {
 // ==============================================================================
 // MySamples Actions
 // ==============================================================================
-export const fetchUsercodeAndSamples = (usercode) => async (
+export const fetchUsercodeAndSamples = (usercode, username, password) => async (
   dispatch,
   getState
 ) => {
@@ -97,7 +117,7 @@ export const fetchUsercodeAndSamples = (usercode) => async (
   //For each igsn in igsn_list run fetchSamples()
   var count = 0;
   igsn_list.forEach(async (element) => {
-    await dispatch(fetchSamples(element));
+    await dispatch(fetchSamples(element, username, password));
     count++;
     if (count == igsn_list.length) {
       dispatch(fetchSamplesSuccessful());
@@ -111,7 +131,7 @@ export const fetchUsercode = (usercode) => async (dispatch) => {
   dispatch({ type: FETCH_USER, payload: response.data });
 };
 
-export const fetchSamples = (igsn) => async (dispatch) => {
+export const fetchSamples = (igsn, username, password) => async (dispatch) => {
   /* Oct 2020 - JFB - need to handle missing data including case where
      release date is in future, which returns this:
     <results>
@@ -120,17 +140,24 @@ export const fetchSamples = (igsn) => async (dispatch) => {
       <status>This is a valid IGSN. The metadata will be released on 2021-11-07.</status>
     </results>   
     */
-  var notProvided = "<Not Provided>";
+  var notProvided = "<Not Released>";
   var response;
 
   var sampleIgsn = notProvided;
   var sampleName = notProvided;
   var latitudes = notProvided;
   var longitudes = notProvided;
-  var elevations = notProvided;
+  var sample_types = notProvided;
 
   try {
-    response = await axios.get(SESAR_SAMPLE_PROFILE + `${igsn}`);
+    response = await axios.get(
+      SESAR_SAMPLE_PROFILE +
+        `${igsn}` +
+        "&username=" +
+        `${username}` +
+        "&password=" +
+        `${password}`
+    );
     sampleIgsn = response.data.sample.igsn;
     sampleName =
       typeof response.data.sample.name == "undefined"
@@ -144,17 +171,17 @@ export const fetchSamples = (igsn) => async (dispatch) => {
       typeof response.data.sample.longitude == "undefined"
         ? notProvided
         : response.data.sample.longitude;
-    elevations =
-      typeof response.data.sample.elevation == "undefined"
+    sample_types =
+      typeof response.data.sample.sample_type == "undefined"
         ? notProvided
-        : response.data.sample.elevation;
+        : response.data.sample.sample_type;
   } catch (e) {
     sampleIgsn = `${igsn}`;
   }
 
   dispatch({
     type: FETCH_SAMPLES,
-    payload: [sampleIgsn, sampleName, latitudes, longitudes, elevations],
+    payload: [sampleIgsn, sampleName, sample_types, latitudes, longitudes],
   });
 };
 
@@ -231,11 +258,22 @@ export const onUploadProceed = (
   readSourceMap(sourceMap, (err, map, logic, combinations) => {
     let sampleCopy = [...uploadSamples];
     let combinedSamples = combineFields(combinations, map, sampleCopy);
+
+    // extract the usercode from the mapping
+    var i;
+    var mapsUserCode;
+    for (i = 0; i < combinedSamples[0].length; i++) {
+      if (combinedSamples[0][i].key == "user_code") {
+        mapsUserCode = combinedSamples[0][i].value;
+      }
+    }
+
     dispatch(
       upload(
         user.username,
         user.password,
-        user.usercode,
+        mapsUserCode,
+        //user.usercode,
         combinedSamples,
         selectedSamples
       )
@@ -307,6 +345,10 @@ export function upload(username, password, usercode, samples, selectedSamples) {
           if (err.response.status == 404) {
             filteredSamples.push(samplesToUpload[i]);
             filteredIndex.push(selectedSamples[i]);
+          } else if (err.response.status == 400) {
+            JSAlert.alert(
+              "The User Code " + usercode + " is invalid.  Please correct your mapping file and reload it.");
+            dispatch({ type: UPLOAD_FAILURE, error });
           }
         }
       }

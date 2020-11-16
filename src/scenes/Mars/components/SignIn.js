@@ -21,7 +21,7 @@ class SignIn extends Component {
         <Form className="signin-form" onSubmit={handleSubmit(this.onSubmit)}>
           <h2>GeoPass Sign In</h2>
           <fieldset>
-            <label className="signin-label">Username</label>
+            <label className="signin-label">Email as User Name</label>
             <br></br>
             <Field
               className="signin-input"
@@ -39,6 +39,18 @@ class SignIn extends Component {
               className="signin-input"
               name="password"
               type="password"
+              component="input"
+              autoComplete="none"
+            />
+          </fieldset>
+          <br></br>
+          <fieldset>
+            <label className="signin-label">SESAR UserCode in CAPS</label>
+            <br></br>
+            <Field
+              className="signin-input"
+              name="usercode"
+              type="text"
               component="input"
               autoComplete="none"
             />

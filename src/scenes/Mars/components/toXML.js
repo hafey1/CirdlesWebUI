@@ -35,12 +35,17 @@ function toXML(samples, usercode) {
       .appendChild(document.createElementNS(SESAR_BASE_URL, "elevation_unit"))
       .appendChild(document.createTextNode("meters"));*/
 
-    //add attributes
+    //add attributes, excepting user_code which is handled above
     for (let j = 0; j < samples[i].length; j++) {
       if (samples[i][j].key) {
-        let node = document.createElementNS(SESAR_BASE_URL, samples[i][j].key);
-        node.appendChild(document.createTextNode(samples[i][j].value));
-        sampleNode.appendChild(node);
+        if (samples[i][j].key != "user_code") {
+          let node = document.createElementNS(
+            SESAR_BASE_URL,
+            samples[i][j].key
+          );
+          node.appendChild(document.createTextNode(samples[i][j].value));
+          sampleNode.appendChild(node);
+        }
       }
     }
   }
