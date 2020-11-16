@@ -78,7 +78,7 @@ class MySamples extends Component {
       );
     } else {
       //Display the table showing key data about registered samples
-      var columns = ["IGSN", "Name", "Type", "Latitude", "Longitude"];
+      var columns = ["IGSN", "Name", "Type", "Material", "Current Archive", "Latitude", "Longitude"];
 
       const options = {
         filter: true,

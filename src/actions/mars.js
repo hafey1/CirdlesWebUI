@@ -148,6 +148,8 @@ export const fetchSamples = (igsn, username, password) => async (dispatch) => {
 
   var sampleIgsn = notProvided;
   var sampleName = notProvided;
+  var materials = notProvided;
+  var currentArchives;
   var latitudes = notProvided;
   var longitudes = notProvided;
   var sample_types = notProvided;
@@ -166,6 +168,14 @@ export const fetchSamples = (igsn, username, password) => async (dispatch) => {
       typeof response.data.sample.name == "undefined"
         ? notProvided
         : response.data.sample.name;
+    materials =
+      typeof response.data.sample.material == "undefined"
+        ? notProvided
+        : response.data.sample.material;
+    currentArchives =
+      typeof response.data.sample.current_archive == "undefined"
+        ? notProvided
+        : response.data.sample.current_archive;
     latitudes =
       typeof response.data.sample.latitude == "undefined"
         ? notProvided
@@ -184,7 +194,15 @@ export const fetchSamples = (igsn, username, password) => async (dispatch) => {
 
   dispatch({
     type: FETCH_SAMPLES,
-    payload: [sampleIgsn, sampleName, sample_types, latitudes, longitudes],
+    payload: [
+      sampleIgsn,
+      sampleName,
+      sample_types,
+      materials,
+      currentArchives,
+      latitudes,
+      longitudes,
+    ],
   });
 };
 
