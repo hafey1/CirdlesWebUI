@@ -23,6 +23,7 @@
     "lodash": "^4.17.19",
     "lodash.isequal": "^4.5.0",
     "mui-datatables": "^2.15.0",
+    "node-fetch": "^2.6.1",
     "prop-types": "^15.7.2",
     "radium": "^0.22.0",
     "react": "^16.13.1",
