@@ -119,7 +119,8 @@ class MySamples extends Component {
                   "My Samples with User Code '" +
                   this.props.usercode +
                   "' from " +
-                  SESAR_BASE_URL.replace("https://", "")
+                  SESAR_BASE_URL.replace("https://", "") +
+                  " , User = '" + this.props.username + "'"
                 }
                 data={this.props.mySamplesList}
                 columns={columns}

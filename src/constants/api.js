@@ -1,3 +1,4 @@
+export const MARS_VERSION = "v2.0.0"; // 17 Nov 2020
 export const BASE_URL = "https://cirdles.cs.cofc.edu/Services";
 export const AMBAPO_ENDPOINT = BASE_URL + "/ambapo";
 export const SQUID_ENDPOINT = BASE_URL + "/prawn";
@@ -6,9 +7,9 @@ export const MARS_ENDPOINT = BASE_URL + "/mars";
 
 // Sesar APIs
 // development server - uncomment next line
-export const SESAR_BASE_URL = "https://sesardev.geosamples.org";
+//export const SESAR_BASE_URL = "https://sesardev.geosamples.org";
 // production server - uncomment next line
-//export const SESAR_BASE_URL = "https://app.geosamples.org";
+export const SESAR_BASE_URL = "https://app.geosamples.org";
 
 export const SESAR_LOGIN =
   SESAR_BASE_URL + "/webservices/credentials_service_v2.php";
