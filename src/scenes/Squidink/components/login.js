@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser, sendRequest } from "./authActions";
+import { loginUser, sendRequest, startUp } from "./authActions";
 import classnames from "classnames";
 import Button from "@material-ui/core/Button";
 import FormControl from '@material-ui/core/FormControl';
