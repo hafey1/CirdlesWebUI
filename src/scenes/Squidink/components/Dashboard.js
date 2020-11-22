@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser, startContainer } from "./authActions";
+import { logoutUser, startUp } from "./authActions";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 
@@ -60,7 +60,7 @@ class Dashboard extends Component {
                 </h2>
               </Grid>
               <Grid item xs={12} style={{ margin: "30px" }}>
-                <Button onClick={this.printErrors} variant="outlined" color="gray" size="large">
+                <Button onClick={this.props.startUp} variant="outlined" color="gray" size="large">
                   Squid Container Button
             </Button>
               </Grid>
@@ -83,7 +83,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {
-    startContainer
+  { //logoutUser
+    startUp
   }
 )(Dashboard);
