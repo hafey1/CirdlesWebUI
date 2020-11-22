@@ -32,7 +32,7 @@ class Dashboard extends Component {
 
   printErrors = () => {
     this.props.startContainer(this.props.history);
-    setTimeout(function () { window.open("http://localhost:81/squid_servlet"); }, 100)
+    setTimeout(function () { window.open("http://localhost:81/squid_servlet"); }, 2000)
 
   }
 

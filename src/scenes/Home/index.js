@@ -45,12 +45,12 @@ const HomePage = ({ history }: Props) => {
           style={{ margin: 40 }}
         />
         <ProjectCard
-            description={SQUIDINK.description}
-            logo={require("img/logos/Mars.svg")}
-            width={300}
-            height={300}
-            onClick={() => history.push("/squidink")}
-            style={{ margin: 40 }}
+          description={SQUIDINK.description}
+          logo={require("img/logos/SquidInk.svg")}
+          width={300}
+          height={300}
+          onClick={() => history.push("/squidink")}
+          style={{ margin: 40 }}
         />
       </div>
     </div>

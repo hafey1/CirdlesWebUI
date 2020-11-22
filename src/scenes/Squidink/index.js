@@ -21,7 +21,7 @@ import Dashboard from "./components/Dashboard"
 class SquidInkPage extends Component {
     render() {
         return (
-            <div>
+            <div className="ink">
                 <Header />
                 <main>
                     <Route exact path="/squidink" component={Landing} />

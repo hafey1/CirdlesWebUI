@@ -5,6 +5,20 @@
 
 $squidink: #3a4c88;
 
+.landingSquid {
+  align-items: center;
+  background-image: url("../img/logos/SquidInk.svg");
+  background-size: cover;
+  color: white;
+  display: flex;
+  flex: auto;
+  height: 100%;
+  position: absolute;
+  text-align: center;
+  width: 200%;
+}
+
+
 .squid {
   .form-control,
   .custom-file input[type="file"].custom-file-input ~ .custom-file-label {

@@ -71,13 +71,7 @@ class Register extends Component {
                         justify="center"
                         spacing={6}
                     >
-                        <Grid item xs={12} >
-                            <div className="col s12">
-                                <h2>
-                                    <b>Register</b> below
-                                </h2>
-                            </div>
-                        </Grid>
+
                         <Box borderColor="#3F51B5" border={2} justifyContent="center" display="flex" p={1} bgcolor="#e3e5e8" >
                             <form autoComplete="on" noValidate onSubmit={this.onSubmit}>
                                 <Grid item xs={12}>
@@ -189,3 +183,11 @@ export default connect(
         registerUser
     }
 )(withRouter(Register));
+
+{/* <Grid item xs={12} >
+    <div className="col s12">
+        <h2>
+            <b>Register</b> below
+                                </h2>
+    </div>
+</Grid> */}
