@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router';
 
 
+
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
 // Register User
@@ -13,6 +14,17 @@ export const registerUser = (newUser, history) => dispatch => {
     axios
         .post("http://localhost:8080/Services/squidinkregister", newUser)
         .then(res => history.push("/squidink/login"))
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        );
+};
+export const startUp = () => dispatch => {
+    axios
+        .post("http://localhost:8080/Services/squidinkstartup")
+        .then(res => console.log(res))
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,
@@ -38,15 +50,16 @@ export const loginUser = (userData, history) => dispatch => {
            setAuthToken(res.data);
            // Set current user to decoded token
            dispatch(setCurrentUser(jwt_decode(res.data)));
-        }).then(push => history.push("/squidink/dashboard"))
-    { /*
-        .catch(err =>
-            dispatch({
-                type: GET_ERRORS,
-                payload: err.response.data
-            })
-        );
-   */ }
+        })
+        //Invoke Container Startup and open endpoint
+        .then(startUp())
+        .then(setTimeout(function () { window.open("http://192.168.99.100:8081/squid_servlet/"); }, 1000))
+        //Send a subsequent post of all current user files
+        .then( axios.post("http://localhost:8080/Services/filesender/" + userData.email)
+        .then(console.log(ress => {
+            console.log(ress)
+        }))
+        )
 };
 
 // Set logged in user
