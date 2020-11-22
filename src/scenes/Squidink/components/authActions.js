@@ -4,10 +4,27 @@ import jwt_decode from "jwt-decode";
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router';
-
+var exec = require('child_process').exec;
 
 
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
+
+let config = {
+    headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+    }
+}
+
+// startup container
+export const startContainer = (history) => dispatch => {
+
+    axios.post('http://localhost:8080/Services/squidinkstartup', config)
+        .then(function (response) {
+            console.log(response);
+        })
+
+}
 
 // Register User
 export const registerUser = (newUser, history) => dispatch => {
@@ -116,6 +133,3 @@ LinkButton.propTypes = {
 }
 
 export default withRouter(LinkButton)
-
-
-

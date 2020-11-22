@@ -11,12 +11,30 @@ class Dashboard extends Component {
   //  e.preventDefault();
   //  this.props.logoutUser();
   //  console.log(this.props.auth)
-//
+  //
   //};
 
+  constructor() {
+    super();
+    this.state = {
+      errors: {}
+    }
+  }
 
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
 
+  printErrors = () => {
+    this.props.startContainer(this.props.history);
+    setTimeout(function () { window.open("http://localhost:81/squid_servlet"); }, 100)
+
+  }
 
   render() {
 
@@ -54,10 +72,10 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.propTypes = {
-  logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
-};
+//Dashboard.propTypes = {
+//logoutUser: PropTypes.func.isRequired,
+//auth: PropTypes.object.isRequired
+//};
 
 const mapStateToProps = state => ({
   auth: state.auth
