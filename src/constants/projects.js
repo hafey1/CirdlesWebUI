@@ -19,9 +19,9 @@ export const MARS = {
 }
 export const SQUIDINK = {
   description:
-      'I don\'t know  what to put here but it needs to be replaced :)'
+    'Squid as a Web Service'
 };
 export const PORTEDSQUID = {
   description:
-      'PORTEDSQUID'
+    'PORTEDSQUID'
 };

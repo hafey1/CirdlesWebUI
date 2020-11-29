@@ -11,11 +11,13 @@ import squidLogo from "../img/logos/Squid.svg";
 import ambapoLogo from "../img/logos/Ambapo.svg";
 import topsoilLogo from "../img/logos/Topsoil.svg";
 import marslogo from "../img/logos/Mars.svg";
+import inklogo from "../img/logos/SquidInk.svg";
 import { colors } from "constants";
 
 import "styles/index.scss";
 import { maxHeaderSize } from "http";
 
+//<NavLink className="nav-item nav-link ml-4" to="/portedsquid">portedsquid</NavLink>
 
 const routes = [
   {
@@ -51,8 +53,9 @@ const routes = [
   },
   {
     path: "/squidink",
-    title: "SQUIDINK TRIAL PAGE",
-    component: Squidink
+    title: "Squid Ink",
+    component: Squidink,
+    logo: inklogo
   }
 ];
 
@@ -92,9 +95,7 @@ const Header = ({ title, logo }) => {
           <NavLink className="nav-item nav-link ml-4" to="/squidink">
             SQUIDINK
           </NavLink>
-          <NavLink className="nav-item nav-link ml-4" to="/portedsquid">
-            portedsquid
-          </NavLink>
+
         </div>
       </div>
     </nav>
