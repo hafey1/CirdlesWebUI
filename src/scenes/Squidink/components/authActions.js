@@ -4,27 +4,10 @@ import jwt_decode from "jwt-decode";
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router';
-var exec = require('child_process').exec;
+
 
 
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
-
-let config = {
-    headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-    }
-}
-
-// startup container
-export const startContainer = (history) => dispatch => {
-
-    axios.post('http://localhost:8080/Services/squidinkstartup', config)
-        .then(function (response) {
-            console.log(response);
-        })
-
-}
 
 // Register User
 export const registerUser = (newUser, history) => dispatch => {
@@ -61,21 +44,21 @@ export const loginUser = (userData, history) => dispatch => {
         .post("http://localhost:8080/Services/squidinklogin", userData)
         .then(res => {
             console.log(res.data)
-            // Set token to localStorage
-            localStorage.setItem("jwtToken", res.data);
-            // Set token to Auth header
-            setAuthToken(res.data);
-            // Set current user to decoded token
-            dispatch(setCurrentUser(jwt_decode(res.data)));
+           // Set token to localStorage
+           localStorage.setItem("jwtToken", res.data);
+           // Set token to Auth header
+           setAuthToken(res.data);
+           // Set current user to decoded token
+           dispatch(setCurrentUser(jwt_decode(res.data)));
         })
         //Invoke Container Startup and open endpoint
         .then(startUp())
-        .then(setTimeout(function () { window.open("http://localhost:81/squid_servlet/"); }, 1000))
+        .then(setTimeout(function () { window.open("http://192.168.99.100:8081/squid_servlet/"); }, 1000))
         //Send a subsequent post of all current user files
-        .then(axios.post("http://localhost:8080/Services/filesender/" + userData.email)
-            .then(console.log(ress => {
-                console.log(ress)
-            }))
+        .then( setTimeout(function() {axios.post("http://localhost:8080/Services/filesender/" + userData.email)}, 10000)
+        .then(console.log(ress => {
+            console.log(ress)
+        }))
         )
 };
 
@@ -133,3 +116,6 @@ LinkButton.propTypes = {
 }
 
 export default withRouter(LinkButton)
+
+
+
