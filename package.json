@@ -27,6 +27,7 @@
     "prop-types": "^15.7.2",
     "radium": "^0.22.0",
     "react": "^16.13.1",
+    "react-addons-update": "^15.6.2",
     "react-dom": "^16.13.1",
     "react-dropzone": "^10.2.2",
     "react-inlinesvg": "^0.7.5",

@@ -6,10 +6,12 @@ import Squid from "./Squid";
 import Ambapo from "./Ambapo";
 import Topsoil from "./Topsoil";
 import Mars from "./Mars";
+import MarsMapMaker from "./MarsMapMaker";
 import squidLogo from "../img/logos/Squid.svg";
 import ambapoLogo from "../img/logos/Ambapo.svg";
 import topsoilLogo from "../img/logos/Topsoil.svg";
 import marslogo from "../img/logos/Mars.svg";
+import marsMapMakerLogo from "../img/logos/MarsMapMaker.svg";
 import { colors } from "constants";
 
 import "styles/index.scss";
@@ -45,6 +47,12 @@ const routes = [
     path: "/mars",
     title: "MARS",
     component: Mars,
+    logo: marslogo,
+  },
+  {
+    path: "/marsMapMaker",
+    title: "MarsMapMaker",
+    component: MarsMapMaker,
     logo: marslogo,
   },
 ];
