@@ -1,56 +1,55 @@
-import update from "react-addons-update";
+import update from "immutability-helper";
 
-const reducer = (
-  state = {
-    totalMultiCount: [
-      {
-        title: "size",
-        count: 0
-      },
-      {
-        title: "description",
-        count: 0
-      },
-      {
-        title: "sample_comment",
-        count: 0
-      },
-      {
-        title: "geological_age",
-        count: 0
-      },
-      {
-        title: "field_name",
-        count: 0
-      }
-    ],
-    persistingMetaData: [],
-    toggleIndex: -1,
-    toggleInUse: false,
-    toggleArr: [],
-    isOpen: false,
-    hasInit: false,
-    jsFile: undefined,
-    entries: [],
-    useOnce: [],
-    centuryChosen: false,
-    century: "",
-    sesarOne2One: [],
-    numOfOneToOne: 0,
-    chosenDateFormat: null,
-    hasChosenDateFormat: false,
-    hasChosenDropdownOption: false,
-    hasTwoYs: false,
-    substringDateFormat: "start",
-    fileMetadata: []
-  },
-  action
-) => {
+const initialState = {
+  totalMultiCount: [
+    {
+      title: "size",
+      count: 0
+    },
+    {
+      title: "description",
+      count: 0
+    },
+    {
+      title: "sample_comment",
+      count: 0
+    },
+    {
+      title: "geological_age",
+      count: 0
+    },
+    {
+      title: "field_name",
+      count: 0
+    }
+  ],
+  persistingMetaData: [],
+  toggleIndex: -1,
+  toggleInUse: false,
+  toggleArr: [],
+  isOpen: false,
+  hasInit: false,
+  jsFile: undefined,
+  entries: [],
+  useOnce: [],
+  centuryChosen: false,
+  century: "",
+  sesarOne2One: [],
+  numOfOneToOne: 0,
+  chosenDateFormat: null,
+  hasChosenDateFormat: false,
+  hasChosenDropdownOption: false,
+  hasTwoYs: false,
+  substringDateFormat: "start",
+  fileMetadata: []
+};
+
+export default function(state = initialState, action) {
   switch (action.type) {
     case "STORE_FILE_METADATA":
       return {
         ...state,
-        fileMetadata: [ ...state.fileMetadata, action.payload.files]
+        fileMetadata: [...state.fileMetadata, action.payload.files]
       };
 
     case "CHANGE_FORCED_CARD_VALUE_TO_OLD":
@@ -92,7 +91,8 @@ const reducer = (
       return {
         ...state,
         entries: state.entries.concat(action.payload.objArr),
-        useOnce: state.useOnce.concat(action.payload.useOnce)
+        useOnce: state.useOnce.concat(action.payload.useOnce),
+        hasInit: true
       };
 
     case "CHANGE_INIT":
@@ -278,6 +278,4 @@ const reducer = (
     default:
       return state;
   }
-};
-
-export default reducer;
+}

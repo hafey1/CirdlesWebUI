@@ -110,7 +110,6 @@ class FileIn extends React.Component {
 
   // onclick helper function to parse the CSV with PapaParse
   importCSV = () => {
-    console.log("hehe you clicked me")
     let jscount = 0;
     let csvcount = 0;
     let fileName = [];
@@ -119,7 +118,11 @@ class FileIn extends React.Component {
         fileName.push(this.state.files[i].name);
 
         if (this.state.files[i].type.includes("javascript")) jscount += 1;
-        else if (this.state.files[i].type.includes("text/csv") || this.state.files[i].type.includes("excel")) csvcount += 1;
+        else if (
+          this.state.files[i].type.includes("text/csv") ||
+          this.state.files[i].type.includes("excel")
+        )
+          csvcount += 1;
       }
 
       const obj = {
@@ -181,8 +184,6 @@ class FileIn extends React.Component {
   };
   //iStart is beginning of map array
   startPushingHelper = (result, i, jsArr, iStart, metaDataAddValue) => {
-
-
     if (
       !JSON.stringify(Object.values(result.data[i])[0])
         .replace(/(\r\n|\n|\r)/gm, "")
@@ -197,37 +198,39 @@ class FileIn extends React.Component {
       if (!(cleaned[0].includes("return") || cleaned[0].includes("}"))) {
         let indexCleaned = cleaned[0].split(" ")[2];
         let addToStore = false;
-        //console.log(indexCleaned) 
+        //console.log(indexCleaned)
         addToStore = cleaned[0].includes("mapMakerIndex");
 
         if (addToStore) {
-          
           //scrubs mapMakerHeader line for header value
           let headerCleaned = Object.values(result.data[i - 1])[0]
-          .replace(/(\r\n|\n|\r)/gm, "")
-          .replace(" ", "")
-          .split(" ")[2].replace(/\"/g, "");
+            .replace(/(\r\n|\n|\r)/gm, "")
+            .replace(" ", "")
+            .split(" ")[2]
+            .replace(/\"/g, "");
 
           //scrubs return of forceEditFunctions for return value to replace value
-          let ses = Object.values(result.data[i+1])[0]
-          .replace(/(\r\n|\n|\r)/gm, "")
-          .replace(/\\|"|;/g, "")
-          .split(" ")[3];
+          let ses = Object.values(result.data[i + 1])[0]
+            .replace(/(\r\n|\n|\r)/gm, "")
+            .replace(/\\|"|;/g, "")
+            .split(" ")[3];
 
-          let findSesar = Object.values(result.data[i-2])[0]
-          .replace(/(\r\n|\n|\r)/gm, "")
-          .replace(/\\|"|;/g, "")
-          .split(" ")[1];
-          console.log(findSesar)          
+          let findSesar = Object.values(result.data[i - 2])[0]
+            .replace(/(\r\n|\n|\r)/gm, "")
+            .replace(/\\|"|;/g, "")
+            .split(" ")[1];
+          console.log(findSesar);
 
-          let sesarFound = ""
-          for(let i = 0; i < result.data.length; i++) {
-            if(Object.values(result.data[i])[0].includes(": " + findSesar)){
-              sesarFound = Object.values(result.data[i])[0].split(":")[0].trim();
+          let sesarFound = "";
+          for (let i = 0; i < result.data.length; i++) {
+            if (Object.values(result.data[i])[0].includes(": " + findSesar)) {
+              sesarFound = Object.values(result.data[i])[0]
+                .split(":")[0]
+                .trim();
               break;
             }
           }
-          console.log(sesarFound)
+          console.log(sesarFound);
 
           let persistObj = {
             sesar: sesarFound,
@@ -238,7 +241,12 @@ class FileIn extends React.Component {
             forceID: this.props.persist.length,
             index: parseInt(indexCleaned)
           };
-          console.log("this is obj we add to persist "+ persistObj.sesar + " " + persistObj.header)
+          console.log(
+            "this is obj we add to persist " +
+              persistObj.sesar +
+              " " +
+              persistObj.header
+          );
           this.props.persistingDataConcat(persistObj);
 
           //put object in store with only the sesar value to persistmetadata
@@ -293,8 +301,6 @@ class FileIn extends React.Component {
       }
     }
   };
-
-
 
   // uses function from App.js (callbackFromParent) to retrieve the result/data from FileIn.js
   updateData(result) {
@@ -406,10 +412,16 @@ class FileIn extends React.Component {
         }
 
         let arr;
-        
+
         if (startPushing === true) {
           //console.log("This is indexSet before startpush: " + "  " + mapIndex + "   " + JSON.stringify(Object.values(result.data[i])[0]).replace(/(\r\n|\n|\r)/gm, ""))
-          this.startPushingHelper(result, i, jsArr, mapIndex, forceEditValueContentArr);
+          this.startPushingHelper(
+            result,
+            i,
+            jsArr,
+            mapIndex,
+            forceEditValueContentArr
+          );
         } else if (dateIdentified === true) {
           if (Object.values(result.data[i])[0].includes("y")) {
             arr = Object.values(result.data[i])[0].split(" ");
@@ -597,7 +609,7 @@ class FileIn extends React.Component {
     this.setState({ num: this.state.num + 1 });
     if (this.state.num === this.state.files.length - 1) {
       //change totalAddedCards to change how many entries of METADATA_ADD/missing field are in the store
-      let totalAddedCards = 4 
+      let totalAddedCards = 4;
 
       this.props.callbackFromParent(
         arr,
@@ -623,24 +635,24 @@ class FileIn extends React.Component {
 
     return (
       <div className={readerClass}>
-      <h2>Load File(s)!</h2>
-      
-      <label>Load JS Mapping File (optional)</label>
-      <div>
-        <input
-          className="csv__input"
-          type="file"
-          accept=".js"
-          ref={input => {
-            this.filesInput = input;
-          }}
-          name="file"
-          placeholder={null}
-          onChange={this.handleChange}
-          multiple="multiple"
-        />
-      </div>  
-      <br></br>
+        <h2>Load File(s)!</h2>
+
+        <label>Load JS Mapping File (optional)</label>
+        <div>
+          <input
+            className="csv__input"
+            type="file"
+            accept=".js"
+            ref={input => {
+              this.filesInput = input;
+            }}
+            name="file"
+            placeholder={null}
+            onChange={this.handleChange}
+            multiple="multiple"
+          />
+        </div>
+        <br></br>
         <div>
           <label>Choose CSV File(s)</label>
           <input
@@ -656,8 +668,7 @@ class FileIn extends React.Component {
             multiple="multiple"
           />
         </div>
-      <br></br>
-
+        <br></br>
 
         {/*force card edit */}
         {/* <div style={{ padding: "0px", margin: "0px", paddingTop: "10px" }}>
@@ -682,10 +693,10 @@ class FileIn extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    hasChosenDropdown: state.hasChosenDropdownOption,
-    hasChosenDateFormat: state.hasChosenDateFormat,
-    persist: state.persistingMetaData,
-    dateFormatSelected: state.chosenDateFormat
+    hasChosenDropdown: state.marsMapMaker.hasChosenDropdownOption,
+    hasChosenDateFormat: state.marsMapMaker.hasChosenDateFormat,
+    persist: state.marsMapMaker.persistingMetaData,
+    dateFormatSelected: state.marsMapMaker.chosenDateFormat
   };
 };
 

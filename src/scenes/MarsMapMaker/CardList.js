@@ -5,6 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React, { useState, useEffect } from "react";
+
 import { connect } from "react-redux";
 
 // COMPONENTS
@@ -12,17 +13,18 @@ import MapOutput from "./MapOutput";
 import DateDropdown from "./DateDropdown";
 import CenturyDropDown from "./CenturyDropDown";
 import FieldCard from "./FieldCard";
-
 // CSS & Style
 import "../../styles/marsMapMaker.scss";
 
 // REDUX
-import { firstState, toggleInUse } from "../../actions/marsMapMaker";
+import {
+  firstState,
+  toggleInUse,
+  changeInit
+} from "../../actions/marsMapMaker";
 import * as helpers from "./util/helper";
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
-
-// there is a particular relationship between checked value and available option in dropdown
 
 const CardList = props => {
   // global variables for the Object Array the Redux Store is built on along with the id accumulator
@@ -106,24 +108,6 @@ const CardList = props => {
     return sesarPassIn;
   };
 
-  // const createEmptyField = () => {
-  //     return (
-  //         <FieldCard
-  //             multiCount={props.multiCount}
-  //             addedNewField={(fieldsState[0] === "~~~" && newKey === 0) ? true : false}
-  //             jsFileValues={props.jsFileValues}
-  //             toggleInUse={props.usingToggle}
-  //             key={newKey}
-  //             hiding={hide}
-  //             fieldTitle={"~~~"}
-  //             id={newKey}
-  //             fieldType={"both"}
-  //             fieldValue={"~~~"}
-  //             hasContent={true}
-  //         />
-  //     )
-  // }
-
   const valueIsInJsMappingFile = field => {
     let valid = false;
     if (props.jsFileValues !== undefined) {
@@ -133,6 +117,34 @@ const CardList = props => {
     }
 
     return valid;
+  };
+
+  const findOneToTwo = id => {
+    let objects = [
+      "size",
+      "description",
+      "sample_comment",
+      "geological_age",
+      "field_name"
+    ];
+
+    for (let j = 0; j < objects.length; j++) {
+      let count = 0;
+      if (objects[j] === props.ent[id].sesarTitle) {
+        for (let i = 0; i < props.ent.length; i++) {
+          if (props.ent[i].sesarTitle === objects[j]) {
+            count += 1;
+          }
+        }
+
+        return count;
+      }
+    }
+  };
+
+  const storeLoad = (ents, toggles) => {
+    console.log(ents);
+    return ents.length > 0 && toggles.length > 0;
   };
 
   // maps content to separate fieldcards on the screen
@@ -222,74 +234,51 @@ const CardList = props => {
     useOnce.push("");
     objArray.push(storedValue);
 
-    const findOneToTwo = () => {
-      if (props.hasInit) {
-        let objects = [
-          "size",
-          "description",
-          "sample_comment",
-          "geological_age",
-          "field_name"
-        ];
-        for (let j = 0; j < objects.length; j++) {
-          let count = 0;
-          if (objects[j] === props.ent[newKey].sesarTitle) {
-            for (let i = 0; i < props.ent.length; i++) {
-              if (props.ent[i].sesarTitle === objects[j]) {
-                count += 1;
-              }
-            }
-
-            return count;
-          }
-        }
-      }
-    };
-
     // create the FieldCard that you see in the UI
     // If toggleIndex is 0 then we're on the 1st row so give it raw input
     // Else give it the object.values..
     // Meaning refer to Sample Row array created in store
-    if (toggleIndex === 1) {
-      return (
-        <FieldCard
-          multiCount={props.multiCount}
-          jsFileValues={props.jsFileValues}
-          toggleInUse={props.usingToggle}
-          key={newKey}
-          hiding={hide}
-          fieldTitle={field}
-          oneOfTwoID={findOneToTwo()}
-          id={newKey}
-          fieldType={helpers.typeField(newKey, lastMetaDataAdd)}
-          fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
-          //fieldValue={props.fieldVal[newKey]}
-          hasContent={
-            props.fieldVal[newKey] !== "" || valueIsInJsMappingFile(field)
-          }
-        />
-      );
-    } else {
-      return (
-        <FieldCard
-          multiCount={props.multiCount}
-          jsFileValues={props.jsFileValues}
-          toggleInUse={props.usingToggle}
-          key={newKey}
-          hiding={hide}
-          fieldTitle={Object.keys(props.toggleArr[toggleIndex])[newKey]}
-          oneOfTwoID={findOneToTwo()}
-          id={newKey}
-          fieldType={helpers.typeField(newKey, lastMetaDataAdd)}
-          fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
-          hasContent={
-            props.fieldVal[newKey] !== "" ||
-            valueIsInJsMappingFile(
-              Object.keys(props.toggleArr[toggleIndex])[newKey]
-            )
-          }
-        />
-      );
+    if (storeLoad(props.ent, props.toggleArr)) {
+      if (toggleIndex === 1) {
+        return (
+          <FieldCard
+            multiCount={props.multiCount}
+            jsFileValues={props.jsFileValues}
+            toggleInUse={props.usingToggle}
+            key={newKey}
+            hiding={hide}
+            fieldTitle={field}
+            oneOfTwoID={findOneToTwo(newKey)}
+            id={newKey}
+            fieldType={helpers.typeField(newKey, lastMetaDataAdd)}
+            fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
+            //fieldValue={props.fieldVal[newKey]}
+            hasContent={
+              props.fieldVal[newKey] !== "" || valueIsInJsMappingFile(field)
+            }
+          />
+        );
+      } else
+        return (
+          <FieldCard
+            multiCount={props.multiCount}
+            jsFileValues={props.jsFileValues}
+            toggleInUse={props.usingToggle}
+            key={newKey}
+            hiding={hide}
+            fieldTitle={Object.keys(props.toggleArr[toggleIndex])[newKey]}
+            oneOfTwoID={findOneToTwo(newKey)}
+            id={newKey}
+            fieldType={helpers.typeField(newKey, lastMetaDataAdd)}
+            fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
+            hasContent={
+              props.fieldVal[newKey] !== "" ||
+              valueIsInJsMappingFile(
+                Object.keys(props.toggleArr[toggleIndex])[newKey]
+              )
+            }
+          />
+        );
     }
   });
 
@@ -442,15 +431,17 @@ const CardList = props => {
   // checks the redux store to see if any of the fieldCards have selected a date
   const dateSelected = () => {
     let found = false;
-    for (let i = 0; i < props.ent.length; i++) {
-      if (
-        props.ent[i].sesarTitle === "collection_start_date" ||
-        props.ent[i].sesarTitle === "collection_end_date"
-      ) {
-        found = true;
+    if (props.hasInit) {
+      for (let i = 0; i < props.ent.length; i++) {
+        if (
+          props.ent[i].sesarTitle === "collection_start_date" ||
+          props.ent[i].sesarTitle === "collection_end_date"
+        ) {
+          found = true;
+        }
       }
+      return found;
     }
-    return found;
   };
 
   return (
@@ -648,16 +639,16 @@ const CardList = props => {
 
 const mapStateToProps = state => {
   return {
-    hasInit: state.hasInit,
-    ent: state.entries,
-    persist: state.persistingMetaData,
-    toggleArr: state.toggleArr,
-    toggleIndex: state.toggleIndex,
-    usingToggle: state.toggleInUse,
-    hasDateFormat: state.hasChosenDateFormat,
-    storeJsFile: state.jsFile,
-    multiCount: state.totalMultiCount,
-    fileMeta: state.fileMetadata
+    hasInit: state.marsMapMaker.hasInit,
+    ent: state.marsMapMaker.entries,
+    persist: state.marsMapMaker.persistingMetaData,
+    toggleArr: state.marsMapMaker.toggleArr,
+    toggleIndex: state.marsMapMaker.toggleIndex,
+    usingToggle: state.marsMapMaker.toggleInUse,
+    hasDateFormat: state.marsMapMaker.hasChosenDateFormat,
+    storeJsFile: state.marsMapMaker.jsFile,
+    multiCount: state.marsMapMaker.totalMultiCount,
+    fileMeta: state.marsMapMaker.fileMetadata
   };
 };
 

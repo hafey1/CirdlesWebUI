@@ -731,21 +731,21 @@ export class DropDown extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    multi: state.multiValues,
-    ent: state.entries,
-    useOnce: state.useOnce,
-    dateFormat: state.chosenDateFormat,
-    hasChosen: state.hasChosenDateFormat,
-    dropDownChosen: state.hasChosenDropdownOption,
-    num: state.numOfOneToOne,
-    hasChosenCentury: state.centuryChosen,
-    century: state.century,
-    multiValues: state.multiValues,
-    sizeArray: state.sizeArray,
-    hasInit: state.hasInit,
-    pairArr: state.sizeOuterArray,
-    usingToggle: state.toggleInUse,
-    totalMulti: state.totalMultiCount
+    multi: state.marsMapMaker.multiValues,
+    ent: state.marsMapMaker.entries,
+    useOnce: state.marsMapMaker.useOnce,
+    dateFormat: state.marsMapMaker.chosenDateFormat,
+    hasChosen: state.marsMapMaker.hasChosenDateFormat,
+    dropDownChosen: state.marsMapMaker.hasChosenDropdownOption,
+    num: state.marsMapMaker.numOfOneToOne,
+    hasChosenCentury: state.marsMapMaker.centuryChosen,
+    century: state.marsMapMaker.century,
+    multiValues: state.marsMapMaker.multiValues,
+    sizeArray: state.marsMapMaker.sizeArray,
+    hasInit: state.marsMapMaker.hasInit,
+    pairArr: state.marsMapMaker.sizeOuterArray,
+    usingToggle: state.marsMapMaker.toggleInUse,
+    totalMulti: state.marsMapMaker.totalMultiCount
   };
 };
 

@@ -14,7 +14,7 @@ import FileIn from "./FileIn";
 import Dialog from "./Dialog";
 // REDUX
 import { connect } from "react-redux";
-import { changeInit, initToggle } from "../../actions/marsMapMaker";
+import { initToggle } from "../../actions/marsMapMaker";
 
 /////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ export class App extends React.Component {
     for (let j = 0; j < numOfEmptyCards; j++) {
       newCardObj[j + "<METADATA_ADD>"] = "";
     }
-    console.log(newCardObj)
+    console.log(newCardObj);
     for (let i = 0; i < tValues.length; i++) {
       tValues[i] = { ...newCardObj, ...tValues[i] };
     }
@@ -138,14 +138,12 @@ export class App extends React.Component {
       forceValues: forceValues
     });
 
-
     if (
       this.state.fieldNames.length -
         this.findDuplicates(newNames, newValues).length ===
       totalSize - this.findDuplicates(newNames, newValues).length
     ) {
-      this.props.changeInit(obj);
-    } else this.props.changeInit(obj);
+    }
   };
 
   // Displays "Preview Pop Up function from cardList, when the Preview Map button is clicked"
@@ -166,33 +164,27 @@ export class App extends React.Component {
     return arr;
   };
 
-  
   render() {
     let readerClass = classNames({
       "mars-photo": this.state.continue === false,
       "mars-photo_hide": this.state.continue === true
     });
 
-    
-
     return (
-      <div style={{height: "100vh", position: "relative"}}>
-        <div className={readerClass} >
-        
+      <div style={{ height: "100vh", position: "relative" }}>
+        <div className={readerClass}>
+          <FileIn testID="FileIn" callbackFromParent={this.fileCallback} />
 
-
-        <FileIn testID='FileIn' callbackFromParent={this.fileCallback} />
-
-        {this.state.isOpened ? (
-          <Dialog
-            isOpen={this.state.isOpened}
-            onClose={e => this.setState({ isOpened: false })}
-          >
-            {this.state.mapPreview.split("\n").map(i => {
-              return <div>{i}</div>;
-            })}
-          </Dialog>
-        ) : null}
+          {this.state.isOpened ? (
+            <Dialog
+              isOpen={this.state.isOpened}
+              onClose={e => this.setState({ isOpened: false })}
+            >
+              {this.state.mapPreview.split("\n").map(i => {
+                return <div>{i}</div>;
+              })}
+            </Dialog>
+          ) : null}
         </div>
         {this.state.continue ? (
           <CardList
@@ -201,12 +193,14 @@ export class App extends React.Component {
             callback={this.isOpenCallback}
             fields={[...this.state.emptyCards, ...this.state.fieldNames]}
             toggleVals={this.state.toggleValuesArr}
-            fieldVal={[...this.createSquiggleArray(), ...this.state.fieldValues]}
+            fieldVal={[
+              ...this.createSquiggleArray(),
+              ...this.state.fieldValues
+            ]}
             forceTitles={this.state.forceTitles}
             forceValues={this.state.forceValues}
           />
         ) : null}
-        
       </div>
     );
   }
@@ -222,5 +216,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { changeInit, initToggle }
+  { initToggle }
 )(App);

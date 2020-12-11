@@ -493,13 +493,13 @@ class MapOutput extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    ent: state.entries,
-    fileMeta: state.fileMetadata,
-    persist: state.persistingMetaData,
-    multiValue: state.multiValues,
-    singleMeasure: state.singleMeasureArr,
-    dateFormat: state.substringDateFormat,
-    centuryChosen: state.century
+    ent: state.marsMapMaker.entries,
+    fileMeta: state.marsMapMaker.fileMetadata,
+    persist: state.marsMapMaker.persistingMetaData,
+    multiValue: state.marsMapMaker.multiValues,
+    singleMeasure: state.marsMapMaker.singleMeasureArr,
+    dateFormat: state.marsMapMaker.substringDateFormat,
+    centuryChosen: state.marsMapMaker.century
   };
 };
 

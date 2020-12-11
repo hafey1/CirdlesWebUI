@@ -1042,14 +1042,14 @@ export class FieldCard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    ent: state.entries,
-    persist: state.persistingMetaData,
-    useOnce: state.useOnce,
-    pairArr: state.sizeOuterArray,
-    hasInit: state.hasInit,
-    toggleIndex: state.toggleIndex,
-    totalMulti: state.totalMultiCount,
-    toggleArray: state.toggleArr
+    ent: state.marsMapMaker.entries,
+    persist: state.marsMapMaker.persistingMetaData,
+    useOnce: state.marsMapMaker.useOnce,
+    pairArr: state.marsMapMaker.sizeOuterArray,
+    hasInit: state.marsMapMaker.hasInit,
+    toggleIndex: state.marsMapMaker.toggleIndex,
+    totalMulti: state.marsMapMaker.totalMultiCount,
+    toggleArray: state.marsMapMaker.toggleArr
   };
 };
 // hello robert
