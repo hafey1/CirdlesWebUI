@@ -129,10 +129,6 @@ class FileIn extends React.Component {
         files: fileName
       };
       this.props.setFileMetadata(obj);
-
-      console.log(fileName);
-      console.log("JSCOUNT: " + jscount);
-      console.log("CSVCOUNT: " + csvcount);
     }
 
     if (csvcount > 3) {
@@ -198,7 +194,6 @@ class FileIn extends React.Component {
       if (!(cleaned[0].includes("return") || cleaned[0].includes("}"))) {
         let indexCleaned = cleaned[0].split(" ")[2];
         let addToStore = false;
-        //console.log(indexCleaned)
         addToStore = cleaned[0].includes("mapMakerIndex");
 
         if (addToStore) {
@@ -219,7 +214,6 @@ class FileIn extends React.Component {
             .replace(/(\r\n|\n|\r)/gm, "")
             .replace(/\\|"|;/g, "")
             .split(" ")[1];
-          console.log(findSesar);
 
           let sesarFound = "";
           for (let i = 0; i < result.data.length; i++) {
@@ -230,7 +224,6 @@ class FileIn extends React.Component {
               break;
             }
           }
-          console.log(sesarFound);
 
           let persistObj = {
             sesar: sesarFound,
@@ -241,14 +234,7 @@ class FileIn extends React.Component {
             forceID: this.props.persist.length,
             index: parseInt(indexCleaned)
           };
-          console.log(
-            "this is obj we add to persist " +
-              persistObj.sesar +
-              " " +
-              persistObj.header
-          );
           this.props.persistingDataConcat(persistObj);
-
           //put object in store with only the sesar value to persistmetadata
         }
       }
@@ -267,7 +253,6 @@ class FileIn extends React.Component {
       // One of the multivalue selections has an extra space in the mapOutput, this is a quick fix
       // However, when mars reads in mapping file, space may still need to be taken care of
       if (firstIndexFormat.length === 5 || firstIndexFormat.length === 6) {
-        //firstIndexFormat[4] = firstIndexFormat[4]
         firstIndexFormat = this.removeBrackets(firstIndexFormat);
       }
 
@@ -333,7 +318,6 @@ class FileIn extends React.Component {
 
       // parsing out a javascript file
       for (let i = 1; i < result.data.length - 1; i++) {
-        //console.log(Object.values(result.data[i]))
         if (
           JSON.stringify(Object.values(result.data[i])).includes("forceEdit") &&
           JSON.stringify(Object.values(result.data[i])).includes("const")
@@ -414,7 +398,6 @@ class FileIn extends React.Component {
         let arr;
 
         if (startPushing === true) {
-          //console.log("This is indexSet before startpush: " + "  " + mapIndex + "   " + JSON.stringify(Object.values(result.data[i])[0]).replace(/(\r\n|\n|\r)/gm, ""))
           this.startPushingHelper(
             result,
             i,
@@ -551,7 +534,6 @@ class FileIn extends React.Component {
           addForceEditValues[i][1] === "<METADATA_ADD>" ||
           addForceEditValues[i][1] === "<METADATA>"
         ) {
-          //  console.log("is this something?: "+ forceEditValueTitleArr[forceEditValuesCount])
           addForceEditValues[i][1] =
             forceEditValueTitleArr[forceEditValuesCount];
           forceEditValuesCount++;
@@ -669,21 +651,6 @@ class FileIn extends React.Component {
           />
         </div>
         <br></br>
-
-        {/*force card edit */}
-        {/* <div style={{ padding: "0px", margin: "0px", paddingTop: "10px" }}>
-                    
-                    <select onChange={this.numOfCards} style={{ paddingTop: "10px", width: "120px" }} class="ui search dropdown">
-                        <option value="">Extra Cards</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div> */}
-
         <p />
         <button onClick={this.importCSV}> Load now!</button>
       </div>

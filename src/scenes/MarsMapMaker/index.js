@@ -98,7 +98,6 @@ export class App extends React.Component {
     for (let j = 0; j < numOfEmptyCards; j++) {
       newCardObj[j + "<METADATA_ADD>"] = "";
     }
-    console.log(newCardObj);
     for (let i = 0; i < tValues.length; i++) {
       tValues[i] = { ...newCardObj, ...tValues[i] };
     }
@@ -174,18 +173,17 @@ export class App extends React.Component {
       <div style={{ height: "100vh", position: "relative" }}>
         <div className={readerClass}>
           <FileIn testID="FileIn" callbackFromParent={this.fileCallback} />
-
-          {this.state.isOpened ? (
-            <Dialog
-              isOpen={this.state.isOpened}
-              onClose={e => this.setState({ isOpened: false })}
-            >
-              {this.state.mapPreview.split("\n").map(i => {
-                return <div>{i}</div>;
-              })}
-            </Dialog>
-          ) : null}
         </div>
+        {this.state.isOpened ? (
+          <Dialog
+            isOpen={this.state.isOpened}
+            onClose={e => this.setState({ isOpened: false })}
+          >
+            {this.state.mapPreview.split("\n").map(i => {
+              return <div>{i}</div>;
+            })}
+          </Dialog>
+        ) : null}
         {this.state.continue ? (
           <CardList
             tValLength={this.state.toggleValueLength}

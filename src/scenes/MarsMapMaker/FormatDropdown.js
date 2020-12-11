@@ -205,24 +205,6 @@ class FormatDropdown extends React.Component {
   };
 
   render() {
-    /*
-        if (
-            (((this.sizeArrayLoop() === 2 && this.props.ent[this.props.id].sesarTitle === "size" && this.props.sizeArray[1].pairHeader !== "") &&
-                (this.sizeArrayLoop() === 2 && this.props.ent[this.props.id].sesarTitle === "size" && this.props.sizeArray[0].pairHeader !== "")) ||
-                (this.sizeArrayLoop() === 1 && this.props.sizeArray[2].pairHeader !== "")
-            )
-        ) {
-            return (
-                <select disabled onChange={this.updateValue}>
-                    <option value={"choose data format"} disabled selected hidden>format type</option>
-                    <option value={"first"}>1st in Pair </option>
-                    <option value={"second"}>2nd in Pair</option>
-                    <option value={"measurement"}>Measurement</option>
-                </select>
-            );
-        }
-        */
-
     if (
       this.props.hasInit &&
       this.props.id > 0 &&

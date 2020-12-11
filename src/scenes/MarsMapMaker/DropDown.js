@@ -24,6 +24,7 @@ import {
 } from "../../actions/marsMapMaker";
 
 import { dropdownSet, isSesarTitlePresent } from "./util/helper.js";
+import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
 //////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 
@@ -395,26 +396,14 @@ export class DropDown extends React.Component {
       return;
     }
 
-    let objects = [
-      "size",
-      "description",
-      "sample_comment",
-      "geological_age",
-      "field_name"
-    ];
-
-    console.log(objects[4]);
-    console.log(this.props.ent[this.props.id].sesarTitle);
-    console.log(newValue);
-    console.log("---------------------");
-    for (let i = 0; i < objects.length; i++) {
+    for (let i = 0; i < MVT.length; i++) {
       if (
-        objects[i] === this.props.ent[this.props.id].sesarTitle &&
-        newValue !== objects[i]
+        MVT[i] === this.props.ent[this.props.id].sesarTitle &&
+        newValue !== MVT[i]
       ) {
         const obj = {
           num: this.props.totalMulti[i].count - 1,
-          ftitle: objects[i],
+          ftitle: MVT[i],
           findex: i
         };
         this.props.totalMultiValueCount(obj);
@@ -671,7 +660,6 @@ export class DropDown extends React.Component {
       //always gives multiValue
       if (this.props.hasInit && this.state.sesarMulti.includes(f.title)) {
         let ital = f.title.italics();
-        //console.log(ital)
         return (
           <option style={{ fontStyle: "italic" }} key={f.title} value={f.title}>
             {f.title}
@@ -683,8 +671,6 @@ export class DropDown extends React.Component {
         !this.props.useOnce.includes(f.title) &&
         !isSesarTitlePresent(f.title, this.props.ent)
       ) {
-        //console.log(f.title + ": Flag 5" + this.hasSesarValue()[1]);
-        //console.log(this.props.useOnce);
         return (
           <option key={f.title} value={f.title}>
             {f.title}

@@ -5,7 +5,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React, { useState, useEffect } from "react";
-
 import { connect } from "react-redux";
 
 // COMPONENTS
@@ -18,7 +17,13 @@ import "../../styles/marsMapMaker.scss";
 
 // REDUX
 import { firstState, toggleInUse } from "../../actions/marsMapMaker";
-import * as helpers from "./util/helper";
+
+// helper functions && constants
+import { typeField } from "./util/helper";
+import {
+  DATE_FORMAT_OPTION,
+  MULTI_VALUE_TITLES as MVT
+} from "./util/constants";
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
@@ -28,9 +33,6 @@ const CardList = props => {
   const objArray = [];
   const useOnce = [];
   let newKey = -1;
-
-  // an array of date option objects to choose from in the date dropdown
-  const { dateFormatOption } = require("./sesarOptions");
 
   const [lastMetaDataAdd, incrementMetaDataAdd] = useState(3);
   const [fieldsState, addAFieldCardHead] = useState(props.fields);
@@ -42,11 +44,6 @@ const CardList = props => {
 
   // used to toggle between the tuples of the csv loaded in
   const [toggleIndex, addToToggleIndex] = useState(1);
-
-  const [addingCard, clickingAddCard] = useState(false);
-
-  // helper function to dicide the the contents of dropdowns for specific fieldcards
-  // if fieldValue contains "0-9 or symbols" it's 'type' will be numbers, else, the type is text
 
   // maps through fields and creates unique field card entry for each
   // hiding: value to hide entry or not
@@ -100,7 +97,6 @@ const CardList = props => {
         }
       }
     }
-
     return sesarPassIn;
   };
 
@@ -111,35 +107,10 @@ const CardList = props => {
         if (props.jsFileValues[i][1] === field) valid = true;
       }
     }
-
     return valid;
   };
 
-  const findOneToTwo = id => {
-    let objects = [
-      "size",
-      "description",
-      "sample_comment",
-      "geological_age",
-      "field_name"
-    ];
-
-    for (let j = 0; j < objects.length; j++) {
-      let count = 0;
-      if (objects[j] === props.ent[id].sesarTitle) {
-        for (let i = 0; i < props.ent.length; i++) {
-          if (props.ent[i].sesarTitle === objects[j]) {
-            count += 1;
-          }
-        }
-
-        return count;
-      }
-    }
-  };
-
   const storeLoad = (ents, toggles) => {
-    console.log(ents);
     return ents.length > 0 && toggles.length > 0;
   };
 
@@ -224,8 +195,6 @@ const CardList = props => {
       }
     }
 
-    //create an object and add it to store
-
     // after object is created, append it to the object array & add one to the ID
     useOnce.push("");
     objArray.push(storedValue);
@@ -244,11 +213,9 @@ const CardList = props => {
             key={newKey}
             hiding={hide}
             fieldTitle={field}
-            oneOfTwoID={findOneToTwo(newKey)}
             id={newKey}
-            fieldType={helpers.typeField(newKey, lastMetaDataAdd)}
+            fieldType={typeField(newKey, lastMetaDataAdd)}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
-            //fieldValue={props.fieldVal[newKey]}
             hasContent={
               props.fieldVal[newKey] !== "" || valueIsInJsMappingFile(field)
             }
@@ -263,9 +230,8 @@ const CardList = props => {
             key={newKey}
             hiding={hide}
             fieldTitle={Object.keys(props.toggleArr[toggleIndex])[newKey]}
-            oneOfTwoID={findOneToTwo(newKey)}
             id={newKey}
-            fieldType={helpers.typeField(newKey, lastMetaDataAdd)}
+            fieldType={typeField(newKey, lastMetaDataAdd)}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
             hasContent={
               props.fieldVal[newKey] !== "" ||
@@ -330,13 +296,6 @@ const CardList = props => {
   const previewPopUp = () => {
     ////////////////
     // POP-UP LOCAL VARIABLES
-    let options = [
-      "field_name",
-      "description",
-      "sample_comment",
-      "geological_age",
-      "size"
-    ];
     let multiValueArr = [[], [], [], [], []];
     let mapPreviewArr = [];
     let fieldIndex = -1;
@@ -357,37 +316,37 @@ const CardList = props => {
           String(props.ent[i].sesarTitle + ":" + props.ent[i].header)
         );
       }
-      multiValueArrHelper(options, i, multiValueArr);
+      multiValueArrHelper(MVT, i, multiValueArr);
     }
     for (i = 0; i < 5; i++) {
       multiValueArr[i] = multiValueArr[i].join("; ");
     }
-    appendTitleToFront(multiValueArr, options);
+    appendTitleToFront(multiValueArr, MVT);
 
     finalMap = mapPreviewArr;
 
     for (i = 0; i < finalMap.length; i++) {
-      if (finalMap[i].includes(options[0])) {
+      if (finalMap[i].includes(MVT[0])) {
         finalMap[i] = multiValueArr[0];
         if (fieldIndex === -1) {
           fieldIndex = i;
         }
-      } else if (finalMap[i].includes(options[1])) {
+      } else if (finalMap[i].includes(MVT[1])) {
         finalMap[i] = multiValueArr[1];
         if (descripIndex === -1) {
           descripIndex = i;
         }
-      } else if (finalMap[i].includes(options[2])) {
+      } else if (finalMap[i].includes(MVT[2])) {
         finalMap[i] = multiValueArr[2];
         if (sampleIndex === -1) {
           sampleIndex = i;
         }
-      } else if (finalMap[i].includes(options[3])) {
+      } else if (finalMap[i].includes(MVT[3])) {
         finalMap[i] = multiValueArr[3];
         if (geoIndex === -1) {
           geoIndex = i;
         }
-      } else if (finalMap[i].includes(options[4])) {
+      } else if (finalMap[i].includes(MVT[4])) {
         finalMap[i] = multiValueArr[4];
         if (sizeIndex === -1) {
           sizeIndex = i;
@@ -396,15 +355,15 @@ const CardList = props => {
     }
     for (i = 0; i < finalMap.length; i++) {
       if (!arr.includes(finalMap[i])) {
-        if (!(finalMap[i].includes(options[0]) && i !== fieldIndex))
+        if (!(finalMap[i].includes(MVT[0]) && i !== fieldIndex))
           arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(options[1]) && i !== descripIndex))
+        else if (!(finalMap[i].includes(MVT[1]) && i !== descripIndex))
           arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(options[2]) && i !== sampleIndex))
+        else if (!(finalMap[i].includes(MVT[2]) && i !== sampleIndex))
           arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(options[3]) && i !== geoIndex))
+        else if (!(finalMap[i].includes(MVT[3]) && i !== geoIndex))
           arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(options[4]) && i !== sizeIndex))
+        else if (!(finalMap[i].includes(MVT[4]) && i !== sizeIndex))
           arr.push(finalMap[i]);
       }
     }
@@ -521,12 +480,12 @@ const CardList = props => {
                       className="toolbar__date__format"
                       style={{ borderColor: "red" }}
                     >
-                      <DateDropdown list={dateFormatOption} />
+                      <DateDropdown list={DATE_FORMAT_OPTION} />
                       <CenturyDropDown />
                     </div>
                   ) : (
                     <div className="toolbar__date__format">
-                      <DateDropdown list={dateFormatOption} />
+                      <DateDropdown list={DATE_FORMAT_OPTION} />
                       <CenturyDropDown />
                     </div>
                   )}

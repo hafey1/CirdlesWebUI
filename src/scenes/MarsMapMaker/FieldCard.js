@@ -16,6 +16,7 @@ import {
   forceEdit,
   persistingDataConcat
 } from "../../actions/marsMapMaker";
+import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
 const { options } = require("./sesarOptions");
 
 export class FieldCard extends React.Component {
@@ -54,16 +55,6 @@ export class FieldCard extends React.Component {
     return value;
   };
 
-  getMulti = () => {
-    let arr = [];
-    for (let i = 0; i < this.state.sesarOptions.length; i++) {
-      if (this.state.sesarOptions[i].format === "multivalue") {
-        arr.push(this.state.sesarOptions[i].title);
-      }
-    }
-    return arr;
-  };
-
   getOne2One = () => {
     let arr = [];
     for (let i = 0; i < this.state.sesarOptions.length; i++) {
@@ -74,9 +65,7 @@ export class FieldCard extends React.Component {
   };
 
   // helper function to display a dropdown IFF it is also green / checked!
-  // sizeCallback={this.getSizeCallback}
   filterDrop = () => {
-    //if (this.state.isGreen === true)
     return (
       <DropDown
         shouldAppear={this.state.isGreen}
@@ -87,12 +76,11 @@ export class FieldCard extends React.Component {
         id={this.props.id}
         value={this.props.fieldValue}
         fieldType={this.state.type}
-        multiList={this.getMulti()}
+        multiList={MVT}
         one2one={this.getOne2One()}
         list={this.state.sesarOptions}
       />
     );
-    // else return <div className="dropDownNoData">{"   "}</div>;
   };
 
   // onClick of the checkmark, change the color of the bar between green and white
@@ -101,7 +89,6 @@ export class FieldCard extends React.Component {
   //change total added cards for changing how many
   isMetaDataAddCard = cardID => {
     let totalAddedCards = 4;
-    //console.log("Are you true? " + cardID + "  " + (cardID < totalAddedCards))
     return cardID < totalAddedCards;
   };
 
@@ -115,8 +102,7 @@ export class FieldCard extends React.Component {
       currentComponent.setState({ updatedValue: value });
       return;
     }
-    //console.log("This needs to be a multi value ONLY::::::  "+ title)
-    if (this.getMulti().includes(title)) {
+    if (MVT.includes(title)) {
       //first two cases: if fieldcard sesarSelected is set to a multivalue
       // if non empty value for multivalue
       // else empty value
@@ -169,18 +155,13 @@ export class FieldCard extends React.Component {
 
   multiValuesBoolHelp = jsFileValue => {
     let valid = false;
-    let options = this.getMulti();
-
-    for (let i = 0; i < options.length; i++) {
-      if (jsFileValue === options[i]) {
+    for (let i = 0; i < MVT.length; i++) {
+      if (jsFileValue === MVT[i]) {
         valid = true;
       }
     }
-
     return valid;
   };
-
-  //countMultiValue = ()
 
   jsFileValueToggle = () => {
     let valid = false;
@@ -193,7 +174,6 @@ export class FieldCard extends React.Component {
           valid = true;
       }
     }
-
     return valid;
   };
 
@@ -237,8 +217,6 @@ export class FieldCard extends React.Component {
   };
 
   entMultiSizeCount = (id, title) => {
-    let objects = this.getMulti();
-    console.log(objects);
     let index;
     let count;
     if (this.props.jsFileValues === undefined) count = 1;
@@ -249,8 +227,8 @@ export class FieldCard extends React.Component {
         count += 1;
       }
     }
-    for (let j = 0; j < objects.length; j++) {
-      if (objects[j] === title) index = j;
+    for (let j = 0; j < MVT.length; j++) {
+      if (MVT[j] === title) index = j;
     }
 
     const obj = {
@@ -278,10 +256,9 @@ export class FieldCard extends React.Component {
   multiStringOutputFunction = (id, title) => {
     this.entMultiSizeCount(id, title);
     let valid = false;
-    let objects = this.getMulti();
     let index;
-    for (let j = 0; j < objects.length; j++) {
-      if (objects[j] === title) {
+    for (let j = 0; j < MVT.length; j++) {
+      if (MVT[j] === title) {
         index = j;
         valid = true;
       }
@@ -298,10 +275,9 @@ export class FieldCard extends React.Component {
   };
 
   isMultiValue = title => {
-    let objects = this.getMulti();
     let valid = false;
-    for (let j = 0; j < objects.length; j++) {
-      if (objects[j] === title) valid = true;
+    for (let j = 0; j < MVT.length; j++) {
+      if (MVT[j] === title) valid = true;
     }
     return valid;
   };
@@ -313,10 +289,7 @@ export class FieldCard extends React.Component {
   forceEdit = event => {
     let obj = {};
     let persistentMetaData = {};
-
-    console.log(event.key + " and type: " + typeof event.key);
     if (event.key === "Enter" || typeof event.key === undefined) {
-      console.log(this.props.ent[this.props.id].value);
       persistentMetaData = {
         index: this.props.id,
         value: event.target.value,
@@ -399,9 +372,6 @@ export class FieldCard extends React.Component {
   };
 
   currentTotal = () => {
-    console.log(this.props.id);
-    console.log(this.props.ent);
-    console.log(this.props.totalMulti);
     for (let i = 0; i < this.props.totalMulti.length; i++) {
       if (
         this.props.hasInit &&
@@ -414,8 +384,6 @@ export class FieldCard extends React.Component {
   };
 
   render() {
-    //these renders return different fieldcards based on the hiding toggle value
-
     //removes the unchecked field card
     if (this.props.hiding && this.state.isGreen === false) return null;
     //returns the green styled field card

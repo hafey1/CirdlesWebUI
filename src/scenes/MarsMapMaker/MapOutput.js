@@ -11,7 +11,8 @@ import { formatDate } from "../../actions/marsMapMaker";
 
 import mars from "../../img/marsMapMakerImg/planet.png";
 import { isSesarTitlePresent } from "./util/helper.js";
-const { license } = require("./license");
+import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
+const { license } = require("./util/license");
 
 class MapOutput extends React.Component {
   state = { functionIDs: [], orderedForcedFields: [] };
@@ -238,11 +239,7 @@ class MapOutput extends React.Component {
         this.props.ent[j].sesarTitle !== "none" &&
         this.props.ent[j].sesarTitle !== "" &&
         this.props.ent[j].value !== "<METADATA_ADD>" &&
-        this.props.ent[j].sesarTitle !== "field_name" &&
-        this.props.ent[j].sesarTitle !== "sample_comment" &&
-        this.props.ent[j].sesarTitle !== "description" &&
-        this.props.ent[j].sesarTitle !== "size" &&
-        this.props.ent[j].sesarTitle !== "geological_age"
+        !MVT.includes(this.props.ent[j].sesarTitle)
       )
         singleLastIndexOfContent = j;
       else if (this.props.ent[j].sesarTitle === "geological_age")
@@ -272,11 +269,7 @@ class MapOutput extends React.Component {
         this.props.ent[i].sesarTitle !== "none" &&
         this.props.ent[i].sesarTitle !== "" &&
         this.props.ent[i].value !== "<METADATA_ADD>" &&
-        this.props.ent[i].sesarTitle !== "geological_age" &&
-        this.props.ent[i].sesarTitle !== "field_name" &&
-        this.props.ent[i].sesarTitle !== "sample_comment" &&
-        this.props.ent[i].sesarTitle !== "description" &&
-        this.props.ent[i].sesarTitle !== "size"
+        !MVT.includes(this.props.ent[j].sesarTitle)
       ) {
         if (
           i === lastIndexOfContent &&

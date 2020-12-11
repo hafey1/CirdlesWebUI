@@ -12,7 +12,7 @@ import "semantic-ui-react";
 
 // REDUX
 import { century } from "../../actions/marsMapMaker";
-
+import { isSesarTitlePresent } from "./util/helper";
 ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 
@@ -25,26 +25,19 @@ class CenturyDropDown extends React.Component {
   }
 
   searchingEntForDate = () => {
-    let valid = false;
-    this.props.ent.forEach(entry => {
-      if (
-        entry.sesarTitle === "collection_start_date" ||
-        entry.sesarTitle === "collection_end_date"
-      )
-        valid = true;
-    });
-    return valid;
+    return (
+      isSesarTitlePresent("collection_start_date", ent) ||
+      isSesarTitlePresent("collection_end_date", ent)
+    );
   };
 
   // uses the clicked list-item in the dropdown to create an object to be passed into the dropdownUpdate action
   // updates specific object in the redux store
   updateValue = e => {
     const newValue = e.target.value;
-
     const obj = {
       chosenCentury: newValue
     };
-
     this.props.century(obj);
   };
 
@@ -72,20 +65,9 @@ class CenturyDropDown extends React.Component {
       !this.props.hasTwoYs ||
       (this.props.hasTwoYs &&
         this.props.hasChosenCentury &&
-        this.props.hasChosenDropdown)
+        this.props.hasChosenDropdown) ||
+      (this.props.hasChosenCentury && this.searchingEntForDate())
     ) {
-      return (
-        <select
-          style={{ fontFamily: "Lucida Grande" }}
-          defaultValue={"Select Dating Century"}
-          disabled
-          className="ui search dropdown"
-          onChange={this.updateValue}
-        >
-          {this.state.cent.map(field => filter(field))}
-        </select>
-      );
-    } else if (this.props.hasChosenCentury && this.searchingEntForDate()) {
       return (
         <select
           style={{ fontFamily: "Lucida Grande" }}

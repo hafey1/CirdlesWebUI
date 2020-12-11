@@ -53,7 +53,6 @@ class DateDropdown extends React.Component {
 
   render() {
     let num = -1;
-    // helper function to list "options" based on the 'type' of field (numbers or letters...)
     let filter = f => {
       num += 1;
       if (num === 0)
@@ -78,7 +77,6 @@ class DateDropdown extends React.Component {
 
     // creates the dropdown, uses filter() to specify which items are included in dropdown
     // IFF You have selected a date formate and SUCCESSFULLY selected sesar option, disable date dropdown
-
     // case for loaded in js mapping file where the date is already previously selected
     if (
       this.props.hasInit === true &&
