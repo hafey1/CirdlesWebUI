@@ -22,7 +22,6 @@
       }
     ],
     "transform-object-rest-spread",
-    "transform-class-properties",
-    "syntax-dynamic-import"
+    "transform-class-properties"
   ]
 }

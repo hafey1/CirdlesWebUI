@@ -17,11 +17,7 @@ import FieldCard from "./FieldCard";
 import "../../styles/marsMapMaker.scss";
 
 // REDUX
-import {
-  firstState,
-  toggleInUse,
-  changeInit
-} from "../../actions/marsMapMaker";
+import { firstState, toggleInUse } from "../../actions/marsMapMaker";
 import * as helpers from "./util/helper";
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
