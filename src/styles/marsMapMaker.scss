@@ -272,6 +272,7 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .description {
+  max-height: 10%;
   background-color: rgb(224, 225, 226);
   padding: 0px;
   width: 100%;
@@ -318,6 +319,7 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .fieldContainer1 {
+  max-height: 10%;
   border-style: solid;
   border-width: 0.5px;
   line-height: 27px;
@@ -326,6 +328,7 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .fieldContainerDisabled {
+  max-height: 10%;
   border-style: solid;
   border-width: 0.5px;
   line-height: 27px;
@@ -333,6 +336,7 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .fieldContainerMetadataAdd {
+  max-height: 10%;
   border-style: solid;
   border-width: 0.5px;
   background-color: #fcb471;
@@ -341,6 +345,7 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .fieldContainerMetadata {
+  max-height: 10%;
   border-style: solid;
   border-width: 0.5px;
   background-color: #fcfa71d2;

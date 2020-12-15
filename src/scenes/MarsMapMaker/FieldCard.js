@@ -16,8 +16,13 @@ import {
   forceEdit,
   persistingDataConcat
 } from "../../actions/marsMapMaker";
+import {
+  isMetaDataAddCard,
+  lengthCheckedValue,
+  getOne2One
+} from "./util/helper";
 import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
-const { options } = require("./sesarOptions");
+const { options } = require("./util/sesarOptions");
 
 export class FieldCard extends React.Component {
   state = {
@@ -43,27 +48,6 @@ export class FieldCard extends React.Component {
     field_container2: !this.state.isGreen
   });
 
-  // helper function to limit length of 'fieldValue' displayed in the UI
-  lengthCheckedValue = fieldVal => {
-    let value = fieldVal;
-    if (value === "<METADATA_ADD>") {
-      value = "";
-    } else if (value.length > 25) {
-      value = value.slice(0, 20);
-      value = value + "...";
-    }
-    return value;
-  };
-
-  getOne2One = () => {
-    let arr = [];
-    for (let i = 0; i < this.state.sesarOptions.length; i++) {
-      if (this.state.sesarOptions[i].format === "one2one")
-        arr.push(this.state.sesarOptions[i].title);
-    }
-    return arr;
-  };
-
   // helper function to display a dropdown IFF it is also green / checked!
   filterDrop = () => {
     return (
@@ -77,25 +61,16 @@ export class FieldCard extends React.Component {
         value={this.props.fieldValue}
         fieldType={this.state.type}
         multiList={MVT}
-        one2one={this.getOne2One()}
+        one2one={getOne2One(this.state.sesarOptions)}
         list={this.state.sesarOptions}
       />
     );
   };
 
-  // onClick of the checkmark, change the color of the bar between green and white
-
-  //this function is for the check of rendering a missing field card to the UI
-  //change total added cards for changing how many
-  isMetaDataAddCard = cardID => {
-    let totalAddedCards = 4;
-    return cardID < totalAddedCards;
-  };
-
   fileCallback = (data, title) => {
     let currentComponent = this;
 
-    if (this.isMetaDataAddCard(this.props.id)) {
+    if (isMetaDataAddCard(this.props.id)) {
       let value;
       value = this.props.ent[this.props.id].value;
 
@@ -361,7 +336,7 @@ export class FieldCard extends React.Component {
     let inputPlaceHolder = "Edit content...";
 
     if (
-      (this.isMetaDataAddCard(this.props.id) &&
+      (isMetaDataAddCard(this.props.id) &&
         (valueInStore !== "<METADATA_ADD>" &&
           valueInStore !== "ADDED_CARD : 1")) ||
       headerInStore === "<METADATA>"
@@ -422,7 +397,7 @@ export class FieldCard extends React.Component {
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (
                     <div className="description__mapped__content">
-                      {this.lengthCheckedValue(
+                      {lengthCheckedValue(
                         this.props.fieldTitle + ": " + this.props.fieldValue
                       )}
                       {this.props.fieldValue.length > 25 ? (
@@ -514,8 +489,7 @@ export class FieldCard extends React.Component {
                   </div>
                   <div className="description__value">
                     {" "}
-                    {":        " +
-                      this.lengthCheckedValue(this.props.fieldValue)}
+                    {":        " + lengthCheckedValue(this.props.fieldValue)}
                     {this.props.fieldValue.length > 25 ? (
                       <span className="hiddentext">
                         {this.props.fieldValue}
@@ -533,7 +507,7 @@ export class FieldCard extends React.Component {
                   {/*left side of fieldcard*/}
                   {this.state.areEditing === true ? (
                     <div className="description__mapped__content">
-                      {this.lengthCheckedValue(this.props.fieldValue)}{" "}
+                      {lengthCheckedValue(this.props.fieldValue)}{" "}
                       {this.props.fieldValue.length > 25 ? (
                         <span className="hiddentext">
                           {this.props.fieldValue}
@@ -628,7 +602,7 @@ export class FieldCard extends React.Component {
                 </div>
                 <div className="description__value">
                   {" "}
-                  {":        " + this.lengthCheckedValue(this.props.fieldValue)}
+                  {":        " + lengthCheckedValue(this.props.fieldValue)}
                 </div>
               </object>
               <object className="arrow">
@@ -641,7 +615,7 @@ export class FieldCard extends React.Component {
                 {this.props.hasInit === true &&
                 this.state.areEditing === true ? (
                   <div className="description__mapped__content">
-                    {this.lengthCheckedValue(this.state.updatedValue)}
+                    {lengthCheckedValue(this.state.updatedValue)}
                     <span className="hiddentext">
                       {this.props.ent[this.props.id].value}
                     </span>
@@ -727,7 +701,7 @@ export class FieldCard extends React.Component {
           </div>
         );
       } else {
-        if (this.isMetaDataAddCard(this.props.id)) {
+        if (isMetaDataAddCard(this.props.id)) {
           return (
             <div className="ui label">
               <div className="fieldContainerMetadataAdd">
@@ -761,7 +735,7 @@ export class FieldCard extends React.Component {
                       {this.props.hasInit &&
                       this.props.ent[this.props.id].sesarTitle !== "" &&
                       this.props.ent[this.props.id].sesarTitle !== "none"
-                        ? this.lengthCheckedValue(this.state.updatedValue)
+                        ? lengthCheckedValue(this.state.updatedValue)
                         : null}
                       {this.props.fieldValue.length > 25 ? (
                         <span className="hiddentext">
@@ -864,8 +838,7 @@ export class FieldCard extends React.Component {
                   </div>
                   <div className="description__value">
                     {" "}
-                    {":        " +
-                      this.lengthCheckedValue(this.props.fieldValue)}
+                    {":        " + lengthCheckedValue(this.props.fieldValue)}
                     {this.props.fieldValue.length > 25 ? (
                       <span className="hiddentext">
                         {this.props.fieldValue}
@@ -885,7 +858,7 @@ export class FieldCard extends React.Component {
                       {this.props.hasInit &&
                       this.props.ent[this.props.id].sesarTitle !== "" &&
                       this.props.ent[this.props.id].sesarTitle !== "none"
-                        ? this.lengthCheckedValue(this.state.updatedValue)
+                        ? lengthCheckedValue(this.state.updatedValue)
                         : null}
                       {this.state.updatedValue.length > 25 ? (
                         <span className="hiddentext">
@@ -994,7 +967,7 @@ export class FieldCard extends React.Component {
               </div>
               <div className="description__value">
                 {" "}
-                {":        " + this.lengthCheckedValue(this.props.fieldValue)}
+                {":        " + lengthCheckedValue(this.props.fieldValue)}
               </div>
             </object>
             <object className="descriptionMapped" align="right">

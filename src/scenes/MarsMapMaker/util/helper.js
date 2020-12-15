@@ -1,3 +1,30 @@
+//used in FieldCard
+export const isMetaDataAddCard = cardID => {
+  let totalAddedCards = 4;
+  return cardID < totalAddedCards;
+};
+
+//used in FieldCard
+export const lengthCheckedValue = fieldVal => {
+  let value = fieldVal;
+  if (value === "<METADATA_ADD>") {
+    value = "";
+  } else if (value.length > 25) {
+    value = value.slice(0, 20);
+    value = value + "...";
+  }
+  return value;
+};
+
+//used in FieldCard
+export const getOne2One = optionArray => {
+  let arr = [];
+  for (let i = 0; i < optionArray.length; i++) {
+    if (optionArray[i].format === "one2one") arr.push(optionArray[i].title);
+  }
+  return arr;
+};
+
 export const typeField = (keyNum, totalMetaDataAdd) => {
   let type;
 
