@@ -21,3 +21,9 @@ export const MARS = {
     + 'collection of Scripps Institution of Oceanography.'
     + '  Contact bowring@gmail.com and visit CIRDLES.org for information.'
 }
+
+export const MARSMAPMAKER = {
+  description: 'Mars Map Maker is an assistive tool that is used to create mapping '
+  + 'files for the uploading of legacy samples at SESAR (System for Earth Sample '
+  + 'Registration) through MARS.'
+}

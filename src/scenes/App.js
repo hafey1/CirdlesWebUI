@@ -6,10 +6,12 @@ import Squid from "./Squid";
 import Ambapo from "./Ambapo";
 import Topsoil from "./Topsoil";
 import Mars from "./Mars";
+import MarsMapMaker from "./MarsMapMaker";
 import squidLogo from "../img/logos/Squid.svg";
 import ambapoLogo from "../img/logos/Ambapo.svg";
 import topsoilLogo from "../img/logos/Topsoil.svg";
 import marslogo from "../img/logos/Mars.svg";
+import marsMapMakerLogo from "../img/logos/MarsMapMaker.svg";
 import { colors } from "constants";
 
 import "styles/index.scss";
@@ -21,32 +23,38 @@ const routes = [
     title: "CIRDLES Web Services",
     exact: true,
     component: Home,
-    logo: null,
+    logo: null
   },
   {
     path: "/ambapo",
     title: "Ambapo",
     component: Ambapo,
-    logo: ambapoLogo,
+    logo: ambapoLogo
   },
   {
     path: "/squid",
     title: "Squid Ink: Squid's Reporting Service (Beta)",
     component: Squid,
-    logo: squidLogo,
+    logo: squidLogo
   },
   {
     path: "/topsoil",
     title: "Topsoil",
     component: Topsoil,
-    logo: topsoilLogo,
+    logo: topsoilLogo
   },
   {
     path: "/mars",
     title: "MARS",
     component: Mars,
-    logo: marslogo,
+    logo: marslogo
   },
+  {
+    path: "/marsMapMaker",
+    title: "MarsMapMaker",
+    component: MarsMapMaker,
+    logo: marsMapMakerLogo
+  }
 ];
 
 const Header = ({ title, logo }) => {
@@ -82,6 +90,9 @@ const Header = ({ title, logo }) => {
           <NavLink className="nav-item nav-link ml-4" to="/mars">
             MARS
           </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/marsMapMaker">
+            MARS Map Maker
+          </NavLink>
         </div>
       </div>
     </nav>
@@ -92,7 +103,7 @@ class App extends Component {
   render() {
     return (
       <div style={styles.wrapper}>
-        {routes.map((route) => {
+        {routes.map(route => {
           const { title, path, exact } = route;
           return (
             <Route
@@ -105,7 +116,7 @@ class App extends Component {
         })}
         <main style={styles.body}>
           <Switch>
-            {routes.map((route) => {
+            {routes.map(route => {
               const { title, ...rest } = route;
               return <Route key={title + "-main-route"} {...rest} />;
             })}
@@ -120,7 +131,7 @@ const styles = {
   wrapper: {
     height: "100vh",
     width: "100%",
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primary
   },
   body: {
     position: "absolute",
@@ -129,8 +140,8 @@ const styles = {
     bottom: "0",
     left: "0",
     overflow: "auto",
-    backgroundColor: colors.primary,
-  },
+    backgroundColor: colors.primary
+  }
 };
 
 export default App;
