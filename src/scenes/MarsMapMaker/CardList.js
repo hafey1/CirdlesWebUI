@@ -546,7 +546,7 @@ const CardList = props => {
               </div>
               <div
                 className="description__value"
-                style={{ fontFamily: "Lucida Grande", width: "23.8%" }}
+                style={{ fontFamily: "Lucida Grande"}}
               >
                 {" "}
                 {": Content"}
@@ -556,14 +556,13 @@ const CardList = props => {
               style={{
                 fontFamily: "Lucida Grande",
                 display: "inline-block",
-                paddingLeft: "4.2em"
               }}
             >
               <div style={{ fontFamily: "Lucida Grande", fontSize: "18px" }}>
                 Maps To
               </div>
             </object>
-            <object className="descriptionKeyMapped" align="right">
+            <object className="descriptionKeyMapped">
               <div
                 style={{ fontFamily: "Lucida Grande", whiteSpace: "nowrap" }}
                 className="description__mapped__content"
