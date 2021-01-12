@@ -38,11 +38,14 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .toggle__content {
+
 }
 .toolbar__help {
+
 }
 
 .toolbar__date {
+
 }
 
 .btn-margin {
@@ -187,11 +190,6 @@ $mars--border: rgb(46, 14, 8);
   font-size: 17px;
 }
 
-.fa {
-  position: relative;
-  z-index: 15;
-  top: 50%;
-}
 .fa-angle-double-right {
   position: relative;
   z-index: 15;
@@ -201,7 +199,6 @@ $mars--border: rgb(46, 14, 8);
 .dropDown {
   font-size: 13px;
   min-height: auto !important;
-  height: 1em;
   display: inline-block;
   width: 170px;
   padding-right: 50px;
@@ -272,7 +269,6 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .description {
-  max-height: 10%;
   background-color: rgb(224, 225, 226);
   padding: 0px;
   width: 100%;
@@ -295,7 +291,6 @@ $mars--border: rgb(46, 14, 8);
 
 .check__box {
   display: inline-block;
-  height: 100%;
   padding-top: 0px;
   padding-bottom: 0px;
   margin: 0px;
@@ -304,7 +299,6 @@ $mars--border: rgb(46, 14, 8);
 
 .description__checkbox {
   display: inline-block;
-  height: 100%;
   padding-top: 0px;
   padding-bottom: 0px;
   margin: 0px;
