@@ -418,11 +418,11 @@ const CardList = props => {
             </div>
             <div className="col-sm-4 col-md-3 order-md-1 align-self-center">
               <div
-                className="card border-0 mx-auto text-center"
+                className="card-transparent border-0 mx-auto text-center"
                 style={{ maxWidth: "300px" }}
               >
                 <div className="card-body">
-                  <div className="card-title border-0 bg-white">
+                  <div className="card-title border-0">
                     Change Displayed Sample
                   </div>
                   <div className="card-text">
@@ -430,20 +430,20 @@ const CardList = props => {
                   </div>
                   <div className="btn-group-vertical text-center btn-margin">
                     <button
-                      className="btn btn-outline-dark"
+                      className="btn bg-white btn-outline-dark"
                       onClick={() => refreshButton()}
                     >
                       Refresh
                     </button>
                     <div className="btn-group">
                       <button
-                        className="btn btn-outline-dark"
+                        className="btn bg-white btn-outline-dark"
                         onClick={() => leftArrowToggle()}
                       >
                         <i class="fa fa-arrow-up"></i>
                       </button>
                       <button
-                        className="btn btn-outline-dark"
+                        className="btn bg-white btn-outline-dark"
                         onClick={() => rightArrowToggle()}
                       >
                         <i class="fa fa-arrow-down"></i>
@@ -456,7 +456,7 @@ const CardList = props => {
 
             <div className="col-sm-4 col-md-3 order-md-3 align-self-center">
               <div
-                className="card border-0 mx-auto text-center"
+                className="card-transparent border-0 mx-auto text-center"
                 style={{ maxWidth: "200px" }}
               >
                 <div className="card-body">
@@ -495,20 +495,20 @@ const CardList = props => {
 
             <div className="col-sm-4 col-md-3 order-md-4 align-self-center text-center">
               <div
-                className="card border-0 mx-auto text-center"
+                className="card-transparent border-0 mx-auto text-center"
                 style={{ maxWidth: "175px" }}
               >
                 <div className="card-body">
                   <div class="btn-group-vertical">
                     <button
-                      className="btn btn-outline-dark"
+                      className="btn bg-white btn-outline-dark"
                       onClick={() => setHide(!hide)}
                     >
                       {" "}
                       {hideOrShow()}{" "}
                     </button>
                     <button
-                      className="btn btn-outline-dark"
+                      className="btn bg-white btn-outline-dark"
                       onClick={() => {
                         props.callback(previewPopUp());
                       }}
@@ -517,7 +517,7 @@ const CardList = props => {
                       Preview Map{" "}
                     </button>
                     <button
-                      className="btn btn-outline-dark"
+                      className="btn bg-white btn-outline-dark"
                       onClick={checkStore}
                     >
                       {" "}
