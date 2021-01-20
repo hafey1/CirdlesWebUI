@@ -936,7 +936,7 @@ export class FieldCard extends React.Component {
                       display: "inline"
                     }}
                   >
-                    <div style={{ float: "right", width: "35px" }}>
+                    <div style={{ float: "right"}}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.currentTotal()
                         : ""}
@@ -972,6 +972,15 @@ export class FieldCard extends React.Component {
             </object>
             <object className="descriptionMapped" align="right">
               <div className="description__mapped__content"> </div>
+              <div
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "42px",
+                      float: "right",
+                      display: "inline"
+                    }}
+                  >
+              </div>
               {this.filterDrop()}
             </object>
           </div>
