@@ -269,7 +269,7 @@ class MapOutput extends React.Component {
         this.props.ent[i].sesarTitle !== "none" &&
         this.props.ent[i].sesarTitle !== "" &&
         this.props.ent[i].value !== "<METADATA_ADD>" &&
-        !MVT.includes(this.props.ent[j].sesarTitle)
+        !MVT.includes(this.props.ent[i].sesarTitle)
       ) {
         if (
           i === lastIndexOfContent &&
