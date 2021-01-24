@@ -5,6 +5,7 @@ import Home from "./Home";
 import Squid from "./Squid";
 import Ambapo from "./Ambapo";
 import Topsoil from "./Topsoil";
+import Squidink from "./Squidink";
 import Mars from "./Mars";
 import MarsMapMaker from "./MarsMapMaker";
 import squidLogo from "../img/logos/Squid.svg";
@@ -12,10 +13,13 @@ import ambapoLogo from "../img/logos/Ambapo.svg";
 import topsoilLogo from "../img/logos/Topsoil.svg";
 import marslogo from "../img/logos/Mars.svg";
 import marsMapMakerLogo from "../img/logos/MarsMapMaker.svg";
+import inklogo from "../img/logos/SquidInk.svg";
 import { colors } from "constants";
 
 import "styles/index.scss";
 import { maxHeaderSize } from "http";
+
+//<NavLink className="nav-item nav-link ml-4" to="/portedsquid">portedsquid</NavLink>
 
 const routes = [
   {
@@ -50,10 +54,17 @@ const routes = [
     logo: marslogo
   },
   {
+
     path: "/marsMapMaker",
     title: "MarsMapMaker",
     component: MarsMapMaker,
     logo: marsMapMakerLogo
+  },
+  {
+    path: "/squidink",
+    title: "Squid Ink",
+    component: Squidink,
+    logo: inklogo
   }
 ];
 
@@ -92,6 +103,9 @@ const Header = ({ title, logo }) => {
           </NavLink>
           <NavLink className="nav-item nav-link ml-4" to="/marsMapMaker">
             MARS Map Maker
+          </NavLink>
+          <NavLink className="nav-item nav-link ml-4" to="/squidink">
+            SQUIDINK
           </NavLink>
         </div>
       </div>
@@ -143,5 +157,4 @@ const styles = {
     backgroundColor: colors.primary
   }
 };
-
 export default App;
