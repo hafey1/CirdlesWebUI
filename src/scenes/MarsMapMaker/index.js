@@ -12,6 +12,7 @@ import classNames from "classnames";
 import CardList from "./CardList";
 import FileIn from "./FileIn";
 import Dialog from "./Dialog";
+import Loading from "./Loading";
 // REDUX
 import { connect } from "react-redux";
 import { initToggle } from "../../actions/marsMapMaker";
@@ -198,7 +199,9 @@ export class App extends React.Component {
             forceTitles={this.state.forceTitles}
             forceValues={this.state.forceValues}
           />
-        ) : null}
+        ) : (
+          <Loading />
+        )}
       </div>
     );
   }
