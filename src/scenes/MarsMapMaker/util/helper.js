@@ -69,7 +69,7 @@ export const lastMetaDataAdd = entries => {
 
 //gets defalut value for select and options in Dropdown from store
 export const dropdownSet = (hasStoreLoaded, entryStore, idInStore) => {
-  let defaultVal = "Sesar Selection";
+  let defaultVal = "Sesar_Selection";
 
   if (hasStoreLoaded && entryStore[idInStore].sesarTitle !== "") {
     defaultVal = entryStore[idInStore].sesarTitle;

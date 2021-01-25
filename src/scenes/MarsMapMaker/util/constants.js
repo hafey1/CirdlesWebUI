@@ -6,6 +6,12 @@ export const MULTI_VALUE_TITLES = [
   "field_name"
 ];
 
+export const METADATA_ADD_SESAR_TITLES = [
+  "sample_type",
+  "elevation_unit",
+  "material"
+];
+
 export const DATE_FORMAT_OPTION = [
   { title: "Select Date Format" },
   { title: "DD/MM/YY or DD-MM-YY", value: "substring", type: "date" },

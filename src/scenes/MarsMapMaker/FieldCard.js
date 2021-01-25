@@ -5,6 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 import React from "react";
+import EditIcon from "@material-ui/icons/Edit";
 import "../../styles/marsMapMaker.scss";
 import classNames from "classnames";
 import { connect } from "react-redux";
@@ -48,20 +49,15 @@ export class FieldCard extends React.Component {
     field_container2: !this.state.isGreen
   });
 
-  // helper function to display a dropdown IFF it is also green / checked!
   filterDrop = () => {
     return (
       <DropDown
         shouldAppear={this.state.isGreen}
-        addedNew={this.props.addedNewField}
         refresh={this.refreshFieldCard}
         callback={this.fileCallback}
         title={this.props.fieldTitle}
         id={this.props.id}
         value={this.props.fieldValue}
-        fieldType={this.state.type}
-        multiList={MVT}
-        one2one={getOne2One(this.state.sesarOptions)}
         list={this.state.sesarOptions}
       />
     );
@@ -554,9 +550,8 @@ export class FieldCard extends React.Component {
                       <button
                         onClick={() => this.areEditing()}
                         style={{ float: "right", width: "35px" }}
-                        class="ui icon button"
                       >
-                        <i class="edit outline icon"></i>
+                        click me
                       </button>
                     </div>
                   ) : (
@@ -796,7 +791,7 @@ export class FieldCard extends React.Component {
                         style={{ float: "right", width: "35px" }}
                         class="ui icon button"
                       >
-                        <i class="edit outline icon"></i>
+                        <EditIcon />
                       </button>
                     </div>
                   )}
@@ -904,10 +899,13 @@ export class FieldCard extends React.Component {
                     >
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right", width: "35px" }}
-                        class="ui icon button"
+                        style={{
+                          float: "right",
+                          width: "35px",
+                          borderRadius: "4px"
+                        }}
                       >
-                        <i class="edit outline icon"></i>
+                        <EditIcon />
                       </button>
                     </div>
                   ) : (
