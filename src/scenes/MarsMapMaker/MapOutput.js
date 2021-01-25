@@ -216,7 +216,6 @@ class MapOutput extends React.Component {
       "const keyValueString = (scrippsValue, scrippsKey) => {\n  return scrippsKey + ' : ' + scrippsValue\n}\n\n";
     const delimit =
       "const delimit = (valueArray) => {\n  return valueArray.join(';')\n}\n\n";
-
     return keyValueString + delimit;
   }
 
