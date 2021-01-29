@@ -437,6 +437,7 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
@@ -453,6 +454,7 @@ export class FieldCard extends React.Component {
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline",
                         visibility: "hidden"
@@ -547,6 +549,7 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
@@ -563,6 +566,7 @@ export class FieldCard extends React.Component {
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
@@ -649,6 +653,7 @@ export class FieldCard extends React.Component {
                     style={{
                       paddingTop: "8px",
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline"
                     }}
@@ -665,6 +670,7 @@ export class FieldCard extends React.Component {
                   <div
                     style={{
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline",
                       visibility: "hidden"
@@ -682,6 +688,7 @@ export class FieldCard extends React.Component {
                   style={{
                     visibility: "hidden",
                     paddingLeft: "10px",
+                    paddingRight: "10px",
                     float: "right",
                     display: "inline"
                   }}
@@ -771,6 +778,7 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
@@ -787,6 +795,7 @@ export class FieldCard extends React.Component {
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline",
                         visibility: "hidden"
@@ -804,6 +813,7 @@ export class FieldCard extends React.Component {
                     style={{
                       visibility: "hidden",
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline"
                     }}
@@ -898,6 +908,7 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
@@ -914,6 +925,7 @@ export class FieldCard extends React.Component {
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline",
                         visibility: "hidden"
@@ -932,6 +944,7 @@ export class FieldCard extends React.Component {
                     style={{
                       paddingTop: "10px",
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline"
                     }}
@@ -975,7 +988,7 @@ export class FieldCard extends React.Component {
               <div
                     style={{
                       paddingTop: "10px",
-                      paddingLeft: "42px",
+                      paddingLeft: "62px",
                       float: "right",
                       display: "inline"
                     }}

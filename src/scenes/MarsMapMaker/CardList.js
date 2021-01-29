@@ -24,6 +24,7 @@ import {
   DATE_FORMAT_OPTION,
   MULTI_VALUE_TITLES as MVT
 } from "./util/constants";
+import { getFormAsyncErrors } from "redux-form";
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
@@ -409,7 +410,7 @@ const CardList = props => {
     <div>
       <div className="label">
         <div className="container-fluid">
-          <div className="row">
+          <div className="row" style={{ backgroundColor: "rgb(207, 216, 220)"}}>
             <div
               className="text-center order-md-3 col-md-3"
               style={{ padding: "20px" }}
@@ -558,7 +559,7 @@ const CardList = props => {
                 display: "inline-block",
               }}
             >
-              <div style={{ fontFamily: "Lucida Grande", fontSize: "18px" }}>
+              <div class="maps__to">
                 Maps To
               </div>
             </object>

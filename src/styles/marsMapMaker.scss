@@ -8,6 +8,12 @@ $mars--border: rgb(46, 14, 8);
     "Lucida Sans", Arial, sans-serif;
 }
 
+.pageBackground {
+  height: "100vh";
+  position: "relative";
+  background-color: white
+}
+
 /* App.js */
 .mars-photo {
   display: flex;
@@ -56,7 +62,7 @@ $mars--border: rgb(46, 14, 8);
   position: relative;
   color: rgb(99, 99, 102);
   display: inline-block;
-  font-size: 17px;
+  font-size: 12px;
   width: 15%;
   white-space: nowrap;
 }
@@ -138,10 +144,8 @@ $mars--border: rgb(46, 14, 8);
 
 .description__title {
   display: inline-block;
-  font-size: 17px;
+  font-size: 12px;
   background-color: inherit;
-  padding-top: 15px;
-  padding-bottom: 15px;
   white-space: nowrap;
   width: 15%;
   text-align: right;
@@ -186,15 +190,13 @@ $mars--border: rgb(46, 14, 8);
   z-index: 15;
   top: 50%;
   font-size: x-large;
-  padding-left: 2.5
+  padding-left: 2.5%;
 }
 
 .dropDown {
   font-size: 13px;
   min-height: auto !important;
-
   display: inline-block;
-  width: 170px;
 }
 
 .description__mapped__header {
@@ -249,7 +251,7 @@ $mars--border: rgb(46, 14, 8);
   position: relative;
   display: inline-block;
   color: rgb(99, 99, 102);
-  font-size: 17px;
+  font-size: 12px;
   padding-right: 5px;
 }
 
@@ -268,7 +270,10 @@ $mars--border: rgb(46, 14, 8);
   border-color: black;
   border-width: 1px;
   border-radius: 5px;
+  padding-top: 10px;
+  padding-bottom: 15px;
 }
+
 .labelInfo {
   background-color: rgb(224, 225, 226);
   width: 100%;
@@ -295,7 +300,7 @@ $mars--border: rgb(46, 14, 8);
   padding-bottom: 0px;
   margin: 0px;
   padding-left: 10px;
-  font-size: 17px;
+  font-size: 12px;
   width: 10%;
 }
 
@@ -312,6 +317,8 @@ $mars--border: rgb(46, 14, 8);
   line-height: 27px;
   background-color: #e9a9a9;
   border-radius: 4px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .fieldContainerDisabled {
@@ -320,6 +327,8 @@ $mars--border: rgb(46, 14, 8);
   border-width: 0.5px;
   line-height: 27px;
   border-radius: 4px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .fieldContainerMetadataAdd {
@@ -329,6 +338,8 @@ $mars--border: rgb(46, 14, 8);
   background-color: #fcb471;
   line-height: 27px;
   border-radius: 4px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .fieldContainerMetadata {
@@ -348,4 +359,46 @@ $mars--border: rgb(46, 14, 8);
 .refreshButton {
   display: inline-block;
   margin: 0 auto;
+}
+
+.btn-outline-dark:hover {
+  background-color: #343a40! important;
+}
+
+.maps__to {
+  font-size: 12px;
+  font-family: "Lucida Grande";
+}
+
+.descriptionMapped > .dropDown > .dropdown {
+  width: 18px;
+}
+
+
+@media (min-width: 544px) {  
+  .description__checkbox {
+    font-size: 17px;
+  } 
+  .description__title {
+    font-size: 17px;
+    width: 15%;
+    max-width: 100%;
+  }
+  .description__value {
+    font-size: 17px;
+  }
+  .maps__to {
+    font-size: 17px;
+  }
+  .description__mapped__content {
+    font-size: 17px;
+  }
+  .descriptionMapped > .dropDown > .dropdown {
+    width: 170px;
+  }
+
+
+
+
+
 }
