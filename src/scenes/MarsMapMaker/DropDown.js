@@ -600,7 +600,6 @@ export class DropDown extends React.Component {
           style={{
             maxHeight: "30px",
             display: "inline-block",
-            width: "170px",
             zIndex: display
           }}
           defaultValue={firstLoad}

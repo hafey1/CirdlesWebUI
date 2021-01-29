@@ -428,32 +428,34 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
                     >
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right", width: "35px" }}
+                        style={{ float: "right" }}
                         class="ui icon button"
                       >
-                        <i class="edit outline icon"></i>
+                        <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline",
                         visibility: "hidden"
                       }}
                     >
                       <button
-                        style={{ float: "right", width: "35px" }}
+                        style={{ float: "right" }}
                         class="ui icon button"
                       >
-                        <i class="edit outline icon"></i>
+                        <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   )}
@@ -538,21 +540,24 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
                     >
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right", width: "35px" }}
+                        style={{ float: "right" }}
+                        class="ui icon button"
                       >
-                        click me
+                        <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
@@ -639,32 +644,34 @@ export class FieldCard extends React.Component {
                     style={{
                       paddingTop: "8px",
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline"
                     }}
                   >
                     <button
                       onClick={() => this.areEditing()}
-                      style={{ float: "right", width: "35px" }}
+                      style={{ float: "right" }}
                       class="ui icon button"
                     >
-                      <i class="edit outline icon"></i>
+                      <i class="fa fa-edit"></i>
                     </button>
                   </div>
                 ) : (
                   <div
                     style={{
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline",
                       visibility: "hidden"
                     }}
                   >
                     <button
-                      style={{ float: "right", width: "35px" }}
+                      style={{ float: "right" }}
                       class="ui icon button"
                     >
-                      <i class="edit outline icon"></i>
+                      <i class="fa fa-edit"></i>
                     </button>
                   </div>
                 )}
@@ -672,11 +679,12 @@ export class FieldCard extends React.Component {
                   style={{
                     visibility: "hidden",
                     paddingLeft: "10px",
+                    paddingRight: "10px",
                     float: "right",
                     display: "inline"
                   }}
                 >
-                  <div style={{ float: "right", width: "35px" }}>
+                  <div style={{ float: "right" }}>
                     {this.props.hasInit && this.state.index !== -1
                       ? "sss" +
                         this.entMultiSizeCount(
@@ -761,32 +769,34 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
                     >
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right", width: "35px" }}
+                        style={{ float: "right" }}
                         class="ui icon button"
                       >
-                        <i class="edit outline icon"></i>
+                        <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline",
                         visibility: "hidden"
                       }}
                     >
                       <button
-                        style={{ float: "right", width: "35px" }}
+                        style={{ float: "right" }}
                         class="ui icon button"
                       >
-                        <EditIcon />
+                        <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   )}
@@ -794,11 +804,12 @@ export class FieldCard extends React.Component {
                     style={{
                       visibility: "hidden",
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline"
                     }}
                   >
-                    <div style={{ float: "right", width: "35px" }}>
+                    <div style={{ float: "right" }}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.entMultiSizeCount(
                             this.props.id,
@@ -888,35 +899,34 @@ export class FieldCard extends React.Component {
                       style={{
                         paddingTop: "8px",
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline"
                       }}
                     >
                       <button
                         onClick={() => this.areEditing()}
-                        style={{
-                          float: "right",
-                          width: "35px",
-                          borderRadius: "4px"
-                        }}
+                        style={{ float: "right" }}
+                        class="ui icon button"
                       >
-                        <EditIcon />
+                        <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
                     <div
                       style={{
                         paddingLeft: "10px",
+                        paddingRight: "10px",
                         float: "right",
                         display: "inline",
                         visibility: "hidden"
                       }}
                     >
                       <button
-                        style={{ float: "right", width: "35px" }}
+                        style={{ float: "right" }}
                         class="ui icon button"
                       >
-                        <i class="edit outline icon"></i>
+                        <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   )}
@@ -925,11 +935,12 @@ export class FieldCard extends React.Component {
                     style={{
                       paddingTop: "10px",
                       paddingLeft: "10px",
+                      paddingRight: "10px",
                       float: "right",
                       display: "inline"
                     }}
                   >
-                    <div style={{ float: "right", width: "35px" }}>
+                    <div style={{ float: "right"}}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.currentTotal()
                         : ""}
@@ -965,6 +976,15 @@ export class FieldCard extends React.Component {
             </object>
             <object className="descriptionMapped" align="right">
               <div className="description__mapped__content"> </div>
+              <div
+                    style={{
+                      paddingTop: "10px",
+                      paddingLeft: "62px",
+                      float: "right",
+                      display: "inline"
+                    }}
+                  >
+              </div>
               {this.filterDrop()}
             </object>
           </div>

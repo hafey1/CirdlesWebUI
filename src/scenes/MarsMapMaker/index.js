@@ -171,7 +171,7 @@ export class App extends React.Component {
     });
 
     return (
-      <div style={{ height: "100vh", position: "relative" }}>
+      <div className="pageBackground">
         <div className={readerClass}>
           <FileIn testID="FileIn" callbackFromParent={this.fileCallback} />
         </div>
