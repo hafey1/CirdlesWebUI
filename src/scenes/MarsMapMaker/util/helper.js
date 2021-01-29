@@ -67,9 +67,20 @@ export const lastMetaDataAdd = entries => {
   }
 };
 
+export const findFirstValueBySesarTitle = (entryStore, sesarTitle) => {
+  let value = "defaultName";
+  for (let i = 0; i < entryStore.length; i++) {
+    if (entryStore[i].sesarTitle === sesarTitle) {
+      value = entryStore[i].value;
+      break;
+    }
+  }
+  return value;
+};
+
 //gets defalut value for select and options in Dropdown from store
 export const dropdownSet = (hasStoreLoaded, entryStore, idInStore) => {
-  let defaultVal = "Sesar Selection";
+  let defaultVal = "Sesar_Selection";
 
   if (hasStoreLoaded && entryStore[idInStore].sesarTitle !== "") {
     defaultVal = entryStore[idInStore].sesarTitle;

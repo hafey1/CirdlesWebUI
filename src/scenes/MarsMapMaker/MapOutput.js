@@ -10,9 +10,22 @@ import saveAs from "file-saver";
 import { formatDate } from "../../actions/marsMapMaker";
 
 import mars from "../../img/marsMapMakerImg/planet.png";
-import { isSesarTitlePresent } from "./util/helper.js";
+import {
+  isSesarTitlePresent,
+  findFirstValueBySesarTitle
+} from "./util/helper.js";
 import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
-const { license } = require("./util/license");
+import {
+  LICENSE,
+  HEADER_TEXT,
+  HEADER_DENOTER,
+  MMM_INFO,
+  MULTIVALUE_FUNCTION_TEXT,
+  COMBINATION_TEXT,
+  STATIC_FUNCTION_TEXT,
+  USER_CODE_ALERT,
+  END_OF_FILE
+} from "./util/staticMapOutputText";
 
 class MapOutput extends React.Component {
   state = { functionIDs: [], orderedForcedFields: [] };
@@ -37,15 +50,8 @@ class MapOutput extends React.Component {
     return filtered;
   };
 
-  //license information located in license.js
-  apacheLicense = () => {
-    return license;
-  };
-
   //creates other dynamic metadata file information
   fileMetadataHeader = () => {
-    let headerText =
-      "//\n// **************************************************\n// Mapping file created with file(s)";
     let arrayContent = "";
     for (let i = 0; i < this.props.fileMeta.length; i++) {
       if (i < this.props.fileMeta.length - 1) {
@@ -68,17 +74,13 @@ class MapOutput extends React.Component {
       }
     }
 
-    arrayContent +=
-      "//\n// Mars Map Maker was created by  Josh Gilley and Robert Niggebrugge\n// of CIRDLES.org, with help from James Rundle,\n// under the guidance of Principal Investigator Dr. Jim Bowring\n// in coordination with geosamples.org.\n//\n//\n" +
-      this.apacheLicense() +
-      "//\n// **************************************************\n\n";
-    return headerText + arrayContent;
+    arrayContent += MMM_INFO + LICENSE + HEADER_DENOTER + "\n";
+    return HEADER_TEXT + arrayContent;
   };
 
   //creates each METADATA and METADATA_ADD functions
   forceEditFunction = () => {
     let id = 0;
-    let functID = "";
 
     //sortedPersistent are the METADATA and METADATA_ADD fields
     let sortedPersistent = this.props.persist;
@@ -87,6 +89,7 @@ class MapOutput extends React.Component {
     let sifted = this.filterSortedPersistent(sortedPersistent);
 
     this.setState({ orderedForcedFields: sifted });
+    let functID = "";
     for (let i = 0; i < sifted.length; i++) {
       functID =
         functID +
@@ -210,15 +213,6 @@ class MapOutput extends React.Component {
     }
     return letDateString;
   };
-
-  createMulitValueJoins() {
-    const keyValueString =
-      "const keyValueString = (scrippsValue, scrippsKey) => {\n  return scrippsKey + ' : ' + scrippsValue\n}\n\n";
-    const delimit =
-      "const delimit = (valueArray) => {\n  return valueArray.join(';')\n}\n\n";
-
-    return keyValueString + delimit;
-  }
 
   //this method loops through the array entries in the store multiple times to append to the string based on corresponding SesarTitles selected that
   createMapString() {
@@ -414,19 +408,9 @@ class MapOutput extends React.Component {
       "let logic = { " +
       "\n" +
       this.logicFunctionAppend() +
-      "  collection_start_date: scrippsDate,\n  collection_end_date: scrippsDate,\n  geological_age: keyValueString,\n  field_name: keyValueString,\n  description: keyValueString,\n  sample_comment: keyValueString,\n  size: keyValueString\n  }\n\n";
+      STATIC_FUNCTION_TEXT;
 
-    const combination = `let combinations = {
-  field_name: delimit,
-  description: delimit,
-  geological_age: delimit,
-  sample_comment: delimit,
-  size: delimit
-\}\n\n`;
-
-    const endOfFile = "return {map, logic, combinations}\n";
-
-    return logic + combination + endOfFile;
+    return logic + COMBINATION_TEXT + END_OF_FILE;
   }
 
   finalAppend = () => {
@@ -451,7 +435,7 @@ class MapOutput extends React.Component {
       "// Mapping file created by Mars Map Maker on" + currentDate + "\n";
     fileString = fileString + this.fileMetadataHeader();
     fileString = fileString + this.forceEditFunction();
-    fileString = fileString + this.createMulitValueJoins();
+    fileString = fileString + MULTIVALUE_FUNCTION_TEXT;
     fileString = fileString + this.createDateFormatString(dateDoubleCheck);
     fileString = fileString + this.createMapString();
     fileString = fileString + this.createLogicAndCombination();
@@ -463,9 +447,10 @@ class MapOutput extends React.Component {
       const fileOutput = new Blob([this.finalAppend()], {
         type: "text/javascript;charset=utf-8"
       });
-      saveAs(fileOutput, "test.js");
+      let name = findFirstValueBySesarTitle(this.props.ent, "user_code");
+      saveAs(fileOutput, name + "_Mapping.js");
     } else {
-      alert("Sesar Selection 'user_code' must be set before file output");
+      alert(USER_CODE_ALERT);
     }
   };
 

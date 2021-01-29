@@ -1,3 +1,4 @@
+// these are the sesar titles that accept multiple mappings to them
 export const MULTI_VALUE_TITLES = [
   "size",
   "description",
@@ -6,6 +7,14 @@ export const MULTI_VALUE_TITLES = [
   "field_name"
 ];
 
+// these are the sesar titles that allow a user to create a new attribute to map to sesar
+export const METADATA_ADD_SESAR_TITLES = [
+  "sample_type",
+  "elevation_unit",
+  "material"
+];
+
+// these are possible date formats
 export const DATE_FORMAT_OPTION = [
   { title: "Select Date Format" },
   { title: "DD/MM/YY or DD-MM-YY", value: "substring", type: "date" },

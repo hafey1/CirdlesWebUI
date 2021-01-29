@@ -24,26 +24,20 @@ class FileIn extends React.Component {
   constructor() {
     super();
     this.state = {
-      numberOfEmptyCards: 0,
       toggleValues: [],
       fieldNames: [],
       fieldValues: [],
       num: -1,
-      readyToInit: false,
       totalFileSize: 0,
       includesJsFile: false,
       isJsFile: false,
       jsFile: undefined,
       files: undefined,
-      csvfile: undefined,
-      csvfile2: undefined,
-      csvfile3: undefined,
       loaded: false,
       forceEditTitles: [],
       forceEditValues: [],
       dualFileLoadInArr: [],
-      loadedInFirstFile: false,
-      validNumOfFiles: true
+      validNumOfFiles: false
     };
     this.updateData = this.updateData.bind(this);
   }
@@ -80,22 +74,6 @@ class FileIn extends React.Component {
 
     console.log(event.target.files);
     this.setState({ files: arr });
-    if (event.target.files[1] === undefined) {
-      this.setState({
-        csvfile: event.target.files[0]
-      });
-    } else if (event.target.files[2] === undefined) {
-      this.setState({
-        csvfile: event.target.files[0],
-        csvfile2: event.target.files[1]
-      });
-    } else {
-      this.setState({
-        csvfile: event.target.files[0],
-        csvfile2: event.target.files[1],
-        csvfile3: event.target.files[2]
-      });
-    }
   };
 
   refreshFileIn = () => {

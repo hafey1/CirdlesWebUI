@@ -5,6 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 import React from "react";
+import EditIcon from "@material-ui/icons/Edit";
 import "../../styles/marsMapMaker.scss";
 import classNames from "classnames";
 import { connect } from "react-redux";
@@ -28,13 +29,8 @@ export class FieldCard extends React.Component {
   state = {
     sesarChosen: "",
     dropDownChosen: false,
-    resetDropDown: false,
-    isDate: false,
-    isMeasurement: false,
     areEditing: true,
     updatedValue: this.props.fieldValue,
-    type: this.props.fieldType,
-    key: this.props.key,
     isGreen: this.props.hasContent,
     sesarOptions: options,
     formattedString: "",
@@ -48,20 +44,15 @@ export class FieldCard extends React.Component {
     field_container2: !this.state.isGreen
   });
 
-  // helper function to display a dropdown IFF it is also green / checked!
   filterDrop = () => {
     return (
       <DropDown
         shouldAppear={this.state.isGreen}
-        addedNew={this.props.addedNewField}
         refresh={this.refreshFieldCard}
         callback={this.fileCallback}
         title={this.props.fieldTitle}
         id={this.props.id}
         value={this.props.fieldValue}
-        fieldType={this.state.type}
-        multiList={MVT}
-        one2one={getOne2One(this.state.sesarOptions)}
         list={this.state.sesarOptions}
       />
     );
@@ -1007,15 +998,13 @@ const mapStateToProps = state => {
   return {
     ent: state.marsMapMaker.entries,
     persist: state.marsMapMaker.persistingMetaData,
-    useOnce: state.marsMapMaker.useOnce,
-    pairArr: state.marsMapMaker.sizeOuterArray,
     hasInit: state.marsMapMaker.hasInit,
     toggleIndex: state.marsMapMaker.toggleIndex,
     totalMulti: state.marsMapMaker.totalMultiCount,
     toggleArray: state.marsMapMaker.toggleArr
   };
 };
-// hello robert
+
 export default connect(
   mapStateToProps,
   { forceEdit, removeContent, totalMultiValueCount, persistingDataConcat }

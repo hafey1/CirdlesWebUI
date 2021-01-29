@@ -208,14 +208,10 @@ const CardList = props => {
       if (toggleIndex === 1) {
         return (
           <FieldCard
-            multiCount={props.multiCount}
             jsFileValues={props.jsFileValues}
-            toggleInUse={props.usingToggle}
-            key={newKey}
             hiding={hide}
             fieldTitle={field}
             id={newKey}
-            fieldType={typeField(newKey, lastMetaDataAdd)}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
             hasContent={
               props.fieldVal[newKey] !== "" || valueIsInJsMappingFile(field)
@@ -225,14 +221,10 @@ const CardList = props => {
       } else
         return (
           <FieldCard
-            multiCount={props.multiCount}
             jsFileValues={props.jsFileValues}
-            toggleInUse={props.usingToggle}
-            key={newKey}
             hiding={hide}
             fieldTitle={Object.keys(props.toggleArr[toggleIndex])[newKey]}
             id={newKey}
-            fieldType={typeField(newKey, lastMetaDataAdd)}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
             hasContent={
               props.fieldVal[newKey] !== "" ||

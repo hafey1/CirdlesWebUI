@@ -23,22 +23,26 @@ import {
   setForcedOldToNew
 } from "../../actions/marsMapMaker";
 
-import { dropdownSet, isSesarTitlePresent } from "./util/helper.js";
-import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
+import { dropdownSet, isMetaDataAddCard } from "./util/helper.js";
+
+import {
+  userCodeDropdownOption,
+  metaDataAddDropdownOption,
+  multiValueDropdownOption,
+  one2OneDropdownOption,
+  noneDropdownOption
+} from "./util/dropdownOptionNames.jsx";
+
+import {
+  MULTI_VALUE_TITLES as MVT,
+  METADATA_ADD_SESAR_TITLES as MAST
+} from "./util/constants";
 //////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 
 export class DropDown extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      list: this.props.list,
-      value: "select",
-      selectedValue: "",
-      sesarMulti: this.props.multiList,
-      sesarOneToOne: this.props.one2one,
-      alreadyInArray: []
-    };
   }
 
   // helper function that removes delimiters from date entry and formats the content into a sesar accepted string
@@ -314,10 +318,6 @@ export class DropDown extends React.Component {
     this.props.dropdownUpdate(obj);
 
     return update;
-
-    // next step is to store this sesar format date into the redux store for the correct field upon choosing one of the date options
-    // also, there should be some robust error handling that checks the value to make sure it even qualifies as a date
-    // also to think further on that, check if the users value matches their format selection, if not send an error
   };
 
   // checks if a date has been selected in the store
@@ -338,7 +338,6 @@ export class DropDown extends React.Component {
   // Handled differently based on if it is a one2one, multivalue, or a date selection
   updateValueHelper = (newValue, isAutomatic) => {
     let breakOrFormat;
-
     if (this.props.dateFormat != null)
       breakOrFormat = this.props.dateFormat.split(" ");
 
@@ -427,18 +426,11 @@ export class DropDown extends React.Component {
     };
 
     if (
-      (this.props.ent[this.props.id].header !== "<METADATA_ADD>" &&
-        this.props.ent[this.props.id].header !== "0<METADATA_ADD>" &&
-        this.props.ent[this.props.id].header !== "1<METADATA_ADD>" &&
-        this.props.ent[this.props.id].header !== "2<METADATA_ADD>" &&
-        this.props.ent[this.props.id].header !== "3<METADATA_ADD>" &&
-        this.props.ent[this.props.id].header !== "4<METADATA_ADD>") ||
+      this.props.ent[this.props.id].header !== "<METADATA_ADD>" ||
       newValue !== this.props.ent[this.props.id].sesarTitle
     ) {
       this.props.dropdownUpdate(obj);
     }
-
-    //this.updateMulti()
 
     if (
       this.props.value !== undefined &&
@@ -448,7 +440,7 @@ export class DropDown extends React.Component {
       this.props.callback(this.props.value, newValue);
       return;
     }
-    //this.props.value.toLowerCase().replace(/[ -/*_#]/g, '')
+
     if (this.props.ent[this.props.id].header === "<METADATA>") {
       this.props.callback(this.props.ent[this.props.id].value, newValue);
       return;
@@ -469,15 +461,6 @@ export class DropDown extends React.Component {
     this.updateValueHelper(newValue, true);
   };
 
-  entWithContent = entries => {
-    let index = -1;
-    for (let i = 0; i < entries.length; i++) {
-      if (typeof entries === "string") break;
-      if (entries[i].value !== "") index = i;
-    }
-    return index;
-  };
-
   // function that searches the ent array in the store for any index with content
   entEnd = entries => {
     let index = -1;
@@ -486,15 +469,6 @@ export class DropDown extends React.Component {
       if (entries[i].value !== "") index = i;
     }
     return entries.length - 1;
-  };
-
-  // counts the number of times size is selected
-  sizeArrayLoop = () => {
-    let count = 0;
-    for (let i = 0; i < this.props.ent.length; i++) {
-      if (this.props.ent[i].sesarTitle === "size") count += 1;
-    }
-    return count;
   };
 
   // when the component mounts, run the toggle function once automatically so if JS mapping file has a selected date
@@ -528,29 +502,6 @@ export class DropDown extends React.Component {
     }
   };
 
-  // checks the store for any entrie that already has a sesarSelection, and returns true/that value
-  hasSesarValue = () => {
-    let arr = [false, ""];
-    if (this.props.hasInit && this.props.ent[this.props.id].sesarTitle !== "") {
-      arr = [true, this.props.ent[this.props.id].sesarTitle];
-    }
-    return arr;
-  };
-
-  //checks to see if a metaDataAdd sesar title has already been chosen in another dropdown
-  checkForMetaDataAdd = title => {
-    let valid = false;
-    let metaAddSesarTitles = ["sample_type", "elevation_unit", "material"];
-    let indexFound = metaAddSesarTitles.indexOf(title);
-    if (indexFound > -1) {
-      for (let i = 0; i < this.props.ent.length; i++) {
-        if (metaAddSesarTitles[indexFound] === this.props.ent[i].sesarTitle)
-          valid = true;
-      }
-    }
-    return valid;
-  };
-
   //forces the first fieldCard dropdown to only show user_code
   createUserCodeOption = title => {
     let allowUserCode = false;
@@ -562,25 +513,17 @@ export class DropDown extends React.Component {
     return allowUserCode;
   };
 
-  checkStoreForTitle = fTitle => {
+  checkStoreForTitle = (fTitle, id) => {
     let valid = false;
     for (let i = 0; i < this.props.ent.length; i++) {
-      if (this.props.ent[i].sesarTitle === fTitle) valid = true;
+      if (this.props.ent[i].sesarTitle === fTitle && id !== i) valid = true;
     }
     return valid;
   };
 
-  alreadyInDropdown = (arr, value) => {
-    let array = arr;
-    array.push(value);
-    return array;
-  };
-
   render() {
     //the list of one to one values
-    const sesarOne2One = this.state.sesarOneToOne;
     //for tracking the very first instance of filter being called
-    let num = -1;
 
     let firstLoad = dropdownSet(
       this.props.hasInit,
@@ -597,11 +540,11 @@ export class DropDown extends React.Component {
     // automatically updates the right side content if a js file is loaded in, no dropdown click necessary
     this.toggleNotInUse();
 
-    // helper function to list "options" based on the 'type' of field (numbers or letters...)
+    // filters default values and possible options for dropdown
     let filter = f => {
-      num += 1;
-      //if the very first call of filter return firstLoad, which is either "Sesar Selection" or SesarTitle from the store (from JS file)
-      if (num === 0) {
+      let filterResult;
+      //returns default value Sesar Selection or loaded in value from JS file
+      if (f.id === 1 && this.props.hasInit) {
         return (
           <option key={f.title} value={firstLoad} disabled hidden>
             {firstLoad}
@@ -609,90 +552,47 @@ export class DropDown extends React.Component {
         );
       }
 
-      if (num === 1) {
-        return (
-          <option key={f.title} value={"none"}>
-            {"none"}
-          </option>
-        );
-      }
-      let metaAddSesarTitles = ["sample_type", "elevation_unit", "material"];
-      //if an added card only show the exclusive added sesartitle fields
-      if (this.props.hasInit && this.props.fieldType === "added_card") {
+      //this block handles first FieldCard to render only none and user_code
+      else if (this.props.id === 0) {
         if (
-          this.props.id !== 0 &&
-          this.checkForMetaDataAdd(f.title) === false &&
-          metaAddSesarTitles.includes(f.title)
+          this.createUserCodeOption(f.title) &&
+          !this.checkStoreForTitle(f.title, 0)
         ) {
-          return (
-            <option key={f.title} value={f.title}>
-              {f.title}
-            </option>
-          );
-        } else if (this.createUserCodeOption(f.title)) {
-          return (
-            <option key={f.title} value={f.title}>
-              {f.title}
-            </option>
-          );
-        } else if (
-          this.hasSesarValue()[0] === true &&
-          this.hasSesarValue()[1] === f.title &&
-          metaAddSesarTitles.includes(f.title)
+          filterResult = userCodeDropdownOption(f.title);
+        } else if (f.format === "none") {
+          filterResult = noneDropdownOption();
+        } else filterResult = null;
+      }
+      //this block handles FieldCards 2,3,4 as metadata add cards to render only
+      //  values in METADATA_ADD_SESAR_TITLES in constants.js
+      else if (isMetaDataAddCard(this.props.id)) {
+        if (
+          MAST.includes(f.title) &&
+          !this.checkStoreForTitle(f.title, this.props.id)
         ) {
-          return null;
-        } else return;
+          filterResult = metaDataAddDropdownOption(f.title);
+        } else if (f.format === "none") {
+          filterResult = noneDropdownOption();
+        } else filterResult = null;
       }
-
-      if (
-        num > 0 &&
-        this.props.hasInit &&
-        this.hasSesarValue()[0] === true &&
-        this.hasSesarValue()[1] === f.title
-      ) {
-        return (
-          <option key={f.title} value={this.hasSesarValue()[1]} disabled hidden>
-            {this.hasSesarValue()[1]}
-          </option>
-        );
+      //this block handles options that have the multi value format
+      else if (f.format === "multivalue") {
+        filterResult = multiValueDropdownOption(f.title);
       }
-
-      //always gives multiValue
-      if (this.props.hasInit && this.state.sesarMulti.includes(f.title)) {
-        let ital = f.title.italics();
-        return (
-          <option style={{ fontStyle: "italic" }} key={f.title} value={f.title}>
-            {f.title}
-          </option>
-        );
-      }
-      //gives unused One to One values
-      if (
-        !this.props.useOnce.includes(f.title) &&
-        !isSesarTitlePresent(f.title, this.props.ent)
-      ) {
-        return (
-          <option key={f.title} value={f.title}>
-            {f.title}
-          </option>
-        );
-      }
-      //this case should be impossible, need time to test
+      //this block handles options that have the one2one format
       else if (
-        this.props.useOnce.includes(f.title) &&
-        !sesarOne2One.includes(f.title)
+        f.format === "one2one" &&
+        !this.checkStoreForTitle(f.title, this.props.id)
       ) {
-        return (
-          <option key={f.title} value={f.title}>
-            {f.title}
-          </option>
-        );
+        filterResult = one2OneDropdownOption(f.title);
       }
-      //this case should be unreachable, need time to test
-      else return null;
-    };
+      //this block creates a none option for every field card
+      else if (f.format === "none") {
+        filterResult = noneDropdownOption();
+      } else filterResult = null;
 
-    // creates the dropdown, uses filter() to specify which items are included in dropdown
+      return filterResult;
+    };
 
     return (
       <div className="dropDown">
@@ -716,19 +616,13 @@ export class DropDown extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    multi: state.marsMapMaker.multiValues,
     ent: state.marsMapMaker.entries,
-    useOnce: state.marsMapMaker.useOnce,
     dateFormat: state.marsMapMaker.chosenDateFormat,
     hasChosen: state.marsMapMaker.hasChosenDateFormat,
     dropDownChosen: state.marsMapMaker.hasChosenDropdownOption,
-    num: state.marsMapMaker.numOfOneToOne,
     hasChosenCentury: state.marsMapMaker.centuryChosen,
     century: state.marsMapMaker.century,
-    multiValues: state.marsMapMaker.multiValues,
-    sizeArray: state.marsMapMaker.sizeArray,
     hasInit: state.marsMapMaker.hasInit,
-    pairArr: state.marsMapMaker.sizeOuterArray,
     usingToggle: state.marsMapMaker.toggleInUse,
     totalMulti: state.marsMapMaker.totalMultiCount
   };
