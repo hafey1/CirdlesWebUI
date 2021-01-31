@@ -456,14 +456,19 @@ class MapOutput extends React.Component {
 
   render() {
     return (
-      <div className="marsOutput">
-        <img
-          className="mars--icon"
-          src={mars}
-          alt="marsIcon"
-          onClick={() => this.createMapFile()}
-        ></img>
-        <h4 style={{ padding: "0%", margin: "0%" }}>Click to Map</h4>
+      <div
+        className="text-center order-md-3 col-md-3"
+        style={{ padding: "20px" }}
+      >
+        <div className="marsOutput">
+          <img
+            className="mars--icon"
+            src={mars}
+            alt="marsIcon"
+            onClick={() => this.createMapFile()}
+          ></img>
+          <h4 style={{ padding: "0%", margin: "0%" }}>Click to Map</h4>
+        </div>
       </div>
     );
   }

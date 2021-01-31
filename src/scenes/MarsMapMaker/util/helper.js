@@ -16,25 +16,6 @@ export const lengthCheckedValue = fieldVal => {
   return value;
 };
 
-//used in FieldCard
-export const getOne2One = optionArray => {
-  let arr = [];
-  for (let i = 0; i < optionArray.length; i++) {
-    if (optionArray[i].format === "one2one") arr.push(optionArray[i].title);
-  }
-  return arr;
-};
-
-export const typeField = (keyNum, totalMetaDataAdd) => {
-  let type;
-
-  if (keyNum > totalMetaDataAdd) type = "both";
-  else {
-    type = "added_card";
-  }
-  return type;
-};
-
 export const isSesarTitlePresent = (title, ent) => {
   let isPresent = false;
   for (let i = 0; i < ent.length; i++) {

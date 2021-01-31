@@ -8,10 +8,13 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 // COMPONENTS
-import MapOutput from "./MapOutput";
-import DateDropdown from "./DateDropdown";
-import CenturyDropDown from "./CenturyDropDown";
+
 import FieldCard from "./FieldCard";
+
+import HeaderFieldCard from "./HeaderFieldCard";
+import MapOutput from "./MapOutput";
+import SampleDisplay from "./SampleDisplay";
+import DateFormat from "./DateFormat";
 // CSS & Style
 import "../../styles/marsMapMaker.scss";
 
@@ -19,12 +22,8 @@ import "../../styles/marsMapMaker.scss";
 import { firstState, toggleInUse } from "../../actions/marsMapMaker";
 
 // helper functions && constants
-import { typeField } from "./util/helper";
-import {
-  DATE_FORMAT_OPTION,
-  MULTI_VALUE_TITLES as MVT
-} from "./util/constants";
-import { getFormAsyncErrors } from "redux-form";
+import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
+
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
@@ -376,22 +375,6 @@ const CardList = props => {
     return final;
   };
 
-  // checks the redux store to see if any of the fieldCards have selected a date
-  const dateSelected = () => {
-    let found = false;
-    if (props.hasInit) {
-      for (let i = 0; i < props.ent.length; i++) {
-        if (
-          props.ent[i].sesarTitle === "collection_start_date" ||
-          props.ent[i].sesarTitle === "collection_end_date"
-        ) {
-          found = true;
-        }
-      }
-      return found;
-    }
-  };
-
   return (
     /////////////////////////
     // TOOLBAR /////////////
@@ -402,90 +385,26 @@ const CardList = props => {
     <div>
       <div className="label">
         <div className="container-fluid">
-          <div className="row" style={{ backgroundColor: "rgb(207, 216, 220)"}}>
-            <div
-              className="text-center order-md-3 col-md-3"
-              style={{ padding: "20px" }}
-            >
-              <MapOutput />
-            </div>
-            <div className="col-sm-4 col-md-3 order-md-1 align-self-center">
-              <div
-                className="card-transparent border-0 mx-auto text-center"
-                style={{ maxWidth: "300px" }}
-              >
-                <div className="card-body">
-                  <div className="card-title border-0">
-                    Change Displayed Sample
-                  </div>
-                  <div className="card-text">
-                    Current Sample Row: {toggleIndex}
-                  </div>
-                  <div className="btn-group-vertical text-center btn-margin">
-                    <button
-                      className="btn bg-white btn-outline-dark"
-                      onClick={() => refreshButton()}
-                    >
-                      Refresh
-                    </button>
-                    <div className="btn-group">
-                      <button
-                        className="btn bg-white btn-outline-dark"
-                        onClick={() => leftArrowToggle()}
-                      >
-                        <i class="fa fa-arrow-up"></i>
-                      </button>
-                      <button
-                        className="btn bg-white btn-outline-dark"
-                        onClick={() => rightArrowToggle()}
-                      >
-                        <i class="fa fa-arrow-down"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div
+            className="row"
+            style={{ backgroundColor: "rgb(207, 216, 220)" }}
+          >
+            <MapOutput />
+            <SampleDisplay
+              toggleInd={toggleIndex}
+              reset={() => refreshButton()}
+              up={() => leftArrowToggle()}
+              down={() => rightArrowToggle()}
+            />
 
-            <div className="col-sm-4 col-md-3 order-md-3 align-self-center">
-              <div
-                className="card-transparent border-0 mx-auto text-center"
-                style={{ maxWidth: "200px" }}
-              >
-                <div className="card-body">
-                  {props.hasDateFormat === false || dateSelected() === false ? (
-                    <div>Select Date Format</div>
-                  ) : (
-                    <div
-                      style={{
-                        visibility: "hidden",
-                        width: "100%",
-                        maxWidth: "400px",
-                        textAlign: "center"
-                      }}
-                    >
-                      Select Date Format
-                    </div>
-                  )}
-
-                  {props.hasDateFormat === false || dateSelected() === false ? (
-                    <div
-                      className="toolbar__date__format"
-                      style={{ borderColor: "red" }}
-                    >
-                      <DateDropdown list={DATE_FORMAT_OPTION} />
-                      <CenturyDropDown />
-                    </div>
-                  ) : (
-                    <div className="toolbar__date__format">
-                      <DateDropdown list={DATE_FORMAT_OPTION} />
-                      <CenturyDropDown />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
+            <DateFormat />
+            <MenuButtons
+              hideField={() => setHide()}
+              isHidden={hide}
+              hideText={hideOrShow()}
+              mapPreview={() => props.callback()}
+              popUp={previewPopUp()}
+            />
             <div className="col-sm-4 col-md-3 order-md-4 align-self-center text-center">
               <div
                 className="card-transparent border-0 mx-auto text-center"
@@ -521,49 +440,7 @@ const CardList = props => {
               </div>
             </div>
           </div>
-
-          <div className="description">
-            <object className="fieldWidget">
-              <div
-                style={{ fontFamily: "Lucida Grande" }}
-                className="description__checkbox"
-              >
-                Use
-              </div>
-              <div
-                style={{ fontFamily: "Lucida Grande" }}
-                dir="rtl"
-                className="description__title"
-              >
-                {"Field"}
-              </div>
-              <div
-                className="description__value"
-                style={{ fontFamily: "Lucida Grande"}}
-              >
-                {" "}
-                {": Content"}
-              </div>
-            </object>
-            <object
-              style={{
-                fontFamily: "Lucida Grande",
-                display: "inline-block",
-              }}
-            >
-              <div class="maps__to">
-                Maps To
-              </div>
-            </object>
-            <object className="descriptionKeyMapped">
-              <div
-                style={{ fontFamily: "Lucida Grande", whiteSpace: "nowrap" }}
-                className="description__mapped__content"
-              >
-                {"Content : [Field]"}
-              </div>
-            </object>
-          </div>
+          <HeaderFieldCard />
         </div>
 
         <div class="container-fluid">{fields}</div>
