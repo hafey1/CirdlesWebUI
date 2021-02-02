@@ -5,8 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 import React from "react";
-import EditIcon from "@material-ui/icons/Edit";
-import "../../styles/marsMapMaker.scss";
+import "../../../styles/marsMapMaker.scss";
 import classNames from "classnames";
 import { connect } from "react-redux";
 import CheckboxExample from "./CheckBox";
@@ -16,14 +15,10 @@ import {
   totalMultiValueCount,
   forceEdit,
   persistingDataConcat
-} from "../../actions/marsMapMaker";
-import {
-  isMetaDataAddCard,
-  lengthCheckedValue,
-  getOne2One
-} from "./util/helper";
-import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
-const { options } = require("./util/sesarOptions");
+} from "../../../actions/marsMapMaker";
+import { isMetaDataAddCard, lengthCheckedValue } from "../util/helper";
+import { MULTI_VALUE_TITLES as MVT } from "../util/constants";
+const { options } = require("../util/sesarOptions");
 
 export class FieldCard extends React.Component {
   state = {
@@ -451,10 +446,7 @@ export class FieldCard extends React.Component {
                         visibility: "hidden"
                       }}
                     >
-                      <button
-                        style={{ float: "right" }}
-                        class="ui icon button"
-                      >
+                      <button style={{ float: "right" }} class="ui icon button">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
@@ -667,10 +659,7 @@ export class FieldCard extends React.Component {
                       visibility: "hidden"
                     }}
                   >
-                    <button
-                      style={{ float: "right" }}
-                      class="ui icon button"
-                    >
+                    <button style={{ float: "right" }} class="ui icon button">
                       <i class="fa fa-edit"></i>
                     </button>
                   </div>
@@ -792,10 +781,7 @@ export class FieldCard extends React.Component {
                         visibility: "hidden"
                       }}
                     >
-                      <button
-                        style={{ float: "right" }}
-                        class="ui icon button"
-                      >
+                      <button style={{ float: "right" }} class="ui icon button">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
@@ -922,10 +908,7 @@ export class FieldCard extends React.Component {
                         visibility: "hidden"
                       }}
                     >
-                      <button
-                        style={{ float: "right" }}
-                        class="ui icon button"
-                      >
+                      <button style={{ float: "right" }} class="ui icon button">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
@@ -940,7 +923,7 @@ export class FieldCard extends React.Component {
                       display: "inline"
                     }}
                   >
-                    <div style={{ float: "right"}}>
+                    <div style={{ float: "right" }}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.currentTotal()
                         : ""}
@@ -977,14 +960,13 @@ export class FieldCard extends React.Component {
             <object className="descriptionMapped" align="right">
               <div className="description__mapped__content"> </div>
               <div
-                    style={{
-                      paddingTop: "10px",
-                      paddingLeft: "62px",
-                      float: "right",
-                      display: "inline"
-                    }}
-                  >
-              </div>
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "62px",
+                  float: "right",
+                  display: "inline"
+                }}
+              ></div>
               {this.filterDrop()}
             </object>
           </div>

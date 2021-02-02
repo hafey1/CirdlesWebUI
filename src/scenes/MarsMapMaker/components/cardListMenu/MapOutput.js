@@ -7,14 +7,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import saveAs from "file-saver";
-import { formatDate } from "../../actions/marsMapMaker";
+import { formatDate } from "../../../../actions/marsMapMaker";
 
-import mars from "../../img/marsMapMakerImg/planet.png";
+import mars from "../../../../img/marsMapMakerImg/planet.png";
 import {
   isSesarTitlePresent,
   findFirstValueBySesarTitle
-} from "./util/helper.js";
-import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
+} from "../../util/helper.js";
+import { MULTI_VALUE_TITLES as MVT } from "../../util/constants";
 import {
   LICENSE,
   HEADER_TEXT,
@@ -25,7 +25,7 @@ import {
   STATIC_FUNCTION_TEXT,
   USER_CODE_ALERT,
   END_OF_FILE
-} from "./util/staticMapOutputText";
+} from "../../util/staticMapOutputText";
 
 class MapOutput extends React.Component {
   state = { functionIDs: [], orderedForcedFields: [] };

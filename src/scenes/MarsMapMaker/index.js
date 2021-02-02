@@ -9,10 +9,9 @@ import React from "react";
 
 import classNames from "classnames";
 // COMPONENTS
-import CardList from "./CardList";
-import FileIn from "./FileIn";
-import Dialog from "./Dialog";
-import Loading from "./Loading";
+import CardList from "./components/CardList";
+import FileIn from "./components/FileIn";
+import Dialog from "./components/Dialog";
 // REDUX
 import { connect } from "react-redux";
 import { initToggle } from "../../actions/marsMapMaker";
@@ -149,7 +148,6 @@ export class App extends React.Component {
   // Displays "Preview Pop Up function from cardList, when the Preview Map button is clicked"
   isOpenCallback = data => {
     let currentComponent = this;
-
     currentComponent.setState({
       isOpened: true,
       mapPreview: data.join("\n")
@@ -199,9 +197,7 @@ export class App extends React.Component {
             forceTitles={this.state.forceTitles}
             forceValues={this.state.forceValues}
           />
-        ) : (
-          <Loading />
-        )}
+        ) : null}
       </div>
     );
   }

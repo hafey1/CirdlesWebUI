@@ -29,12 +29,12 @@ const initialState = {
   toggleArr: [],
   isOpen: false,
   hasInit: false,
+  hide: false,
   jsFile: undefined,
   entries: [],
   useOnce: [],
   centuryChosen: false,
   century: "",
-  sesarOne2One: [],
   numOfOneToOne: 0,
   chosenDateFormat: null,
   hasChosenDateFormat: false,
@@ -46,6 +46,9 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case "HIDE_FIELD":
+      return { ...state, hide: !state.hide };
+
     case "STORE_FILE_METADATA":
       return {
         ...state,
@@ -176,57 +179,12 @@ export default function(state = initialState, action) {
         hasTwoYs: action.payload.hasTwoYs
       };
 
-    case "ADD_ONE_2_ONE":
-      return {
-        ...state,
-        sesarOne2One: state.sesarOne2One.concat(action.payload.title),
-        numOfOneToOne: action.payload.size
-      };
-
     case "CENTURY":
       return {
         ...state,
         hasTwoYs: true,
         centuryChosen: true,
         century: action.payload.chosenCentury
-      };
-
-    case "MULTIVALUE_ADD":
-      return {
-        ...state,
-        multiValues: [
-          {
-            id: "sample_comment",
-            concatValues: []
-          },
-          {
-            id: "description",
-            concatValues: []
-          },
-          {
-            id: "field_name",
-            concatValues: []
-          }
-        ]
-      };
-
-    case "MULTIVALUE_ADD_FINISH":
-      let indy = action.payload.index;
-
-      return {
-        ...state,
-        multiValues: [
-          ...state.multiValues.slice(0, indy),
-          {
-            id: action.payload.ident,
-            concatValues: [
-              ...state.multiValues[indy].concatValues.concat(
-                action.payload.keyString
-              )
-            ]
-          },
-          ...state.multiValues.slice(indy + 1)
-        ]
       };
 
     case "REMOVE_SELECTION":

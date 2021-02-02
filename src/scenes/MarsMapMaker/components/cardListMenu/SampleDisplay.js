@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/marsMapMaker.scss";
+import "../../../../styles/marsMapMaker.scss";
 
 const SampleDisplay = props => {
   return (

@@ -8,7 +8,7 @@ import React, { Component } from "react";
 
 // CSS & Styling
 import { Checkbox } from "semantic-ui-react";
-import "../../styles/marsMapMaker.scss";
+import "../../../styles/marsMapMaker.scss";
 
 /////////////////////////////////////////////////
 ////////////////////////////////////////////////

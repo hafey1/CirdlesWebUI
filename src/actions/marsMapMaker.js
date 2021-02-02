@@ -23,20 +23,6 @@ export const formatDate = chosenObj => {
   };
 };
 
-export const multiValueCreate = keyPairObj => {
-  return {
-    type: "MULTIVALUE_ADD",
-    payload: keyPairObj
-  };
-};
-
-export const one2one = obj => {
-  return {
-    type: "ADD_ONE_2_ONE",
-    payload: obj
-  };
-};
-
 export const century = obj => {
   return {
     type: "CENTURY",
@@ -47,13 +33,6 @@ export const century = obj => {
 export const removeContent = obj => {
   return {
     type: "REMOVE_SELECTION",
-    payload: obj
-  };
-};
-
-export const multiValueCreateFinish = obj => {
-  return {
-    type: "MULTIVALUE_ADD_FINISH",
     payload: obj
   };
 };
@@ -180,5 +159,11 @@ export const setFileMetadata = obj => {
   return {
     type: "STORE_FILE_METADATA",
     payload: obj
+  };
+};
+
+export const hideField = () => {
+  return {
+    type: "HIDE_FIELD"
   };
 };

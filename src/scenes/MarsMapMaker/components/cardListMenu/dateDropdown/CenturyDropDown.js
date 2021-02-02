@@ -11,8 +11,8 @@ import { connect } from "react-redux";
 import "semantic-ui-react";
 
 // REDUX
-import { century } from "../../actions/marsMapMaker";
-import { isSesarTitlePresent } from "./util/helper";
+import { century } from "../../../../../actions/marsMapMaker";
+import { isSesarTitlePresent } from "../../../util/helper";
 ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 

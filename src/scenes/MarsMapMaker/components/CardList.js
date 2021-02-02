@@ -11,18 +11,17 @@ import { connect } from "react-redux";
 
 import FieldCard from "./FieldCard";
 
-import HeaderFieldCard from "./HeaderFieldCard";
-import MapOutput from "./MapOutput";
-import SampleDisplay from "./SampleDisplay";
-import DateFormat from "./DateFormat";
+import HeaderFieldCard from "./cardListMenu/HeaderFieldCard";
+
+import CardListMenu from "./cardListMenu/CardListMenu";
 // CSS & Style
-import "../../styles/marsMapMaker.scss";
+import "../../../styles/marsMapMaker.scss";
 
 // REDUX
-import { firstState, toggleInUse } from "../../actions/marsMapMaker";
+import { firstState, toggleInUse } from "../../../actions/marsMapMaker";
 
 // helper functions && constants
-import { MULTI_VALUE_TITLES as MVT } from "./util/constants";
+import { MULTI_VALUE_TITLES as MVT } from "../util/constants";
 
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -39,9 +38,6 @@ const CardList = props => {
 
   const [fieldValState, addAFieldCardVal] = useState(props.fieldVal);
 
-  // used to hide 'non-green / non-checked fields in the UI (hides field and checks)
-  const [hide, setHide] = useState(false);
-
   // used to toggle between the tuples of the csv loaded in
   const [toggleIndex, addToToggleIndex] = useState(1);
 
@@ -53,7 +49,7 @@ const CardList = props => {
   // hasContent: for initial filtering of checked cards
   // goes to the next row of content in the csv
 
-  const rightArrowToggle = () => {
+  const downArrowToggle = () => {
     if (toggleIndex < props.tValLength) {
       addToToggleIndex((toggleIndex + 1) % props.tValLength);
       let obj = {
@@ -64,7 +60,7 @@ const CardList = props => {
   };
 
   // goes to the previous row of content in the csv
-  const leftArrowToggle = () => {
+  const upArrowToggle = () => {
     if (toggleIndex > 1) {
       addToToggleIndex((toggleIndex - 1) % props.toggleArr.length);
       let obj = {
@@ -208,7 +204,7 @@ const CardList = props => {
         return (
           <FieldCard
             jsFileValues={props.jsFileValues}
-            hiding={hide}
+            hiding={props.hide}
             fieldTitle={field}
             id={newKey}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
@@ -221,7 +217,7 @@ const CardList = props => {
         return (
           <FieldCard
             jsFileValues={props.jsFileValues}
-            hiding={hide}
+            hiding={props.hide}
             fieldTitle={Object.keys(props.toggleArr[toggleIndex])[newKey]}
             id={newKey}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
@@ -244,16 +240,6 @@ const CardList = props => {
     };
     props.firstState(initObj);
   }, []);
-
-  // shows contents of the store if you click the "help" button in the console (FOR NOW)
-  const checkStore = () => {
-    console.log(props.fileMeta);
-    console.log(props.persist);
-    console.log(props.multiCount);
-    console.log(props.ent);
-    console.log(props.toggleArr);
-    valueIsInJsMappingFile();
-  };
 
   // This helper function fills the multiValueArray where each index represents the "field_name", "description", or "sample_comment" selections
   const multiValueArrHelper = (options, index, multiArr) => {
@@ -286,6 +272,7 @@ const CardList = props => {
 
   ////////// Shows (Map Preview / Size Selection Preview / Multi-Value Selections )
   const previewPopUp = () => {
+    console.log("you rang");
     ////////////////
     // POP-UP LOCAL VARIABLES
     let multiValueArr = [[], [], [], [], []];
@@ -367,7 +354,7 @@ const CardList = props => {
 
   const hideOrShow = () => {
     let final = "";
-    if (hide === true) {
+    if (props.hide) {
       final = "Show Unused Fields";
     } else {
       final = "Hide Unused Fields";
@@ -385,61 +372,16 @@ const CardList = props => {
     <div>
       <div className="label">
         <div className="container-fluid">
-          <div
-            className="row"
-            style={{ backgroundColor: "rgb(207, 216, 220)" }}
-          >
-            <MapOutput />
-            <SampleDisplay
-              toggleInd={toggleIndex}
-              reset={() => refreshButton()}
-              up={() => leftArrowToggle()}
-              down={() => rightArrowToggle()}
-            />
+          <CardListMenu
+            toggleIndex={toggleIndex}
+            refreshButton={() => refreshButton()}
+            upArrowToggle={() => upArrowToggle()}
+            downArrowToggle={() => downArrowToggle()}
+            hideOrShow={() => hideOrShow()}
+            callbacks={() => props.callback(previewPopUp())}
+            previewPop={() => previewPopUp()}
+          />
 
-            <DateFormat />
-            <MenuButtons
-              hideField={() => setHide()}
-              isHidden={hide}
-              hideText={hideOrShow()}
-              mapPreview={() => props.callback()}
-              popUp={previewPopUp()}
-            />
-            <div className="col-sm-4 col-md-3 order-md-4 align-self-center text-center">
-              <div
-                className="card-transparent border-0 mx-auto text-center"
-                style={{ maxWidth: "175px" }}
-              >
-                <div className="card-body">
-                  <div class="btn-group-vertical">
-                    <button
-                      className="btn bg-white btn-outline-dark"
-                      onClick={() => setHide(!hide)}
-                    >
-                      {" "}
-                      {hideOrShow()}{" "}
-                    </button>
-                    <button
-                      className="btn bg-white btn-outline-dark"
-                      onClick={() => {
-                        props.callback(previewPopUp());
-                      }}
-                    >
-                      {" "}
-                      Preview Map{" "}
-                    </button>
-                    <button
-                      className="btn bg-white btn-outline-dark"
-                      onClick={checkStore}
-                    >
-                      {" "}
-                      Help{" "}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <HeaderFieldCard />
         </div>
 
@@ -462,6 +404,7 @@ const CardList = props => {
 const mapStateToProps = state => {
   return {
     hasInit: state.marsMapMaker.hasInit,
+    hide: state.marsMapMaker.hide,
     ent: state.marsMapMaker.entries,
     persist: state.marsMapMaker.persistingMetaData,
     toggleArr: state.marsMapMaker.toggleArr,

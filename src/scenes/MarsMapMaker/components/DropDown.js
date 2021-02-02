@@ -14,16 +14,14 @@ import "semantic-ui-react";
 // REDUX
 import {
   dropdownUpdate,
-  multiValueCreate,
-  multiValueCreateFinish,
   removeContent,
   setSubstringDateFormat,
   toggleInUse,
   totalMultiValueCount,
   setForcedOldToNew
-} from "../../actions/marsMapMaker";
+} from "../../../actions/marsMapMaker";
 
-import { dropdownSet, isMetaDataAddCard } from "./util/helper.js";
+import { dropdownSet, isMetaDataAddCard } from "../util/helper.js";
 
 import {
   userCodeDropdownOption,
@@ -31,12 +29,12 @@ import {
   multiValueDropdownOption,
   one2OneDropdownOption,
   noneDropdownOption
-} from "./util/dropdownOptionNames.jsx";
+} from "../util/dropdownOptionNames.jsx";
 
 import {
   MULTI_VALUE_TITLES as MVT,
   METADATA_ADD_SESAR_TITLES as MAST
-} from "./util/constants";
+} from "../util/constants";
 //////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 
@@ -635,8 +633,6 @@ export default connect(
     totalMultiValueCount,
     removeContent,
     dropdownUpdate,
-    multiValueCreate,
-    multiValueCreateFinish,
     setSubstringDateFormat,
     toggleInUse
   }

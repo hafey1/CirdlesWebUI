@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import "../../styles/marsMapMaker.scss";
-import { DATE_FORMAT_OPTION } from "./util/constants";
+import "../../../../styles/marsMapMaker.scss";
+import { DATE_FORMAT_OPTION } from "../../util/constants";
 
-import DateDropdown from "./DateDropdown";
-import CenturyDropDown from "./CenturyDropDown";
+import DateDropdown from "./dateDropdown/DateDropdown";
+import CenturyDropDown from "./dateDropdown/CenturyDropDown";
 
 const DateFormat = props => {
   // checks the redux store to see if any of the fieldCards have selected a date
