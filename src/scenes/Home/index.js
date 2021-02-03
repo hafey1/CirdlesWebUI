@@ -2,7 +2,7 @@
 import React from "react";
 import Radium from "radium";
 import { ProjectCard } from "components";
-import { SQUID, AMBAPO, TOPSOIL, MARS, MARSMAPMAKER } from "constants";
+import { SQUID, AMBAPO, TOPSOIL, MARS, MARSMAPMAKER, SQUIDINK } from "constants";
 
 type Props = {
   history: any
@@ -52,6 +52,14 @@ const HomePage = ({ history }: Props) => {
         onClick={() => history.push("/marsMapMaker")}
         style={{ margin: 40 }}
       />
+        <ProjectCard
+          description={SQUIDINK.description}
+          logo={require("img/logos/SquidInk.svg")}
+          width={300}
+          height={300}
+          onClick={() => history.push("/squidink")}
+          style={{ margin: 40 }}
+        />
       </div>
     </div>
   );

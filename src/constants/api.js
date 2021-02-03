@@ -4,6 +4,8 @@ export const AMBAPO_ENDPOINT = BASE_URL + "/ambapo";
 export const SQUID_ENDPOINT = BASE_URL + "/prawn";
 export const TOPSOIL_ENDPOINT = BASE_URL + "/topsoil";
 export const MARS_ENDPOINT = BASE_URL + "/mars";
+export const SQUIDINK_ENDPOINT = BASE_URL + "/squidink";
+export const PORTEDSQUID_ENDPOINT = BASE_URL + "/portedsquid";
 
 // Sesar APIs
 // development server - uncomment next line

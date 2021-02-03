@@ -11,7 +11,7 @@ export const AMBAPO = {
 export const TOPSOIL = {
   description:
     'Topsoil is an application for the manipulation and visualization of geochronological data.'
-}
+};
 
 export const MARS = {
   description:
@@ -20,10 +20,18 @@ export const MARS = {
     + 'IGSNs (International GeoSample Number). The initial repository is the cores '
     + 'collection of Scripps Institution of Oceanography.'
     + '  Contact bowring@gmail.com and visit CIRDLES.org for information.'
-}
+};
 
 export const MARSMAPMAKER = {
   description: 'Mars Map Maker is an assistive tool that is used to create mapping '
   + 'files for the uploading of legacy samples at SESAR (System for Earth Sample '
   + 'Registration) through MARS.'
-}
+};
+export const SQUIDINK = {
+  description:
+    'Squid as a Web Service'
+};
+export const PORTEDSQUID = {
+  description:
+    'PORTEDSQUID'
+};
