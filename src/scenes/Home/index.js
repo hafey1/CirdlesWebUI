@@ -2,7 +2,14 @@
 import React from "react";
 import Radium from "radium";
 import { ProjectCard } from "components";
-import { SQUID, AMBAPO, TOPSOIL, MARS, MARSMAPMAKER, SQUIDINK } from "constants";
+import {
+  SQUID,
+  AMBAPO,
+  TOPSOIL,
+  MARS,
+  MARSMAPMAKER,
+  SQUIDINK
+} from "constants";
 
 type Props = {
   history: any
@@ -20,14 +27,16 @@ const HomePage = ({ history }: Props) => {
           onClick={() => history.push("/squid")}
           style={{ margin: 40 }}
         />
-        <ProjectCard
+        {/*Temporarily unavailable
+          uncomment ambapo references in App.js as well
+          <ProjectCard
           description={AMBAPO.description}
           logo={require("img/logos/Ambapo.svg")}
           width={300}
           height={300}
           onClick={() => history.push("/ambapo")}
           style={{ margin: 40 }}
-        />
+        />*/}
         <ProjectCard
           description={TOPSOIL.description}
           logo={require("img/logos/Topsoil.svg")}
@@ -45,13 +54,13 @@ const HomePage = ({ history }: Props) => {
           style={{ margin: 40 }}
         />
         <ProjectCard
-        description={MARSMAPMAKER.description}
-        logo={require("img/logos/MarsMapMaker.svg")}
-        width={300}
-        height={300}
-        onClick={() => history.push("/marsMapMaker")}
-        style={{ margin: 40 }}
-      />
+          description={MARSMAPMAKER.description}
+          logo={require("img/logos/MarsMapMaker.svg")}
+          width={300}
+          height={300}
+          onClick={() => history.push("/marsMapMaker")}
+          style={{ margin: 40 }}
+        />
         <ProjectCard
           description={SQUIDINK.description}
           logo={require("img/logos/SquidInk.svg")}
