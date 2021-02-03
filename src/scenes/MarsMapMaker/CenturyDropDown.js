@@ -26,8 +26,8 @@ class CenturyDropDown extends React.Component {
 
   searchingEntForDate = () => {
     return (
-      isSesarTitlePresent("collection_start_date", ent) ||
-      isSesarTitlePresent("collection_end_date", ent)
+      isSesarTitlePresent("collection_start_date", this.props.ent) ||
+      isSesarTitlePresent("collection_end_date", this.props.ent)
     );
   };
 

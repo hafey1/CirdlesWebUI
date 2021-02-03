@@ -8,6 +8,12 @@ $mars--border: rgb(46, 14, 8);
     "Lucida Sans", Arial, sans-serif;
 }
 
+.pageBackground {
+  height: "100vh";
+  position: "relative";
+  background-color: white
+}
+
 /* App.js */
 .mars-photo {
   display: flex;
@@ -38,11 +44,14 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .toggle__content {
+
 }
 .toolbar__help {
+
 }
 
 .toolbar__date {
+
 }
 
 .btn-margin {
@@ -53,9 +62,8 @@ $mars--border: rgb(46, 14, 8);
   position: relative;
   color: rgb(99, 99, 102);
   display: inline-block;
-  padding-left: 5px;
-  font-size: 17px;
-  width: 30%;
+  font-size: 12px;
+  width: 15%;
   white-space: nowrap;
 }
 
@@ -135,14 +143,12 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .description__title {
-  max-width: 0px;
   display: inline-block;
-  font-size: 17px;
+  font-size: 12px;
   background-color: inherit;
-  padding-left: 225px;
-  padding-top: 15px;
-  padding-bottom: 15px;
   white-space: nowrap;
+  width: 15%;
+  text-align: right;
 }
 
 .field_wrapper {
@@ -179,33 +185,18 @@ $mars--border: rgb(46, 14, 8);
   padding-bottom: 100px;
 }
 
-.arrow {
-  font-size: 3em;
-}
-
-.arrowInfo {
-  font-size: 17px;
-}
-
-.fa {
-  position: relative;
-  z-index: 15;
-  top: 50%;
-}
 .fa-angle-double-right {
   position: relative;
   z-index: 15;
   top: 50%;
+  font-size: x-large;
+  padding-left: 2.5%;
 }
 
 .dropDown {
   font-size: 13px;
   min-height: auto !important;
-  height: 1em;
   display: inline-block;
-  width: 170px;
-  padding-right: 50px;
-  padding-bottom: 20px;
 }
 
 .description__mapped__header {
@@ -244,25 +235,24 @@ $mars--border: rgb(46, 14, 8);
 
 .descriptionKeyMapped {
   display: inline-block;
-  padding-right: 250px;
   padding-left: 0px;
   padding-top: 7px;
+  width: 40%;
+  text-align: right;
 }
 
 .descriptionMapped {
   display: inline-block;
-  padding-right: 55px;
   padding-left: 0px;
   padding-top: 7px;
 }
 
 .description__mapped__content {
   position: relative;
-  padding-top: 0.5em;
   display: inline-block;
-  padding-right: 10px;
   color: rgb(99, 99, 102);
-  font-size: 17px;
+  font-size: 12px;
+  padding-right: 5px;
 }
 
 .ui {
@@ -272,7 +262,6 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .description {
-  max-height: 10%;
   background-color: rgb(224, 225, 226);
   padding: 0px;
   width: 100%;
@@ -281,7 +270,10 @@ $mars--border: rgb(46, 14, 8);
   border-color: black;
   border-width: 1px;
   border-radius: 5px;
+  padding-top: 10px;
+  padding-bottom: 15px;
 }
+
 .labelInfo {
   background-color: rgb(224, 225, 226);
   width: 100%;
@@ -295,21 +287,21 @@ $mars--border: rgb(46, 14, 8);
 
 .check__box {
   display: inline-block;
-  height: 100%;
   padding-top: 0px;
   padding-bottom: 0px;
   margin: 0px;
   padding-left: 10px;
+  width: 10%;
 }
 
 .description__checkbox {
   display: inline-block;
-  height: 100%;
   padding-top: 0px;
   padding-bottom: 0px;
   margin: 0px;
   padding-left: 10px;
-  font-size: 17px;
+  font-size: 12px;
+  width: 10%;
 }
 
 .check__box > .inner--checkbox {
@@ -325,6 +317,8 @@ $mars--border: rgb(46, 14, 8);
   line-height: 27px;
   background-color: #e9a9a9;
   border-radius: 4px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .fieldContainerDisabled {
@@ -333,6 +327,8 @@ $mars--border: rgb(46, 14, 8);
   border-width: 0.5px;
   line-height: 27px;
   border-radius: 4px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .fieldContainerMetadataAdd {
@@ -342,6 +338,8 @@ $mars--border: rgb(46, 14, 8);
   background-color: #fcb471;
   line-height: 27px;
   border-radius: 4px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .fieldContainerMetadata {
@@ -350,7 +348,6 @@ $mars--border: rgb(46, 14, 8);
   border-width: 0.5px;
   background-color: #fcfa71d2;
   line-height: 27px;
-
   border-radius: 4px;
 }
 
@@ -362,4 +359,46 @@ $mars--border: rgb(46, 14, 8);
 .refreshButton {
   display: inline-block;
   margin: 0 auto;
+}
+
+.btn-outline-dark:hover {
+  background-color: #343a40! important;
+}
+
+.maps__to {
+  font-size: 12px;
+  font-family: "Lucida Grande";
+}
+
+.descriptionMapped > .dropDown > .dropdown {
+  width: 18px;
+}
+
+
+@media (min-width: 544px) {  
+  .description__checkbox {
+    font-size: 17px;
+  } 
+  .description__title {
+    font-size: 17px;
+    width: 15%;
+    max-width: 100%;
+  }
+  .description__value {
+    font-size: 17px;
+  }
+  .maps__to {
+    font-size: 17px;
+  }
+  .description__mapped__content {
+    font-size: 17px;
+  }
+  .descriptionMapped > .dropDown > .dropdown {
+    width: 170px;
+  }
+
+
+
+
+
 }

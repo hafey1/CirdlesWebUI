@@ -1,88 +1,84 @@
+//a list of available database columns
 const options = [
   {
-    selected: false,
-    id: 0,
+    id: 999,
     title: "",
-    key: "field",
     type: "both",
-    message: "Sesar Selection",
+    message: "no value",
     format: "none"
   },
   {
-    selected: false,
     id: 1,
+    title: "",
+    type: "both",
+    message: "Sesar Selection",
+    format: "defaultValue"
+  },
+  {
+    id: 2,
+    title: "user_code",
+    type: "text",
+    message: "check SESAR database",
+    format: "one2one"
+  },
+  {
+    id: 3,
     title: "original_archive",
-    key: "field",
     type: "text",
     message: "Name of institution",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 2,
-    title: "current_archive",
-    key: "field",
-    type: "text",
-    format: "one2one"
-  },
-  {
-    selected: false,
-    id: 3,
-    title: "platform_name",
-    key: "field",
-    type: "text",
-    format: "one2one"
-  },
-  {
-    selected: false,
     id: 4,
+    title: "current_archive",
+    type: "text",
+    format: "one2one"
+  },
+  {
+    id: 5,
+    title: "platform_name",
+    type: "text",
+    format: "one2one"
+  },
+  {
+    id: 6,
     title: "cruise_field_prgrm",
-    key: "field",
     type: "text",
     message:
       "Name or identifier of the field program during which the sample was collected.",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 5,
+    id: 7,
     title: "name",
-    key: "field",
     type: "text",
     message: "The Name of the sample.",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 6,
+    id: 8,
     title: "collection_method",
-    key: "field",
     type: "text",
     message: "Method by which the sample was collected",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 7,
+    id: 9,
     title: "collection_start_date",
-    key: "field",
     type: "numbers",
     message:
       "Date when the sample was collected. The format is YYYY-MM-DDTHH:MM:SSZ",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 8,
+    id: 10,
     title: "collection_end_date",
-    key: "field",
     type: "numbers",
     message: "Date when the sample collection was finished",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 9,
+    id: 11,
     title: "latitude",
     key: "numbers",
     message:
@@ -90,8 +86,7 @@ const options = [
     format: "one2one"
   },
   {
-    selected: false,
-    id: 10,
+    id: 12,
     title: "latitude_end",
     key: "numbers",
     message:
@@ -99,8 +94,7 @@ const options = [
     format: "one2one"
   },
   {
-    selected: false,
-    id: 11,
+    id: 13,
     title: "longitude",
     key: "numbers",
     message:
@@ -108,8 +102,7 @@ const options = [
     format: "one2one"
   },
   {
-    selected: false,
-    id: 12,
+    id: 14,
     title: "longitude_end",
     key: "numbers",
     message:
@@ -117,8 +110,7 @@ const options = [
     format: "one2one"
   },
   {
-    selected: false,
-    id: 13,
+    id: 15,
     title: "elevation",
     key: "numbers",
     message:
@@ -126,127 +118,93 @@ const options = [
     format: "one2one"
   },
   {
-    selected: false,
-    id: 14,
+    id: 16,
     title: "elevation_end",
     key: "numbers",
     message: "End elevation at which a sample was collected",
     format: "one2one"
   },
   {
-    selected: false,
     id: 17,
     title: "collector",
-    key: "field",
     type: "text",
     message:
       "Name of the person who collected the sample or name of chief scientist for larger field programs",
     format: "one2one"
   },
   {
-    selected: false,
     id: 18,
     title: "primary_location_type",
-    key: "field",
     type: "text",
     message:
       "Physiographic feature or type of feture that your sample was collected from",
     format: "one2one"
   },
   {
-    selected: false,
     id: 19,
     title: "igsn",
-    key: "field",
     type: "numbers",
     message: "(AUTOMATIC) The 9-digit IGSN of the sample",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 26,
+    id: 20,
     title: "classification",
-    key: "field",
     type: "text",
     message: "Classification",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 27,
-    title: "user_code",
-    key: "field",
-    type: "text",
-    message: "check SESAR database",
-    format: "one2one"
-  },
-  {
-    selected: false,
-    id: 27,
+    id: 21,
     title: "material",
-    key: "field",
     type: "text",
     message: "check SESAR database",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 27,
+    id: 22,
     title: "elevation_unit",
-    key: "field",
     type: "text",
     message: "check SESAR database",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 27,
+    id: 23,
     title: "sample_type",
-    key: "field",
     type: "text",
     message: "The type of sample which comes from a SESAR controlled list",
     format: "one2one"
   },
   {
-    selected: false,
-    id: 15,
+    id: 24,
     title: "size",
     message: "Size of the registered object",
     type: "numbers",
     format: "multivalue"
   },
   {
-    selected: false,
-    id: 20,
+    id: 25,
     title: "description",
-    key: "field",
     type: "text",
     message: "Any free 'text' comment about the sample",
     format: "multivalue"
   },
   {
-    selected: false,
-    id: 22,
+    id: 26,
     title: "sample_comment",
     type: "text",
-    key: "field",
     format: "multivalue"
   },
   {
-    selected: false,
-    id: 23,
+    id: 27,
     title: "geological_age",
-    key: "field",
     type: "numbers",
     message: "Age of a sample as described by the stratigraphic era",
     format: "multivalue"
   },
-
   {
-    selected: false,
-    id: 32,
+    id: 28,
     title: "field_name",
-    key: "field",
     type: "text",
     message: "Keyed List / Order Pair of Values (Ex: [FACILITY CODE: MARS])",
     format: "multivalue"

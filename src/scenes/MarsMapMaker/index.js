@@ -4,7 +4,6 @@
 // It renders our three main components (FileIn.js, Dialog.js, CardList.js)//
 // Which act as the entire application itself //////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
-// helllooooooooo
 
 import React from "react";
 
@@ -13,6 +12,7 @@ import classNames from "classnames";
 import CardList from "./CardList";
 import FileIn from "./FileIn";
 import Dialog from "./Dialog";
+import Loading from "./Loading";
 // REDUX
 import { connect } from "react-redux";
 import { initToggle } from "../../actions/marsMapMaker";
@@ -171,7 +171,7 @@ export class App extends React.Component {
     });
 
     return (
-      <div style={{ height: "100vh", position: "relative" }}>
+      <div className="pageBackground">
         <div className={readerClass}>
           <FileIn testID="FileIn" callbackFromParent={this.fileCallback} />
         </div>
@@ -199,7 +199,9 @@ export class App extends React.Component {
             forceTitles={this.state.forceTitles}
             forceValues={this.state.forceValues}
           />
-        ) : null}
+        ) : (
+          <Loading />
+        )}
       </div>
     );
   }

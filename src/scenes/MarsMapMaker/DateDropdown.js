@@ -17,9 +17,7 @@ import { formatDate } from "../../actions/marsMapMaker";
 ///////////////////////////////////////////////
 
 class DateDropdown extends React.Component {
-  state = {
-    currentChosen: null
-  };
+  state = {};
 
   // uses the clicked list-item in the dropdown to create an object to be passed into the dropdownUpdate action
   // updates specific object in the redux store

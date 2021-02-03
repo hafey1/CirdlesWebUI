@@ -153,7 +153,6 @@ const styles = {
     right: "0",
     bottom: "0",
     left: "0",
-    overflow: "auto",
     backgroundColor: colors.primary
   }
 };
