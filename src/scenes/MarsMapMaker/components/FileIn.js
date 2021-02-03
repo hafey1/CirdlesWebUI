@@ -7,7 +7,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Papa from "papaparse";
-import "../../styles/marsMapMaker.scss";
+import "../../../styles/marsMapMaker.scss";
 import classNames from "classnames";
 
 import {
@@ -15,7 +15,7 @@ import {
   century,
   setFileMetadata,
   persistingDataConcat
-} from "../../actions/marsMapMaker";
+} from "../../../actions/marsMapMaker";
 
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////

@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import "semantic-ui-react";
 
 // Action Creators
-import { formatDate } from "../../actions/marsMapMaker";
+import { formatDate } from "../../../../../actions/marsMapMaker";
 
 ////////////////////////////////////////////////
 ///////////////////////////////////////////////
