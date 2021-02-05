@@ -29,13 +29,12 @@ const routes = [
     component: Home,
     logo: null
   },
-  //{ temporarily unavailable
-  // uncomment ambapo reference in Home/index as well
-  //  path: "/ambapo",
-  //  title: "Ambapo",
-  //  component: Ambapo,
-  //  logo: ambapoLogo
-  //},
+  {
+    path: "/ambapo",
+    title: "Ambapo",
+    component: Ambapo,
+    logo: ambapoLogo
+  },
   {
     path: "/squid",
     title: "Squid Ink: Squid's Reporting Service (Beta)",
