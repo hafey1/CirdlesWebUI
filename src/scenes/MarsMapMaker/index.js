@@ -28,7 +28,7 @@ export class App extends React.Component {
       emptyCards: [],
       toggleValuesArr: null,
       mapPreview: null,
-      isOpened: props.hasBeenOpened,
+      isOpened: false,
       jsFile: undefined,
       fieldNames: [],
       fieldValues: [],
@@ -206,7 +206,6 @@ export class App extends React.Component {
 const mapStateToProps = state => {
   return {
     ent: state.entries,
-    hasBeenOpened: state.isOpen,
     toggleArr: state.toggleArr
   };
 };

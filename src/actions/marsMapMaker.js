@@ -92,13 +92,6 @@ export const changeInit = obj => {
   };
 };
 
-export const isOpen = obj => {
-  return {
-    type: "IS_OPEN",
-    payload: obj
-  };
-};
-
 export const initToggle = obj => {
   return {
     type: "INIT_TOGGLE",

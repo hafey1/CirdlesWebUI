@@ -1,3 +1,4 @@
+import { MULTI_VALUE_TITLES as MVT } from "./constants";
 //used in FieldCard
 export const isMetaDataAddCard = cardID => {
   let totalAddedCards = 4;
@@ -67,4 +68,35 @@ export const dropdownSet = (hasStoreLoaded, entryStore, idInStore) => {
     defaultVal = entryStore[idInStore].sesarTitle;
   }
   return defaultVal;
+};
+
+export const dialogFilter = entries => {
+  const singleVal = entries.filter(entry => {
+    return (
+      entry.sesarTitle !== "" &&
+      entry.sesarTitle !== "none" &&
+      !MVT.includes(entry.sesarTitle)
+    );
+  });
+  const multiVal = entries.filter(entry => {
+    return MVT.includes(entry.sesarTitle);
+  });
+
+  const values = [];
+  singleVal.forEach(element => {
+    values.push([element.sesarTitle, [element.header]]);
+  });
+
+  MVT.forEach(title => {
+    const eachVal = [];
+    multiVal.forEach(element => {
+      if (element.sesarTitle == title) {
+        eachVal.push(element.header + " : " + element.value);
+      }
+    });
+    if (eachVal.length > 0) {
+      values.push([title, eachVal]);
+    }
+  });
+  return values;
 };

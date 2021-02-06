@@ -27,7 +27,6 @@ const initialState = {
   toggleIndex: -1,
   toggleInUse: false,
   toggleArr: [],
-  isOpen: false,
   hasInit: false,
   hide: false,
   jsFile: undefined,
@@ -211,11 +210,6 @@ export default function(state = initialState, action) {
     case "SET_SUB":
       return update(state, {
         substringDateFormat: { $set: action.payload.substringDateFormat }
-      });
-
-    case "IS_OPEN":
-      return update(state, {
-        isOpen: { $set: action.payload.bool }
       });
 
     case "INIT_TOGGLE":
