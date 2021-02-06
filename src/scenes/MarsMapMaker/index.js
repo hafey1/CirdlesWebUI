@@ -144,15 +144,6 @@ export class App extends React.Component {
     }
   };
 
-  // Displays "Preview Pop Up function from cardList, when the Preview Map button is clicked"
-  isOpenCallback = data => {
-    let currentComponent = this;
-    currentComponent.setState({
-      isOpened: true,
-      mapPreview: data.join("\n")
-    });
-  };
-
   createSquiggleArray = () => {
     let arr = [];
     for (let i = 0; i < this.state.emptyCards.length; i++) {
@@ -177,7 +168,6 @@ export class App extends React.Component {
           <CardList
             tValLength={this.state.toggleValueLength}
             jsFileValues={this.state.jsFile}
-            callback={this.isOpenCallback}
             fields={[...this.state.emptyCards, ...this.state.fieldNames]}
             toggleVals={this.state.toggleValuesArr}
             fieldVal={[
