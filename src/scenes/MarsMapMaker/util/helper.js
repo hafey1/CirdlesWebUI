@@ -1,4 +1,5 @@
 import { MULTI_VALUE_TITLES as MVT } from "./constants";
+
 //used in FieldCard
 export const isMetaDataAddCard = cardID => {
   let totalAddedCards = 4;
@@ -60,7 +61,7 @@ export const findFirstValueBySesarTitle = (entryStore, sesarTitle) => {
   return value;
 };
 
-//gets defalut value for select and options in Dropdown from store
+//gets default value for select and options in Dropdown from store
 export const dropdownSet = (hasStoreLoaded, entryStore, idInStore) => {
   let defaultVal = "Sesar_Selection";
 
@@ -70,7 +71,10 @@ export const dropdownSet = (hasStoreLoaded, entryStore, idInStore) => {
   return defaultVal;
 };
 
+//Used in PreviewModal
+//filters entries for currently set mappings
 export const dialogFilter = entries => {
+  //filters to find all one to one mappings
   const singleVal = entries.filter(entry => {
     return (
       entry.sesarTitle !== "" &&
@@ -78,6 +82,7 @@ export const dialogFilter = entries => {
       !MVT.includes(entry.sesarTitle)
     );
   });
+  //filters to find all multivalue mappings
   const multiVal = entries.filter(entry => {
     return MVT.includes(entry.sesarTitle);
   });
@@ -87,6 +92,8 @@ export const dialogFilter = entries => {
     values.push([element.sesarTitle, [element.header]]);
   });
 
+  //special formatting for multivalues to show organizational header
+  //   and value
   MVT.forEach(title => {
     const eachVal = [];
     multiVal.forEach(element => {

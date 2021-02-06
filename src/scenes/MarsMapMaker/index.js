@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // APP.JS /////////////////////////////////////////////////////////////////////
 // This component sets the stage for Mars Map Maker///////////////////////////
-// It renders our three main components (FileIn.js, Dialog.js, CardList.js)//
-// Which act as the entire application itself //////////////////////////////
+// It renders our two main components (FileIn.js and CardList.js)//
+// Which handle the logic of the application ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 
 import React from "react";
@@ -11,7 +11,6 @@ import classNames from "classnames";
 // COMPONENTS
 import CardList from "./components/CardList";
 import FileIn from "./components/FileIn";
-import Dialog from "./components/Dialog";
 // REDUX
 import { connect } from "react-redux";
 import { initToggle } from "../../actions/marsMapMaker";
@@ -173,16 +172,7 @@ export class App extends React.Component {
         <div className={readerClass}>
           <FileIn testID="FileIn" callbackFromParent={this.fileCallback} />
         </div>
-        {this.state.isOpened ? (
-          <Dialog
-            isOpen={this.state.isOpened}
-            onClose={e => this.setState({ isOpened: false })}
-          >
-            {this.state.mapPreview.split("\n").map(i => {
-              return <div>{i}</div>;
-            })}
-          </Dialog>
-        ) : null}
+
         {this.state.continue ? (
           <CardList
             tValLength={this.state.toggleValueLength}

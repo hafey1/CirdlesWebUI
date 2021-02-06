@@ -29,7 +29,7 @@ const MenuButtons = props => {
               {" "}
               {props.hideText()}{" "}
             </button>
-            <PreviewModal />
+            <PreviewModal ent={props.ent} />
             <button
               className="btn bg-white btn-outline-dark"
               onClick={checkStore}

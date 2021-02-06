@@ -20,9 +20,6 @@ import "../../../styles/marsMapMaker.scss";
 // REDUX
 import { firstState, toggleInUse } from "../../../actions/marsMapMaker";
 
-// helper functions && constants
-import { MULTI_VALUE_TITLES as MVT } from "../util/constants";
-
 ///////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
@@ -241,117 +238,6 @@ const CardList = props => {
     props.firstState(initObj);
   }, []);
 
-  // This helper function fills the multiValueArray where each index represents the "field_name", "description", or "sample_comment" selections
-  const multiValueArrHelper = (options, index, multiArr) => {
-    let j;
-    for (j = 0; j < 3; j++) {
-      if (options.indexOf(props.ent[index].sesarTitle) !== -1) {
-        if (props.ent[index].value !== "") {
-          multiArr[options.indexOf(props.ent[index].sesarTitle)].push(
-            props.ent[index].header + ":" + props.ent[index].value
-          );
-          break;
-        } else {
-          multiArr[options.indexOf(props.ent[index].sesarTitle)].push(
-            props.ent[index].header + ":NO_DATA"
-          );
-          break;
-        }
-      }
-    }
-  };
-
-  // Helper function add the "field_name", "description", "sample_comment" title to the beginning of the join(";") array index
-  const appendTitleToFront = (multiValueArr, options) => {
-    let i;
-    for (i = 0; i < 5; i++) {
-      if (multiValueArr[i] !== "" && multiValueArr[i] !== undefined)
-        multiValueArr[i] = options[i] + " ==> " + multiValueArr[i];
-    }
-  };
-
-  ////////// Shows (Map Preview / Size Selection Preview / Multi-Value Selections )
-  const previewPopUp = () => {
-    console.log("you rang");
-    ////////////////
-    // POP-UP LOCAL VARIABLES
-    let multiValueArr = [[], [], [], [], []];
-    let mapPreviewArr = [];
-    let fieldIndex = -1;
-    let descripIndex = -1;
-    let sampleIndex = -1;
-    let geoIndex = -1;
-    let sizeIndex = -1;
-    let finalMap;
-    let finalArray;
-    let arr = [];
-    let i;
-
-    /////////////////////////////////////////////////////////
-    /////////// Display Preview of Multi-Value Selections
-    for (i = 0; i < props.ent.length; i++) {
-      if (props.ent[i].sesarTitle !== "") {
-        mapPreviewArr.push(
-          String(props.ent[i].sesarTitle + ":" + props.ent[i].header)
-        );
-      }
-      multiValueArrHelper(MVT, i, multiValueArr);
-    }
-    for (i = 0; i < 5; i++) {
-      multiValueArr[i] = multiValueArr[i].join("; ");
-    }
-    appendTitleToFront(multiValueArr, MVT);
-
-    finalMap = mapPreviewArr;
-
-    for (i = 0; i < finalMap.length; i++) {
-      if (finalMap[i].includes(MVT[0])) {
-        finalMap[i] = multiValueArr[0];
-        if (fieldIndex === -1) {
-          fieldIndex = i;
-        }
-      } else if (finalMap[i].includes(MVT[1])) {
-        finalMap[i] = multiValueArr[1];
-        if (descripIndex === -1) {
-          descripIndex = i;
-        }
-      } else if (finalMap[i].includes(MVT[2])) {
-        finalMap[i] = multiValueArr[2];
-        if (sampleIndex === -1) {
-          sampleIndex = i;
-        }
-      } else if (finalMap[i].includes(MVT[3])) {
-        finalMap[i] = multiValueArr[3];
-        if (geoIndex === -1) {
-          geoIndex = i;
-        }
-      } else if (finalMap[i].includes(MVT[4])) {
-        finalMap[i] = multiValueArr[4];
-        if (sizeIndex === -1) {
-          sizeIndex = i;
-        }
-      }
-    }
-    for (i = 0; i < finalMap.length; i++) {
-      if (!arr.includes(finalMap[i])) {
-        if (!(finalMap[i].includes(MVT[0]) && i !== fieldIndex))
-          arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(MVT[1]) && i !== descripIndex))
-          arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(MVT[2]) && i !== sampleIndex))
-          arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(MVT[3]) && i !== geoIndex))
-          arr.push(finalMap[i]);
-        else if (!(finalMap[i].includes(MVT[4]) && i !== sizeIndex))
-          arr.push(finalMap[i]);
-      }
-    }
-
-    finalArray = arr;
-
-    return finalArray;
-  };
-
   const hideOrShow = () => {
     let final = "";
     if (props.hide) {
@@ -378,8 +264,6 @@ const CardList = props => {
             upArrowToggle={() => upArrowToggle()}
             downArrowToggle={() => downArrowToggle()}
             hideOrShow={() => hideOrShow()}
-            callbacks={() => props.callback(previewPopUp())}
-            previewPop={() => previewPopUp()}
           />
 
           <HeaderFieldCard />
@@ -403,17 +287,10 @@ const CardList = props => {
 
 const mapStateToProps = state => {
   return {
-    hasInit: state.marsMapMaker.hasInit,
     hide: state.marsMapMaker.hide,
     ent: state.marsMapMaker.entries,
     persist: state.marsMapMaker.persistingMetaData,
-    toggleArr: state.marsMapMaker.toggleArr,
-    toggleIndex: state.marsMapMaker.toggleIndex,
-    usingToggle: state.marsMapMaker.toggleInUse,
-    hasDateFormat: state.marsMapMaker.hasChosenDateFormat,
-    storeJsFile: state.marsMapMaker.jsFile,
-    multiCount: state.marsMapMaker.totalMultiCount,
-    fileMeta: state.marsMapMaker.fileMetadata
+    toggleArr: state.marsMapMaker.toggleArr
   };
 };
 
