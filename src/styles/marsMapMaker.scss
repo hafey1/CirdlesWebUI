@@ -187,7 +187,7 @@ $mars--border: rgb(46, 14, 8);
 
 .fa-angle-double-right {
   position: relative;
-  z-index: 15;
+  z-index: 1;
   top: 50%;
   font-size: x-large;
   padding-left: 2.5%;
@@ -244,7 +244,6 @@ $mars--border: rgb(46, 14, 8);
 .descriptionMapped {
   display: inline-block;
   padding-left: 0px;
-  padding-top: 7px;
 }
 
 .description__mapped__content {
@@ -354,6 +353,25 @@ $mars--border: rgb(46, 14, 8);
 .rightArrowIcon {
   display: inline-block;
   width: 20px;
+}
+
+.edit_icon {
+  float: right;
+}
+
+.pad {
+  padding-left: 10px;
+  padding-right: 10px;
+  float: right;
+  display: inline;
+}
+
+.hidden_pad {
+  padding-left: 10px;
+  padding-right: 10px;
+  float: right;
+  display: inline;
+  visibility: hidden;
 }
 
 .refreshButton {
