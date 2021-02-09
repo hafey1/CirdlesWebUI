@@ -16,8 +16,10 @@ export const PreviewModal = props => {
         onRequestClose={() => setModalShow(false)}
         contentLabel="Preview Mapping"
       >
+        <button className="btn bg-white btn-outline-dark float-right" onClick={() => setModalShow(false)}>
+          X
+        </button>
         <h3>Sesar Mappings</h3>
-        <button onClick={() => setModalShow(false)}>close window</button>
         {dialogFilter(props.ent).map(element => previewMapping(element))}
       </Modal>
     </div>

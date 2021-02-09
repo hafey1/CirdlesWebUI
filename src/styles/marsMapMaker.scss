@@ -374,6 +374,10 @@ $mars--border: rgb(46, 14, 8);
   width: 18px;
 }
 
+.ReactModal__Overlay {
+  z-index: 1;
+}
+
 
 @media (min-width: 544px) {  
   .description__checkbox {
