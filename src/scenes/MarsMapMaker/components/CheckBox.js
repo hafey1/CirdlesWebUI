@@ -6,8 +6,6 @@
 
 import React, { Component } from "react";
 
-// CSS & Styling
-import { Checkbox } from "semantic-ui-react";
 import "../../../styles/marsMapMaker.scss";
 
 /////////////////////////////////////////////////
@@ -25,7 +23,13 @@ export default class CheckboxExample extends Component {
   render() {
     return (
       <div className="inner--checkbox">
-        <Checkbox onChange={this.toggle} checked={this.state.checked} />
+        <label>
+          <input
+            type="radio"
+            onClick={this.toggle}
+            checked={this.state.checked}
+          />
+        </label>
       </div>
     );
   }

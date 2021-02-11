@@ -153,9 +153,9 @@ export class FieldCard extends React.Component {
       id: this.props.id,
       isGreen: !this.state.isGreen
     };
-    this.props.removeContent(obj);
+    //this.props.removeContent(obj);
     this.setState({ isGreen: !this.state.isGreen });
-    this.render();
+    //this.render();
   };
 
   refreshFieldCard = () => {

@@ -126,6 +126,16 @@ const CardList = props => {
 
     //if not metadata or metadata add
     if (forcedIndex === -1) {
+      console.log(
+        newKey +
+          " :: " +
+          fieldValState[newKey] +
+          " :: " +
+          (fieldValState[newKey] !== "") +
+          " :: " +
+          valueIsInJsMappingFile(field)
+      );
+
       storedValue = {
         id: newKey,
         sesarTitle: sesarFind,

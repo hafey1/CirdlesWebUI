@@ -52,7 +52,6 @@
     "redux-form": "^7.4.3",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
-    "semantic-ui-react": "^2.0.1",
     "sortablejs": "^1.10.2",
     "tabulator-tables": "^4.7.2",
     "topsoil-js": "github:CIRDLES/topsoil-js",

@@ -63,7 +63,7 @@ export const findFirstValueBySesarTitle = (entryStore, sesarTitle) => {
 
 //gets default value for select and options in Dropdown from store
 export const dropdownSet = (hasStoreLoaded, entryStore, idInStore) => {
-  let defaultVal = "Sesar_Selection";
+  let defaultVal = "none";
 
   if (hasStoreLoaded && entryStore[idInStore].sesarTitle !== "") {
     defaultVal = entryStore[idInStore].sesarTitle;
