@@ -7,9 +7,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-// CSS & Styling
-import "semantic-ui-react";
-
 // Action Creators
 import { formatDate } from "../../../../../actions/marsMapMaker";
 
