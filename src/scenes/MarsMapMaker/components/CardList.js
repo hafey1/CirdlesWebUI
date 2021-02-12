@@ -43,7 +43,6 @@ const CardList = props => {
   // fieldTitle: column attribute of an entry
   // fieldType: defines if content is number or text
   // fieldValue: the content of an column attribute
-  // hasContent: for initial filtering of checked cards
   // goes to the next row of content in the csv
 
   const downArrowToggle = () => {
@@ -126,16 +125,6 @@ const CardList = props => {
 
     //if not metadata or metadata add
     if (forcedIndex === -1) {
-      console.log(
-        newKey +
-          " :: " +
-          fieldValState[newKey] +
-          " :: " +
-          (fieldValState[newKey] !== "") +
-          " :: " +
-          valueIsInJsMappingFile(field)
-      );
-
       storedValue = {
         id: newKey,
         sesarTitle: sesarFind,
@@ -215,9 +204,6 @@ const CardList = props => {
             fieldTitle={field}
             id={newKey}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
-            hasContent={
-              props.fieldVal[newKey] !== "" || valueIsInJsMappingFile(field)
-            }
           />
         );
       } else
@@ -228,12 +214,6 @@ const CardList = props => {
             fieldTitle={Object.keys(props.toggleArr[toggleIndex])[newKey]}
             id={newKey}
             fieldValue={Object.values(props.toggleArr[toggleIndex])[newKey]}
-            hasContent={
-              props.fieldVal[newKey] !== "" ||
-              valueIsInJsMappingFile(
-                Object.keys(props.toggleArr[toggleIndex])[newKey]
-              )
-            }
           />
         );
     }

@@ -224,7 +224,8 @@ export class DropDown extends React.Component {
         sesarSelected: title,
         oldValue: this.props.value,
         value: update,
-        header: this.props.title
+        header: this.props.title,
+        isGreen: this.props.ent[this.props.id].isGreen
       };
 
       this.props.dropdownUpdate(obj);
@@ -308,8 +309,10 @@ export class DropDown extends React.Component {
       sesarSelected: title,
       oldValue: this.props.value,
       value: update,
-      header: this.props.title
+      header: this.props.title,
+      isGreen: this.props.ent[this.props.id].isGreen
     };
+    /////// js prepopulates date fieldcard
     this.props.dropdownUpdate(obj);
 
     return update;
@@ -345,6 +348,7 @@ export class DropDown extends React.Component {
       if (!this.props.dropDownChosen) {
         alert("You have not selected a date format...");
         this.props.refresh();
+        this.setState(this.state);
         console.log("Please choose a date format!!!");
       }
       return;
@@ -417,13 +421,15 @@ export class DropDown extends React.Component {
       value: valueOverride,
       header: headerOverride,
       bool: true,
-      dropOption: this.props.dropDownChosen
+      dropOption: this.props.dropDownChosen,
+      isGreen: this.props.ent[this.props.id].isGreen
     };
 
     if (
       this.props.ent[this.props.id].header !== "<METADATA_ADD>" ||
       newValue !== this.props.ent[this.props.id].sesarTitle
     ) {
+      /////called for every fieldcard
       this.props.dropdownUpdate(obj);
     }
 
@@ -452,8 +458,9 @@ export class DropDown extends React.Component {
   // automatically updates the right side content if a js file is loaded in, no dropdown click necessary
   updateValueToggle = () => {
     const newValue = this.props.ent[this.props.id].sesarTitle;
-
-    this.updateValueHelper(newValue, true);
+    if (this.props.jsFile !== undefined) {
+      this.updateValueHelper(newValue, true);
+    }
   };
 
   // function that searches the ent array in the store for any index with content
@@ -533,7 +540,7 @@ export class DropDown extends React.Component {
     } else display = "auto";
 
     // automatically updates the right side content if a js file is loaded in, no dropdown click necessary
-    this.toggleNotInUse();
+    if (this.props.jsFile !== undefined) this.toggleNotInUse();
 
     // filters default values and possible options for dropdown
     let filter = f => {
@@ -613,6 +620,7 @@ const mapStateToProps = state => {
   return {
     ent: state.marsMapMaker.entries,
     dateFormat: state.marsMapMaker.chosenDateFormat,
+    jsFile: state.marsMapMaker.jsFile,
     hasChosen: state.marsMapMaker.hasChosenDateFormat,
     dropDownChosen: state.marsMapMaker.hasChosenDropdownOption,
     hasChosenCentury: state.marsMapMaker.centuryChosen,

@@ -23,6 +23,13 @@ export const formatDate = chosenObj => {
   };
 };
 
+export const greenFlip = chosenObj => {
+  return {
+    type: "FLIP_CHECKBOX",
+    payload: chosenObj
+  };
+};
+
 export const century = obj => {
   return {
     type: "CENTURY",
