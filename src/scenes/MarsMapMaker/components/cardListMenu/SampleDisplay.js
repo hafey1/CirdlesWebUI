@@ -16,7 +16,7 @@ const SampleDisplay = props => {
               className="btn bg-white btn-outline-dark"
               onClick={() => props.reset()}
             >
-              Refresh
+              Back to Top Row
             </button>
             <div className="btn-group">
               <button
