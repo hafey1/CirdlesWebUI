@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser, sendRequest, startUp } from "./authActions";
+import { loginUser, startUp } from "./authActions";
 import classnames from "classnames";
 import Button from "@material-ui/core/Button";
 import FormControl from '@material-ui/core/FormControl';
@@ -21,7 +21,7 @@ class Login extends Component {
             errors: {}
         };
     }
-    //@TODO HANDLE AUTH CONTEXT FOR DIDMOUNT AUTOMATED ROUTING
+//@TODO HANDLE AUTH CONTEXT FOR DIDMOUNT AUTOMATED ROUTING
     //componentDidMount() {
     //    // If logged in and user navigates to Login page, should redirect them to dashboard
     //    if (this.props.auth.isAuthenticated) {
@@ -69,25 +69,31 @@ class Login extends Component {
                     transform: "translate(-50%, -70%)"
                 }}>
                     <Grid container
-                        justify="center"
-                        spacing={6}
+                          justify="center"
+                          spacing={6}
                     >
+                        <Grid item xs={12} >
+                            <div className="col s12">
+                                <h2>
+                                    <b>Login</b> below
+                                </h2>
+                            </div>
+                        </Grid>
 
-
-                        <Box borderColor="#3F51B5" border={2} justifyContent="center" display="flex" p={1} bgcolor="#e3e5e8" >
+                        <Box   borderColor="#3F51B5" border={2} justifyContent="center" display="flex" p={1} bgcolor="#e3e5e8" >
                             <form noValidate autoComplete="on" onSubmit={this.onSubmit} >
                                 <Grid item xs={12}>
                                     <FormControl>
                                         <InputLabel htmlFor="component-simple">Email</InputLabel>
-                                        <Input style={{ width: "500px" }}
-                                            id="email"
-                                            value={this.state.email}
-                                            onChange={this.onChange}
-                                            error={errors.email}
-                                            type="email"
-                                            className={classnames("", {
-                                                invalid: errors.email || errors.emailnotfound
-                                            })} />
+                                        <Input style={{width: "500px"}}
+                                               id="email"
+                                               value={this.state.email}
+                                               onChange={this.onChange}
+                                               error={errors.email}
+                                               type="email"
+                                               className={classnames("", {
+                                                   invalid: errors.email || errors.emailnotfound
+                                               })}/>
                                         <FormHelperText error id="helper">{errors.email}
                                             {errors.emailnotfound}</FormHelperText>
                                     </FormControl>
@@ -95,31 +101,31 @@ class Login extends Component {
                                 <Grid item xs={12}>
                                     <FormControl>
                                         <InputLabel htmlFor="component-simple">Password</InputLabel>
-                                        <Input style={{ width: "500px" }}
-                                            id="password"
-                                            value={this.state.password}
-                                            onChange={this.onChange}
-                                            error={errors.password}
-                                            type="password"
-                                            className={classnames("", {
-                                                invalid: errors.password || errors.passwordincorrect
-                                            })} />
+                                        <Input style={{width: "500px"}}
+                                               id="password"
+                                               value={this.state.password}
+                                               onChange={this.onChange}
+                                               error={errors.password}
+                                               type="password"
+                                               className={classnames("", {
+                                                   invalid: errors.password || errors.passwordincorrect
+                                               })}/>
                                         <FormHelperText error id="helper" >{errors.password}
                                             {errors.passwordincorrect}</FormHelperText>
 
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <div className="col s12" style={{ paddingLeft: "11.250px", marginTop: "20px" }}>
+                                    <div className="col s12" style={{paddingLeft: "11.250px", marginTop: "20px"}}>
                                         <Button type="submit" variant="outlined" color="gray" size="large">
                                             Login
                                         </Button>
                                     </div>
                                 </Grid>
-                                <div className="col s12" style={{ marginTop: "10px" }}>
+                                <div className="col s12" style={{marginTop: "10px"}}>
                                     <Grid item xs={12}>
                                         <h3 className="grey-text text-darken-1">
-                                            Don't have an account? <br />
+                                            Don't have an account? <br/>
                                             <Link to="/register">Register Here</Link>
                                         </h3>
                                     </Grid>
@@ -147,16 +153,6 @@ const mapStateToProps = state => ({
 //@TODO ROUTE REGISTERUSER ACTION TO ACTIONS SUBDIRECTORY WHICH PIPES REQUEST TO LOGIN/REGISTER SERVLET TO HANDLE ACTION CONTEXT
 export default connect(
     mapStateToProps,
-    {
-        loginUser, sendRequest
+    {loginUser
     }
 )(Login);
-
-
-{/* <Grid item xs={12} >
-    <div className="col s12">
-        <h2>
-            <b>Login</b> below
-                                </h2>
-    </div>
-</Grid> */}
