@@ -350,9 +350,7 @@ export class FieldCard extends React.Component {
                   <div className="description__value"></div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (
@@ -438,9 +436,7 @@ export class FieldCard extends React.Component {
                   </div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {/*left side of fieldcard*/}
@@ -529,9 +525,7 @@ export class FieldCard extends React.Component {
                 </div>
               </object>
               <object className="arrow">
-                <i
-                  className="fa fa-angle-double-right"
-                ></i>
+                <i className="fa fa-angle-double-right"></i>
               </object>
               <object className="descriptionMapped" align="right">
                 {this.props.hasInit === true &&
@@ -619,9 +613,7 @@ export class FieldCard extends React.Component {
                   <div className="description__value"></div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (
@@ -714,9 +706,7 @@ export class FieldCard extends React.Component {
                   </div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (

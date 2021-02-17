@@ -23,13 +23,13 @@ const SampleDisplay = props => {
                 className="btn bg-white btn-outline-dark"
                 onClick={() => props.up()}
               >
-                <i class="fa fa-arrow-up"></i>
+                <i className="fa fa-arrow-up"></i>
               </button>
               <button
                 className="btn bg-white btn-outline-dark"
                 onClick={() => props.down()}
               >
-                <i class="fa fa-arrow-down"></i>
+                <i className="fa fa-arrow-down"></i>
               </button>
             </div>
           </div>

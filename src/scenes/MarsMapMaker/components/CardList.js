@@ -199,6 +199,7 @@ const CardList = props => {
       if (toggleIndex === 1) {
         return (
           <FieldCard
+            key={newKey}
             jsFileValues={props.jsFileValues}
             hiding={props.hide}
             fieldTitle={field}
@@ -209,6 +210,7 @@ const CardList = props => {
       } else
         return (
           <FieldCard
+            key={newKey}
             jsFileValues={props.jsFileValues}
             hiding={props.hide}
             fieldTitle={Object.keys(props.toggleArr[toggleIndex])[newKey]}
@@ -259,7 +261,7 @@ const CardList = props => {
           <HeaderFieldCard />
         </div>
 
-        <div class="container-fluid">{fields}</div>
+        <div className="container-fluid">{fields}</div>
       </div>
       <div>
         Icons made by{" "}
