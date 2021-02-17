@@ -58,6 +58,11 @@ $mars--border: rgb(46, 14, 8);
   margin: 10px;
 }
 
+.btn-middle {
+  border-radius: 0px!important;
+  border-top: 0!important;
+}
+
 .description__value {
   position: relative;
   color: rgb(99, 99, 102);
@@ -385,6 +390,10 @@ $mars--border: rgb(46, 14, 8);
 
 .descriptionMapped > .dropDown > .dropdown {
   width: 18px;
+}
+
+.ReactModal__Overlay {
+  z-index: 1;
 }
 
 
