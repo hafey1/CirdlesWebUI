@@ -21,7 +21,7 @@ const MenuButtons = props => {
         style={{ maxWidth: "175px" }}
       >
         <div className="card-body">
-          <div class="btn-group-vertical">
+          <div className="btn-group-vertical">
             <button
               className="btn bg-white btn-outline-dark"
               onClick={() => props.hideField(props.isHidden)}

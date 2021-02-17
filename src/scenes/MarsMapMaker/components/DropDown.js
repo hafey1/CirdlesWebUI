@@ -7,6 +7,7 @@
 
 import React from "react";
 import { connect } from "react-redux";
+import _uniqueId from "lodash/uniqueId";
 
 // REDUX
 import {
@@ -548,7 +549,7 @@ export class DropDown extends React.Component {
       //returns default value Sesar Selection or loaded in value from JS file
       if (f.id === 1 && this.props.hasInit) {
         return (
-          <option key={f.title} value={firstLoad} disabled hidden>
+          <option key={f.id} value={firstLoad} disabled hidden>
             {firstLoad}
           </option>
         );
@@ -560,9 +561,9 @@ export class DropDown extends React.Component {
           this.createUserCodeOption(f.title) &&
           !this.checkStoreForTitle(f.title, 0)
         ) {
-          filterResult = userCodeDropdownOption(f.title);
+          filterResult = userCodeDropdownOption(f.title, f.id);
         } else if (f.format === "none") {
-          filterResult = noneDropdownOption();
+          filterResult = noneDropdownOption(f.id);
         } else filterResult = null;
       }
       //this block handles FieldCards 2,3,4 as metadata add cards to render only
@@ -572,25 +573,25 @@ export class DropDown extends React.Component {
           MAST.includes(f.title) &&
           !this.checkStoreForTitle(f.title, this.props.id)
         ) {
-          filterResult = metaDataAddDropdownOption(f.title);
+          filterResult = metaDataAddDropdownOption(f.title, f.id);
         } else if (f.format === "none") {
-          filterResult = noneDropdownOption();
+          filterResult = noneDropdownOption(f.id);
         } else filterResult = null;
       }
       //this block handles options that have the multi value format
       else if (f.format === "multivalue") {
-        filterResult = multiValueDropdownOption(f.title);
+        filterResult = multiValueDropdownOption(f.title, f.id);
       }
       //this block handles options that have the one2one format
       else if (
         f.format === "one2one" &&
         !this.checkStoreForTitle(f.title, this.props.id)
       ) {
-        filterResult = one2OneDropdownOption(f.title);
+        filterResult = one2OneDropdownOption(f.title, f.id);
       }
       //this block creates a none option for every field card
       else if (f.format === "none") {
-        filterResult = noneDropdownOption();
+        filterResult = noneDropdownOption(f.id);
       } else filterResult = null;
 
       return filterResult;

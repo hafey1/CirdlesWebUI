@@ -24,7 +24,11 @@ class CheckboxExample extends Component {
   render() {
     return (
       <div onClick={this.handleChange} className="inner--checkbox">
-        <input type="radio" checked={this.props.ent[this.props.id].isGreen} />
+        <input
+          type="radio"
+          onChange={() => {}}
+          checked={this.props.ent[this.props.id].isGreen}
+        />
       </div>
     );
   }
