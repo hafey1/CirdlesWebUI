@@ -564,7 +564,7 @@ export class FieldCard extends React.Component {
                   </div>
                 )}
                 <div class="hidden_pad">
-                  <div style={{ float: "right" }}>
+                  <div>
                     {this.props.hasInit && this.state.index !== -1
                       ? "sss" +
                         this.entMultiSizeCount(
@@ -649,7 +649,7 @@ export class FieldCard extends React.Component {
                     </div>
                   )}
                   <div class="hidden_pad">
-                    <div style={{ float: "right" }}>
+                    <div>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.entMultiSizeCount(
                             this.props.id,
@@ -740,7 +740,7 @@ export class FieldCard extends React.Component {
                   )}
 
                   <div class="hidden_pad">
-                    <div style={{ float: "right" }}>
+                    <div>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.currentTotal()
                         : ""}
@@ -775,15 +775,8 @@ export class FieldCard extends React.Component {
               </div>
             </object>
             <object className="descriptionMapped" align="right">
-              <div className="description__mapped__content"> </div>
-              <div
-                style={{
-                  paddingTop: "10px",
-                  paddingLeft: "62px",
-                  float: "right",
-                  display: "inline"
-                }}
-              ></div>
+              <div className="description__mapped__content"></div>
+              <div className="map_disabled"></div>
               {this.props.ent[this.props.id].isGreen ? this.filterDrop() : null}
             </object>
           </div>
