@@ -134,7 +134,10 @@ const CardList = props => {
         header: field,
         isDate: false,
         isMeasurement: false,
-        isGreen: fieldValState[newKey] !== "" || valueIsInJsMappingFile(field)
+        isGreen:
+          fieldValState[newKey] !== "" ||
+          valueIsInJsMappingFile(field) ||
+          newKey === 0
       };
       fieldContentValue = fieldValState[newKey];
     } else {
@@ -170,6 +173,7 @@ const CardList = props => {
               fieldValState[newKey] !== "" || valueIsInJsMappingFile(field)
           };
         } else {
+          console.log(newKey === 0);
           storedValue = {
             id: newKey,
             sesarTitle: "",

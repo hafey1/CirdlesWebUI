@@ -147,7 +147,7 @@ export class App extends React.Component {
   createSquiggleArray = () => {
     let arr = [];
     for (let i = 0; i < this.state.emptyCards.length; i++) {
-      arr.push("_");
+      arr.push("");
     }
     return arr;
   };
