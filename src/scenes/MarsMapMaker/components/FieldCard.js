@@ -352,7 +352,6 @@ export class FieldCard extends React.Component {
                 <object className="arrow">
                   <i
                     className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
                   ></i>
                 </object>
                 <object className="descriptionMapped" align="right">
@@ -370,7 +369,6 @@ export class FieldCard extends React.Component {
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -396,34 +394,17 @@ export class FieldCard extends React.Component {
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline",
-                        visibility: "hidden"
-                      }}
-                    >
-                      <button style={{ float: "right" }} class="ui icon button">
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
@@ -459,7 +440,6 @@ export class FieldCard extends React.Component {
                 <object className="arrow">
                   <i
                     className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
                   ></i>
                 </object>
                 <object className="descriptionMapped" align="right">
@@ -476,7 +456,6 @@ export class FieldCard extends React.Component {
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -504,32 +483,16 @@ export class FieldCard extends React.Component {
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       {" "}
                       {this.props.hasInit && this.state.index !== -1
                         ? "ddd" +
@@ -568,7 +531,6 @@ export class FieldCard extends React.Component {
               <object className="arrow">
                 <i
                   className="fa fa-angle-double-right"
-                  style={{ zIndex: 1 }}
                 ></i>
               </object>
               <object className="descriptionMapped" align="right">
@@ -583,7 +545,6 @@ export class FieldCard extends React.Component {
                 ) : (
                   <div
                     style={{
-                      paddingTop: ".8em",
                       display: "inline-block",
                       width: "150px",
                       paddingRight: "35px"
@@ -607,47 +568,22 @@ export class FieldCard extends React.Component {
                 this.props.ent[this.props.id].sesarTitle !== "" &&
                 this.isMultiValue(this.props.ent[this.props.id].sesarTitle) ===
                   false ? (
-                  <div
-                    style={{
-                      paddingTop: "8px",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline"
-                    }}
-                  >
+                  <div class="pad">
                     <button
                       onClick={() => this.areEditing()}
-                      style={{ float: "right" }}
-                      class="ui icon button"
+                      class="ui icon button edit_icon"
                     >
                       <i class="fa fa-edit"></i>
                     </button>
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline",
-                      visibility: "hidden"
-                    }}
-                  >
-                    <button style={{ float: "right" }} class="ui icon button">
+                  <div class="hidden_pad">
+                    <button class="ui icon button edit_icon">
                       <i class="fa fa-edit"></i>
                     </button>
                   </div>
                 )}
-                <div
-                  style={{
-                    visibility: "hidden",
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
-                    float: "right",
-                    display: "inline"
-                  }}
-                >
+                <div class="hidden_pad">
                   <div style={{ float: "right" }}>
                     {this.props.hasInit && this.state.index !== -1
                       ? "sss" +
@@ -685,7 +621,6 @@ export class FieldCard extends React.Component {
                 <object className="arrow">
                   <i
                     className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
                   ></i>
                 </object>
                 <object className="descriptionMapped" align="right">
@@ -705,7 +640,6 @@ export class FieldCard extends React.Component {
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -728,47 +662,22 @@ export class FieldCard extends React.Component {
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline",
-                        visibility: "hidden"
-                      }}
-                    >
-                      <button style={{ float: "right" }} class="ui icon button">
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   )}
-                  <div
-                    style={{
-                      visibility: "hidden",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline"
-                    }}
-                  >
+                  <div class="hidden_pad">
                     <div style={{ float: "right" }}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.entMultiSizeCount(
@@ -807,7 +716,6 @@ export class FieldCard extends React.Component {
                 <object className="arrow">
                   <i
                     className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
                   ></i>
                 </object>
                 <object className="descriptionMapped" align="right">
@@ -827,7 +735,6 @@ export class FieldCard extends React.Component {
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -854,48 +761,23 @@ export class FieldCard extends React.Component {
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline",
-                        visibility: "hidden"
-                      }}
-                    >
-                      <button style={{ float: "right" }} class="ui icon button">
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   )}
 
-                  <div
-                    style={{
-                      paddingTop: "10px",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline"
-                    }}
-                  >
+                  <div class="hidden_pad">
                     <div style={{ float: "right" }}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.currentTotal()
