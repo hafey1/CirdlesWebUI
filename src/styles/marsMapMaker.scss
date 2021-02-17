@@ -357,6 +357,19 @@ $mars--border: rgb(46, 14, 8);
 
 .edit_icon {
   float: right;
+  margin-top: 5px;
+}
+
+.input {
+  display: inline-block;
+  width: 150px;
+  padding-right: 35px;
+}
+
+.input_box {
+  max-height: 27px;
+  display: inline-block;
+  width: 150px;
 }
 
 .pad {
