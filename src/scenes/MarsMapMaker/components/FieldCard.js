@@ -360,7 +360,7 @@ export class FieldCard extends React.Component {
                       )}
                       {this.props.fieldValue.length > 25 ? (
                         <span className="hiddentext">
-                          {this.props.fieldValue}
+                          {this.props.ent[this.props.id].value}
                         </span>
                       ) : null}
                     </div>
@@ -531,7 +531,7 @@ export class FieldCard extends React.Component {
                 {this.props.hasInit === true &&
                 this.state.areEditing === true ? (
                   <div className="description__mapped__content">
-                    {lengthCheckedValue(this.state.updatedValue)}
+                    {lengthCheckedValue(this.props.ent[this.props.id].value)}
                     <span className="hiddentext">
                       {this.props.ent[this.props.id].value}
                     </span>
@@ -608,7 +608,9 @@ export class FieldCard extends React.Component {
                     )}
                   </div>
                   <div dir="rtl" className="description__title">
-                    {"Added Metadata"}
+                    {this.props.id === 0
+                      ? "Required Metadata"
+                      : "Added Optional Metadata"}
                   </div>
                   <div className="description__value"></div>
                 </object>
@@ -621,7 +623,9 @@ export class FieldCard extends React.Component {
                       {this.props.hasInit &&
                       this.props.ent[this.props.id].sesarTitle !== "" &&
                       this.props.ent[this.props.id].sesarTitle !== "none"
-                        ? lengthCheckedValue(this.state.updatedValue)
+                        ? lengthCheckedValue(
+                            this.props.ent[this.props.id].value
+                          )
                         : "Not Mapped"}
                       {this.props.fieldValue.length > 25 ? (
                         <span className="hiddentext">
@@ -795,7 +799,9 @@ export class FieldCard extends React.Component {
                 />
               </div>
               <div dir="rtl" className="description__title">
-                {this.props.fieldTitle}
+                {this.props.ent[this.props.id].header.includes("<METADATA_AD")
+                  ? "Added Optional Metadata"
+                  : this.props.ent[this.props.id].header}
               </div>
               <div className="description__value">
                 {" "}
