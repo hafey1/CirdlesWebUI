@@ -10,6 +10,7 @@ import classNames from "classnames";
 import { connect } from "react-redux";
 import CheckboxExample from "./CheckBox";
 import DropDown from "./DropDown";
+import FieldCardRender from "./renderCards/FieldCardRender";
 import {
   removeContent,
   totalMultiValueCount,
@@ -342,6 +343,27 @@ export class FieldCard extends React.Component {
         return "Total:" + this.props.totalMulti[i].count;
       }
     }
+  };
+  // function that creates an object with all the properties we need to render fieldCard
+  createRenderingObject = () => {
+    let obj = {
+      id : this.props.id,
+      fieldTitle : this.props.fieldTitle,
+      fieldName : this.props.fieldName,
+      fieldValue : this.props.fieldValue,
+      greenCallback : this.greenToggle,
+      isChecked : this.state.isGreen,
+      areEditing : this.state.areEditing,
+      updatedValue : this.state.updatedValue,
+      forceEdit : this.forceEdit,
+      editPlaceholderText : this.editPlaceholderText,
+      filterDrop : this.filterDrop,
+      hasInit : this.props.hasInit,
+      ent : this.props.ent,
+      isMultiValue : this.isMultiValue,
+      areEditingFunction : this.areEditing
+    };
+    return obj;
   };
 
   render() {
@@ -940,37 +962,7 @@ export class FieldCard extends React.Component {
     // returns the white styled field card
     else {
       return (
-        <div className="ui label">
-          <div className="fieldContainerDisabled">
-            <object>
-              <div className="check__box">
-                <CheckboxExample
-                  greenCallback={this.greenToggle}
-                  isChecked={this.state.isGreen}
-                />
-              </div>
-              <div dir="rtl" className="description__title">
-                {this.props.fieldTitle}
-              </div>
-              <div className="description__value">
-                {" "}
-                {":        " + lengthCheckedValue(this.props.fieldValue)}
-              </div>
-            </object>
-            <object className="descriptionMapped" align="right">
-              <div className="description__mapped__content"> </div>
-              <div
-                style={{
-                  paddingTop: "10px",
-                  paddingLeft: "62px",
-                  float: "right",
-                  display: "inline"
-                }}
-              ></div>
-              {this.filterDrop()}
-            </object>
-          </div>
-        </div>
+        <FieldCardRender rObject={this.createRenderingObject()}/>
       );
     }
   }
