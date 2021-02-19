@@ -7,9 +7,7 @@
 
 import React from "react";
 import { connect } from "react-redux";
-
-//CSS & Styling
-import "semantic-ui-react";
+import _uniqueId from "lodash/uniqueId";
 
 // REDUX
 import {
@@ -227,7 +225,8 @@ export class DropDown extends React.Component {
         sesarSelected: title,
         oldValue: this.props.value,
         value: update,
-        header: this.props.title
+        header: this.props.title,
+        isGreen: this.props.ent[this.props.id].isGreen
       };
 
       this.props.dropdownUpdate(obj);
@@ -311,8 +310,10 @@ export class DropDown extends React.Component {
       sesarSelected: title,
       oldValue: this.props.value,
       value: update,
-      header: this.props.title
+      header: this.props.title,
+      isGreen: this.props.ent[this.props.id].isGreen
     };
+    /////// js prepopulates date fieldcard
     this.props.dropdownUpdate(obj);
 
     return update;
@@ -348,6 +349,7 @@ export class DropDown extends React.Component {
       if (!this.props.dropDownChosen) {
         alert("You have not selected a date format...");
         this.props.refresh();
+        this.setState(this.state);
         console.log("Please choose a date format!!!");
       }
       return;
@@ -420,13 +422,15 @@ export class DropDown extends React.Component {
       value: valueOverride,
       header: headerOverride,
       bool: true,
-      dropOption: this.props.dropDownChosen
+      dropOption: this.props.dropDownChosen,
+      isGreen: this.props.ent[this.props.id].isGreen
     };
 
     if (
       this.props.ent[this.props.id].header !== "<METADATA_ADD>" ||
       newValue !== this.props.ent[this.props.id].sesarTitle
     ) {
+      /////called for every fieldcard
       this.props.dropdownUpdate(obj);
     }
 
@@ -455,8 +459,9 @@ export class DropDown extends React.Component {
   // automatically updates the right side content if a js file is loaded in, no dropdown click necessary
   updateValueToggle = () => {
     const newValue = this.props.ent[this.props.id].sesarTitle;
-
-    this.updateValueHelper(newValue, true);
+    if (this.props.jsFile !== undefined) {
+      this.updateValueHelper(newValue, true);
+    }
   };
 
   // function that searches the ent array in the store for any index with content
@@ -536,7 +541,7 @@ export class DropDown extends React.Component {
     } else display = "auto";
 
     // automatically updates the right side content if a js file is loaded in, no dropdown click necessary
-    this.toggleNotInUse();
+    if (this.props.jsFile !== undefined) this.toggleNotInUse();
 
     // filters default values and possible options for dropdown
     let filter = f => {
@@ -544,7 +549,7 @@ export class DropDown extends React.Component {
       //returns default value Sesar Selection or loaded in value from JS file
       if (f.id === 1 && this.props.hasInit) {
         return (
-          <option key={f.title} value={firstLoad} disabled hidden>
+          <option key={f.id} value={firstLoad} disabled hidden>
             {firstLoad}
           </option>
         );
@@ -556,9 +561,9 @@ export class DropDown extends React.Component {
           this.createUserCodeOption(f.title) &&
           !this.checkStoreForTitle(f.title, 0)
         ) {
-          filterResult = userCodeDropdownOption(f.title);
+          filterResult = userCodeDropdownOption(f.title, f.id);
         } else if (f.format === "none") {
-          filterResult = noneDropdownOption();
+          filterResult = noneDropdownOption(f.id);
         } else filterResult = null;
       }
       //this block handles FieldCards 2,3,4 as metadata add cards to render only
@@ -568,25 +573,25 @@ export class DropDown extends React.Component {
           MAST.includes(f.title) &&
           !this.checkStoreForTitle(f.title, this.props.id)
         ) {
-          filterResult = metaDataAddDropdownOption(f.title);
+          filterResult = metaDataAddDropdownOption(f.title, f.id);
         } else if (f.format === "none") {
-          filterResult = noneDropdownOption();
+          filterResult = noneDropdownOption(f.id);
         } else filterResult = null;
       }
       //this block handles options that have the multi value format
       else if (f.format === "multivalue") {
-        filterResult = multiValueDropdownOption(f.title);
+        filterResult = multiValueDropdownOption(f.title, f.id);
       }
       //this block handles options that have the one2one format
       else if (
         f.format === "one2one" &&
         !this.checkStoreForTitle(f.title, this.props.id)
       ) {
-        filterResult = one2OneDropdownOption(f.title);
+        filterResult = one2OneDropdownOption(f.title, f.id);
       }
       //this block creates a none option for every field card
       else if (f.format === "none") {
-        filterResult = noneDropdownOption();
+        filterResult = noneDropdownOption(f.id);
       } else filterResult = null;
 
       return filterResult;
@@ -616,6 +621,7 @@ const mapStateToProps = state => {
   return {
     ent: state.marsMapMaker.entries,
     dateFormat: state.marsMapMaker.chosenDateFormat,
+    jsFile: state.marsMapMaker.jsFile,
     hasChosen: state.marsMapMaker.hasChosenDateFormat,
     dropDownChosen: state.marsMapMaker.hasChosenDropdownOption,
     hasChosenCentury: state.marsMapMaker.centuryChosen,

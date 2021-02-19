@@ -23,6 +23,13 @@ export const formatDate = chosenObj => {
   };
 };
 
+export const greenFlip = chosenObj => {
+  return {
+    type: "FLIP_CHECKBOX",
+    payload: chosenObj
+  };
+};
+
 export const century = obj => {
   return {
     type: "CENTURY",
@@ -89,13 +96,6 @@ export const setSubstringDateFormat = obj => {
 export const changeInit = obj => {
   return {
     type: "CHANGE_INIT"
-  };
-};
-
-export const isOpen = obj => {
-  return {
-    type: "IS_OPEN",
-    payload: obj
   };
 };
 

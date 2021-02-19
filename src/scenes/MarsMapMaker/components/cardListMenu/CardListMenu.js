@@ -17,11 +17,7 @@ const CardListMenu = props => {
       />
 
       <DateFormat />
-      <MenuButtons
-        hideText={() => props.hideOrShow()}
-        mapPreview={() => props.callbacks()}
-        pop={() => props.previewPop()}
-      />
+      <MenuButtons hideText={() => props.hideOrShow()} />
     </div>
   );
 };

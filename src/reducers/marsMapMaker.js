@@ -27,7 +27,6 @@ const initialState = {
   toggleIndex: -1,
   toggleInUse: false,
   toggleArr: [],
-  isOpen: false,
   hasInit: false,
   hide: false,
   jsFile: undefined,
@@ -150,7 +149,7 @@ export default function(state = initialState, action) {
             header: action.payload.header,
             isDate: false,
             isMeasurement: false,
-            isGreen: true
+            isGreen: state.entries[action.payload.id].isGreen
           },
           ...state.entries.slice(index + 1)
         ],
@@ -162,11 +161,11 @@ export default function(state = initialState, action) {
         ]
       };
 
-    case "SHOW_METADATA_CARD":
+    case "FLIP_CHECKBOX":
       return update(state, {
         entries: {
           [action.payload.id]: {
-            isGreen: { $set: true }
+            isGreen: { $set: !state.entries[action.payload.id].isGreen }
           }
         }
       });
@@ -196,7 +195,7 @@ export default function(state = initialState, action) {
           ...state.entries.slice(0, i),
           {
             id: action.payload.id,
-            sesarTitle: "",
+            sesarTitle: "none",
             oldValue: action.payload.oldValue,
             value: action.payload.value,
             header: action.payload.header,
@@ -211,11 +210,6 @@ export default function(state = initialState, action) {
     case "SET_SUB":
       return update(state, {
         substringDateFormat: { $set: action.payload.substringDateFormat }
-      });
-
-    case "IS_OPEN":
-      return update(state, {
-        isOpen: { $set: action.payload.bool }
       });
 
     case "INIT_TOGGLE":

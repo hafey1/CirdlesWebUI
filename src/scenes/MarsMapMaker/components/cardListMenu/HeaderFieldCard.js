@@ -32,7 +32,7 @@ const HeaderFieldCard = props => {
           display: "inline-block"
         }}
       >
-        <div class="maps__to">Maps To</div>
+        <div className="maps__to">Maps To</div>
       </object>
       <object className="descriptionKeyMapped">
         <div

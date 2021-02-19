@@ -21,22 +21,16 @@ export const registerUser = (newUser, history) => dispatch => {
             })
         );
 };
-export const startUp = () => dispatch => {
+export const startUp = (userName) => dispatch => {
     axios
-        .post("http://localhost:8080/Services/squidinkstartup")
-        .then(res => console.log(res))
+        .post("http://localhost:8080/Services/squidinkstartup", userName)
+        .then(res => openPage(res.data))
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
             })
         );
-};
-export const sendRequest = (newUser, history) => dispatch => {
-    axios
-        .post("http://localhost:8080/Services/squidinktester", newUser)
-        .then(res => console.log("done: " + JSON.stringify(res.data)))
-
 };
 // Login - get user token
 export const loginUser = (userData, history) => dispatch => {
@@ -52,16 +46,12 @@ export const loginUser = (userData, history) => dispatch => {
            dispatch(setCurrentUser(jwt_decode(res.data)));
         })
         //Invoke Container Startup and open endpoint
-        .then(startUp())
-        .then(setTimeout(function () { window.open("http://192.168.99.100:8081/squid_servlet/"); }, 1000))
-        //Send a subsequent post of all current user files
-        .then( setTimeout(function() {axios.post("http://localhost:8080/Services/filesender/" + userData.email)}, 10000)
-        .then(console.log(ress => {
-            console.log(ress)
-        }))
-        )
+        .then(startUp(userData.email))
 };
-
+//@TODO Change input to Base_URL
+export const openPage = (port) => {
+    setTimeout(function () { window.open("http://192.168.99.100:" + port + "/squid_servlet/") }, 1000);
+}
 // Set logged in user
 export const setCurrentUser = decoded => {
     return {

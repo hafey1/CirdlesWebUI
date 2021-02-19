@@ -5,28 +5,42 @@
 ///////////////////////////////////////////////////////////////////////////////////
 
 import React, { Component } from "react";
-
-// CSS & Styling
-import { Checkbox } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { greenFlip } from "../../../actions/marsMapMaker";
 import "../../../styles/marsMapMaker.scss";
 
 /////////////////////////////////////////////////
 ////////////////////////////////////////////////
 
-export default class CheckboxExample extends Component {
-  state = { checked: this.props.isChecked };
-
+class CheckboxExample extends Component {
   // function that goes back to the fieldCard and changes the color of the fieldCard (previously the cards were green, hints the name)
-  toggle = () => {
-    this.props.greenCallback();
-    this.setState({ checked: !this.props.isChecked });
+  handleChange = () => {
+    let obj = {
+      id: this.props.id
+    };
+    this.props.greenFlip(obj);
   };
 
   render() {
     return (
-      <div className="inner--checkbox">
-        <Checkbox onChange={this.toggle} checked={this.state.checked} />
+      <div onClick={this.handleChange} className="inner--checkbox">
+        <input
+          type="radio"
+          onChange={() => {}}
+          checked={this.props.ent[this.props.id].isGreen}
+        />
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    ent: state.marsMapMaker.entries
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { greenFlip }
+)(CheckboxExample);

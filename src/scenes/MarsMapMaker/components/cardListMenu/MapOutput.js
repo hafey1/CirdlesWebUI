@@ -231,6 +231,7 @@ class MapOutput extends React.Component {
       //these conditionals track the last occurance of each type of sesarTitle
       if (
         this.props.ent[j].sesarTitle !== "none" &&
+        this.props.ent[j].isGreen &&
         this.props.ent[j].sesarTitle !== "" &&
         this.props.ent[j].value !== "<METADATA_ADD>" &&
         !MVT.includes(this.props.ent[j].sesarTitle)
@@ -261,6 +262,7 @@ class MapOutput extends React.Component {
     for (let i = 0; i < this.props.ent.length; i++) {
       if (
         this.props.ent[i].sesarTitle !== "none" &&
+        this.props.ent[i].isGreen &&
         this.props.ent[i].sesarTitle !== "" &&
         this.props.ent[i].value !== "<METADATA_ADD>" &&
         !MVT.includes(this.props.ent[i].sesarTitle)

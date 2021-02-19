@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import "../../../../styles/marsMapMaker.scss";
 import { hideField } from "../../../../actions/marsMapMaker";
 
-//#### TODO: move store content from cardlist into this file as neccessary
-const MenuButton = props => {
+import { PreviewModal } from "./PreviewModal";
+
+const MenuButtons = props => {
   const checkStore = () => {
     console.log(props.fileMeta);
     console.log(props.persist);
@@ -20,7 +21,7 @@ const MenuButton = props => {
         style={{ maxWidth: "175px" }}
       >
         <div className="card-body">
-          <div class="btn-group-vertical">
+          <div className="btn-group-vertical">
             <button
               className="btn bg-white btn-outline-dark"
               onClick={() => props.hideField(props.isHidden)}
@@ -28,13 +29,7 @@ const MenuButton = props => {
               {" "}
               {props.hideText()}{" "}
             </button>
-            <button
-              className="btn bg-white btn-outline-dark"
-              onClick={() => props.mapPreview()}
-            >
-              {" "}
-              Preview Map{" "}
-            </button>
+            <PreviewModal ent={props.ent} />
             <button
               className="btn bg-white btn-outline-dark"
               onClick={checkStore}
@@ -65,4 +60,4 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   { hideField }
-)(MenuButton);
+)(MenuButtons);

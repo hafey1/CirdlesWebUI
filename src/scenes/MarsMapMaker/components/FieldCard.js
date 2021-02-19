@@ -15,7 +15,8 @@ import {
   removeContent,
   totalMultiValueCount,
   forceEdit,
-  persistingDataConcat
+  persistingDataConcat,
+  greenFlip
 } from "../../../actions/marsMapMaker";
 import { isMetaDataAddCard, lengthCheckedValue } from "../util/helper";
 import { MULTI_VALUE_TITLES as MVT } from "../util/constants";
@@ -27,7 +28,6 @@ export class FieldCard extends React.Component {
     dropDownChosen: false,
     areEditing: true,
     updatedValue: this.props.fieldValue,
-    isGreen: this.props.hasContent,
     sesarOptions: options,
     formattedString: "",
     index: -1
@@ -36,14 +36,14 @@ export class FieldCard extends React.Component {
   // switch between CSS classes to switch between green and white
   btnClass = classNames({
     field_container3: this.props.addedNewField,
-    field_container1: this.state.isGreen,
-    field_container2: !this.state.isGreen
+    field_container1: this.props.ent[this.props.id].isGreen,
+    field_container2: !this.props.ent[this.props.id].isGreen
   });
 
   filterDrop = () => {
     return (
       <DropDown
-        shouldAppear={this.state.isGreen}
+        shouldAppear={this.props.ent[this.props.id].isGreen}
         refresh={this.refreshFieldCard}
         callback={this.fileCallback}
         title={this.props.fieldTitle}
@@ -56,7 +56,6 @@ export class FieldCard extends React.Component {
 
   fileCallback = (data, title) => {
     let currentComponent = this;
-
     if (isMetaDataAddCard(this.props.id)) {
       let value;
       value = this.props.ent[this.props.id].value;
@@ -139,43 +138,21 @@ export class FieldCard extends React.Component {
     return valid;
   };
 
-  greenToggle = () => {
-    this.jsFileValueToggle();
-    let currentComponent = this;
-    currentComponent.setState({
-      isGreen: !this.state.isGreen,
-      updatedValue: this.props.fieldValue
-    });
-
-    const obj = {
-      oldValue: this.props.fieldValue,
-      value: this.props.fieldValue,
-      header: this.props.fieldTitle,
-      id: this.props.id,
-      isGreen: !this.state.isGreen
-    };
-    this.props.removeContent(obj);
-    this.setState({ isGreen: !this.state.isGreen });
-    this.render();
-  };
-
   refreshFieldCard = () => {
+    //rerenders fieldcard if wrong dropdown option is chosen
     setTimeout(() => {
       let obj = {
         oldValue: this.props.fieldCard,
         id: this.props.id,
         value: this.props.fieldValue,
         header: this.props.fieldTitle,
-        isGreen: this.props.isGreen
+        isGreen: !this.props.ent[this.props.id].isGreen
       };
-      this.setState({ isGreen: !this.state.isGreen });
+
       this.setState({ sesarChosen: "", updatedValue: this.props.fieldValue });
       this.props.removeContent(obj);
-    }, 0); // ------------------------------> timeout 0
-
-    setTimeout(() => {
-      this.setState({ isGreen: !this.state.isGreen });
-    }, 10);
+      this.props.greenFlip(obj);
+    }, 0);
   };
 
   entMultiSizeCount = (id, title) => {
@@ -368,9 +345,10 @@ export class FieldCard extends React.Component {
 
   render() {
     //removes the unchecked field card
-    if (this.props.hiding && this.state.isGreen === false) return null;
+    if (this.props.hiding && this.props.ent[this.props.id].isGreen === false)
+      return null;
     //returns the green styled field card
-    else if (this.state.isGreen) {
+    else if (this.props.ent[this.props.id].isGreen) {
       //if a JS file was loaded and this card does not have a dropdown selected
       if (
         this.jsFileValueToggle() === true &&
@@ -386,10 +364,7 @@ export class FieldCard extends React.Component {
               <div className="fieldContainerMetadataAdd">
                 <object>
                   <div className="check__box">
-                    <CheckboxExample
-                      greenCallback={this.greenToggle}
-                      isChecked={this.state.isGreen}
-                    />
+                    <CheckboxExample id={this.props.id} />
                   </div>
                   <div dir="rtl" className="description__title">
                     {this.props.fieldTitle}
@@ -397,10 +372,7 @@ export class FieldCard extends React.Component {
                   <div className="description__value"></div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (
@@ -410,14 +382,13 @@ export class FieldCard extends React.Component {
                       )}
                       {this.props.fieldValue.length > 25 ? (
                         <span className="hiddentext">
-                          {this.props.fieldValue}
+                          {this.props.ent[this.props.id].value}
                         </span>
                       ) : null}
                     </div>
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -434,41 +405,26 @@ export class FieldCard extends React.Component {
                       />
                     </div>
                   )}
-                  {this.filterDrop()}
+                  {this.props.ent[this.props.id].isGreen
+                    ? this.filterDrop()
+                    : null}
 
                   {this.props.hasInit === true &&
                   this.props.ent[this.props.id].sesarTitle !== "" &&
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline",
-                        visibility: "hidden"
-                      }}
-                    >
-                      <button style={{ float: "right" }} class="ui icon button">
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
@@ -486,10 +442,7 @@ export class FieldCard extends React.Component {
               <div className="fieldContainer1">
                 <object>
                   <div className="check__box">
-                    <CheckboxExample
-                      greenCallback={this.greenToggle}
-                      isChecked={this.state.isGreen}
-                    />
+                    <CheckboxExample id={this.props.id} />
                   </div>
                   <div dir="rtl" className="description__title">
                     {this.props.fieldTitle}
@@ -505,10 +458,7 @@ export class FieldCard extends React.Component {
                   </div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {/*left side of fieldcard*/}
@@ -524,7 +474,6 @@ export class FieldCard extends React.Component {
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -541,7 +490,9 @@ export class FieldCard extends React.Component {
                       />
                     </div>
                   )}
-                  {this.filterDrop()}
+                  {this.props.ent[this.props.id].isGreen
+                    ? this.filterDrop()
+                    : null}
 
                   {/*If dropdown value is chosen, and value is not a multivalue display edit button */}
                   {this.props.hasInit === true &&
@@ -550,32 +501,16 @@ export class FieldCard extends React.Component {
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       {" "}
                       {this.props.hasInit && this.state.index !== -1
                         ? "ddd" +
@@ -601,10 +536,7 @@ export class FieldCard extends React.Component {
             <div className="fieldContainerMetadata">
               <object>
                 <div className="check__box">
-                  <CheckboxExample
-                    greenCallback={this.greenToggle}
-                    isChecked={this.state.isGreen}
-                  />
+                  <CheckboxExample id={this.props.id} />
                 </div>
                 <div dir="rtl" className="description__title">
                   {this.props.fieldTitle}
@@ -615,16 +547,13 @@ export class FieldCard extends React.Component {
                 </div>
               </object>
               <object className="arrow">
-                <i
-                  className="fa fa-angle-double-right"
-                  style={{ zIndex: 1 }}
-                ></i>
+                <i className="fa fa-angle-double-right"></i>
               </object>
               <object className="descriptionMapped" align="right">
                 {this.props.hasInit === true &&
                 this.state.areEditing === true ? (
                   <div className="description__mapped__content">
-                    {lengthCheckedValue(this.state.updatedValue)}
+                    {lengthCheckedValue(this.props.ent[this.props.id].value)}
                     <span className="hiddentext">
                       {this.props.ent[this.props.id].value}
                     </span>
@@ -632,7 +561,6 @@ export class FieldCard extends React.Component {
                 ) : (
                   <div
                     style={{
-                      paddingTop: ".8em",
                       display: "inline-block",
                       width: "150px",
                       paddingRight: "35px"
@@ -649,52 +577,29 @@ export class FieldCard extends React.Component {
                     />
                   </div>
                 )}
-                {this.filterDrop()}
+                {this.props.ent[this.props.id].isGreen
+                  ? this.filterDrop()
+                  : null}
                 {this.props.hasInit === true &&
                 this.props.ent[this.props.id].sesarTitle !== "" &&
                 this.isMultiValue(this.props.ent[this.props.id].sesarTitle) ===
                   false ? (
-                  <div
-                    style={{
-                      paddingTop: "8px",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline"
-                    }}
-                  >
+                  <div class="pad">
                     <button
                       onClick={() => this.areEditing()}
-                      style={{ float: "right" }}
-                      class="ui icon button"
+                      class="ui icon button edit_icon"
                     >
                       <i class="fa fa-edit"></i>
                     </button>
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline",
-                      visibility: "hidden"
-                    }}
-                  >
-                    <button style={{ float: "right" }} class="ui icon button">
+                  <div class="hidden_pad">
+                    <button class="ui icon button edit_icon">
                       <i class="fa fa-edit"></i>
                     </button>
                   </div>
                 )}
-                <div
-                  style={{
-                    visibility: "hidden",
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
-                    float: "right",
-                    display: "inline"
-                  }}
-                >
+                <div class="hidden_pad">
                   <div style={{ float: "right" }}>
                     {this.props.hasInit && this.state.index !== -1
                       ? "sss" +
@@ -720,23 +625,19 @@ export class FieldCard extends React.Component {
                       <div> </div>
                     ) : (
                       <div>
-                        <CheckboxExample
-                          greenCallback={this.greenToggle}
-                          isChecked={this.state.isGreen}
-                        />
+                        <CheckboxExample id={this.props.id} />
                       </div>
                     )}
                   </div>
                   <div dir="rtl" className="description__title">
-                    {"Missing field"}
+                    {this.props.id === 0
+                      ? "Required Metadata"
+                      : "Added Optional Metadata"}
                   </div>
                   <div className="description__value"></div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (
@@ -744,8 +645,10 @@ export class FieldCard extends React.Component {
                       {this.props.hasInit &&
                       this.props.ent[this.props.id].sesarTitle !== "" &&
                       this.props.ent[this.props.id].sesarTitle !== "none"
-                        ? lengthCheckedValue(this.state.updatedValue)
-                        : null}
+                        ? lengthCheckedValue(
+                            this.props.ent[this.props.id].value
+                          )
+                        : "Not Mapped"}
                       {this.props.fieldValue.length > 25 ? (
                         <span className="hiddentext">
                           {this.props.fieldValue}
@@ -755,7 +658,6 @@ export class FieldCard extends React.Component {
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -770,53 +672,30 @@ export class FieldCard extends React.Component {
                       />
                     </div>
                   )}
-                  {this.filterDrop()}
+                  {this.props.ent[this.props.id].isGreen
+                    ? this.filterDrop()
+                    : null}
                   {this.props.hasInit === true &&
                   this.props.ent[this.props.id].sesarTitle !== "" &&
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline",
-                        visibility: "hidden"
-                      }}
-                    >
-                      <button style={{ float: "right" }} class="ui icon button">
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   )}
-                  <div
-                    style={{
-                      visibility: "hidden",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline"
-                    }}
-                  >
+                  <div class="hidden_pad">
                     <div style={{ float: "right" }}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.entMultiSizeCount(
@@ -837,10 +716,7 @@ export class FieldCard extends React.Component {
               <div className="fieldContainer1">
                 <object>
                   <div className="check__box">
-                    <CheckboxExample
-                      greenCallback={this.greenToggle}
-                      isChecked={this.state.isGreen}
-                    />
+                    <CheckboxExample id={this.props.id} />
                   </div>
                   <div dir="rtl" className="description__title">
                     {this.props.fieldTitle}
@@ -856,10 +732,7 @@ export class FieldCard extends React.Component {
                   </div>
                 </object>
                 <object className="arrow">
-                  <i
-                    className="fa fa-angle-double-right"
-                    style={{ zIndex: 1 }}
-                  ></i>
+                  <i className="fa fa-angle-double-right"></i>
                 </object>
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (
@@ -868,7 +741,7 @@ export class FieldCard extends React.Component {
                       this.props.ent[this.props.id].sesarTitle !== "" &&
                       this.props.ent[this.props.id].sesarTitle !== "none"
                         ? lengthCheckedValue(this.state.updatedValue)
-                        : null}
+                        : "Not Mapped"}
                       {this.state.updatedValue.length > 25 ? (
                         <span className="hiddentext">
                           {this.state.updatedValue}
@@ -878,7 +751,6 @@ export class FieldCard extends React.Component {
                   ) : (
                     <div
                       style={{
-                        paddingTop: ".8em",
                         display: "inline-block",
                         width: "150px",
                         paddingRight: "35px"
@@ -896,55 +768,32 @@ export class FieldCard extends React.Component {
                     </div>
                   )}
 
-                  {this.filterDrop()}
+                  {this.props.ent[this.props.id].isGreen
+                    ? this.filterDrop()
+                    : null}
                   {this.props.hasInit === true &&
                   this.props.ent[this.props.id].sesarTitle !== "none" &&
                   this.props.ent[this.props.id].sesarTitle !== "" &&
                   this.isMultiValue(
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
-                    <div
-                      style={{
-                        paddingTop: "8px",
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline"
-                      }}
-                    >
+                    <div class="pad">
                       <button
                         onClick={() => this.areEditing()}
-                        style={{ float: "right" }}
-                        class="ui icon button"
+                        class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        paddingLeft: "10px",
-                        paddingRight: "10px",
-                        float: "right",
-                        display: "inline",
-                        visibility: "hidden"
-                      }}
-                    >
-                      <button style={{ float: "right" }} class="ui icon button">
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
                         <i class="fa fa-edit"></i>
                       </button>
                     </div>
                   )}
 
-                  <div
-                    style={{
-                      paddingTop: "10px",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                      float: "right",
-                      display: "inline"
-                    }}
-                  >
+                  <div class="hidden_pad">
                     <div style={{ float: "right" }}>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.currentTotal()
@@ -962,7 +811,43 @@ export class FieldCard extends React.Component {
     // returns the white styled field card
     else {
       return (
+<<<<<<< HEAD
         <FieldCardRender rObject={this.createRenderingObject()}/>
+=======
+        <div className="ui label">
+          <div className="fieldContainerDisabled">
+            <object>
+              <div className="check__box">
+                <CheckboxExample
+                  id={this.props.id}
+                  isChecked={this.props.ent[this.props.id].isGreen}
+                />
+              </div>
+              <div dir="rtl" className="description__title">
+                {this.props.ent[this.props.id].header.includes("<METADATA_AD")
+                  ? "Added Optional Metadata"
+                  : this.props.ent[this.props.id].header}
+              </div>
+              <div className="description__value">
+                {" "}
+                {":        " + lengthCheckedValue(this.props.fieldValue)}
+              </div>
+            </object>
+            <object className="descriptionMapped" align="right">
+              <div className="description__mapped__content"> </div>
+              <div
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "62px",
+                  float: "right",
+                  display: "inline"
+                }}
+              ></div>
+              {this.props.ent[this.props.id].isGreen ? this.filterDrop() : null}
+            </object>
+          </div>
+        </div>
+>>>>>>> master
       );
     }
   }
@@ -981,5 +866,11 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { forceEdit, removeContent, totalMultiValueCount, persistingDataConcat }
+  {
+    forceEdit,
+    removeContent,
+    totalMultiValueCount,
+    persistingDataConcat,
+    greenFlip
+  }
 )(FieldCard);
