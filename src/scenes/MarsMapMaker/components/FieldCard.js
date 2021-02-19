@@ -810,10 +810,8 @@ export class FieldCard extends React.Component {
 
     // returns the white styled field card
     else {
+      //need to set RenderFieldCard Component instead of this Robert Change
       return (
-<<<<<<< HEAD
-        <FieldCardRender rObject={this.createRenderingObject()}/>
-=======
         <div className="ui label">
           <div className="fieldContainerDisabled">
             <object>
@@ -847,7 +845,6 @@ export class FieldCard extends React.Component {
             </object>
           </div>
         </div>
->>>>>>> master
       );
     }
   }
