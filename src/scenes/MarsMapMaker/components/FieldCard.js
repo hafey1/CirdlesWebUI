@@ -366,18 +366,13 @@ export class FieldCard extends React.Component {
                     </div>
                   ) : (
                     <div
-                      style={{
-                        display: "inline-block",
-                        width: "150px",
-                        paddingRight: "35px"
-                      }}
                       class="ui input"
                     >
                       <input
+                        className="input_box"
                         value={this.state.updatedValue}
                         onChange={this.forceEdit}
                         onKeyPress={this.forceEdit}
-                        style={{ display: "inline-block", width: "150px" }}
                         type="text"
                         placeholder={this.editPlaceholderText()}
                       />
@@ -450,19 +445,12 @@ export class FieldCard extends React.Component {
                       ) : null}
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        display: "inline-block",
-                        width: "150px",
-                        paddingRight: "35px"
-                      }}
-                      class="ui input"
-                    >
+                    <div class="ui input">
                       <input
+                        className="input_box"
                         value={this.state.updatedValue}
                         onChange={this.forceEdit}
                         onKeyPress={this.forceEdit}
-                        style={{ display: "inline-block", width: "150px" }}
                         type="text"
                         placeholder={this.editPlaceholderText()}
                       />
@@ -480,15 +468,21 @@ export class FieldCard extends React.Component {
                     this.props.ent[this.props.id].sesarTitle
                   ) === false ? (
                     <div class="pad">
-                      <button
-                        onClick={() => this.areEditing()}
-                        class="ui icon button edit_icon"
-                      >
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  ) : (
-                    <div class="pad">
+                    <button
+                      onClick={() => this.areEditing()}
+                      class="ui icon button edit_icon"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div class="hidden_pad">
+                    <button class="ui icon button edit_icon">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                )}
+                  <div class="pad">
                       {" "}
                       {this.props.hasInit && this.state.index !== -1
                         ? "ddd" +
@@ -498,7 +492,6 @@ export class FieldCard extends React.Component {
                           )
                         : null}
                     </div>
-                  )}
                 </object>
               </div>
             </div>
@@ -537,19 +530,12 @@ export class FieldCard extends React.Component {
                     </span>
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      display: "inline-block",
-                      width: "150px",
-                      paddingRight: "35px"
-                    }}
-                    class="ui input"
-                  >
+                  <div class="ui input">
                     <input
+                      className="input_box"
                       value={this.state.updatedValue}
                       onChange={this.forceEdit}
                       onKeyPress={this.forceEdit}
-                      style={{ display: "inline-block", width: "150px" }}
                       type="text"
                       placeholder={this.editPlaceholderText()}
                     />
@@ -578,7 +564,7 @@ export class FieldCard extends React.Component {
                   </div>
                 )}
                 <div class="hidden_pad">
-                  <div style={{ float: "right" }}>
+                  <div>
                     {this.props.hasInit && this.state.index !== -1
                       ? "sss" +
                         this.entMultiSizeCount(
@@ -634,17 +620,10 @@ export class FieldCard extends React.Component {
                       ) : null}
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        display: "inline-block",
-                        width: "150px",
-                        paddingRight: "35px"
-                      }}
-                      class="ui input"
-                    >
+                    <div class="ui input">
                       <input
+                        className="input_box"
                         onKeyPress={this.forceEdit}
-                        style={{ display: "inline-block", width: "150px" }}
                         type="text"
                         placeholder={this.editPlaceholderText()}
                       />
@@ -674,7 +653,7 @@ export class FieldCard extends React.Component {
                     </div>
                   )}
                   <div class="hidden_pad">
-                    <div style={{ float: "right" }}>
+                    <div>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.entMultiSizeCount(
                             this.props.id,
@@ -727,19 +706,12 @@ export class FieldCard extends React.Component {
                       ) : null}
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        display: "inline-block",
-                        width: "150px",
-                        paddingRight: "35px"
-                      }}
-                      class="ui input"
-                    >
+                    <div class="ui input">
                       <input
+                        className="input_box"
                         value={this.state.updatedValue}
                         onKeyPress={this.forceEdit}
                         onChange={this.forceEdit}
-                        style={{ display: "inline-block", width: "150px" }}
                         type="text"
                         placeholder="Edit Content..."
                       />
@@ -772,7 +744,7 @@ export class FieldCard extends React.Component {
                   )}
 
                   <div class="hidden_pad">
-                    <div style={{ float: "right" }}>
+                    <div>
                       {this.props.hasInit && this.state.index !== -1
                         ? this.currentTotal()
                         : ""}
@@ -809,15 +781,8 @@ export class FieldCard extends React.Component {
               </div>
             </object>
             <object className="descriptionMapped" align="right">
-              <div className="description__mapped__content"> </div>
-              <div
-                style={{
-                  paddingTop: "10px",
-                  paddingLeft: "62px",
-                  float: "right",
-                  display: "inline"
-                }}
-              ></div>
+              <div className="description__mapped__content"></div>
+              <div className="map_disabled"></div>
               {this.props.ent[this.props.id].isGreen ? this.filterDrop() : null}
             </object>
           </div>
