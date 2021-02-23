@@ -332,7 +332,7 @@ export class FieldCard extends React.Component {
       isChecked : this.state.isGreen,
       areEditing : this.state.areEditing,
       updatedValue : this.state.updatedValue,
-      forceEdit : this.forceEdit,
+      forceEdit : this.props.forceEdit,
       editPlaceholderText : this.editPlaceholderText,
       filterDrop : this.filterDrop,
       hasInit : this.props.hasInit,
@@ -363,78 +363,7 @@ export class FieldCard extends React.Component {
           this.props.ent[this.props.id].header === "<METADATA>"
         ) {
           return (
-            <div className="ui label">
-              <div className="fieldContainerMetadataAdd">
-                <object>
-                  <div className="check__box">
-                    <CheckboxExample id={this.props.id} />
-                  </div>
-                  <div dir="rtl" className="description__title">
-                    {this.props.fieldTitle}
-                  </div>
-                  <div className="description__value"></div>
-                </object>
-                <object className="arrow">
-                  <i className="fa fa-angle-double-right"></i>
-                </object>
-                <object className="descriptionMapped" align="right">
-                  {this.state.areEditing === true ? (
-                    <div className="description__mapped__content">
-                      {lengthCheckedValue(
-                        this.props.fieldTitle + ": " + this.props.fieldValue
-                      )}
-                      {this.props.fieldValue.length > 25 ? (
-                        <span className="hiddentext">
-                          {this.props.ent[this.props.id].value}
-                        </span>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        display: "inline-block",
-                        width: "150px",
-                        paddingRight: "35px"
-                      }}
-                      class="ui input"
-                    >
-                      <input
-                        value={this.state.updatedValue}
-                        onChange={this.forceEdit}
-                        onKeyPress={this.forceEdit}
-                        style={{ display: "inline-block", width: "150px" }}
-                        type="text"
-                        placeholder={this.editPlaceholderText()}
-                      />
-                    </div>
-                  )}
-                  {this.props.ent[this.props.id].isGreen
-                    ? this.filterDrop()
-                    : null}
-
-                  {this.props.hasInit === true &&
-                  this.props.ent[this.props.id].sesarTitle !== "" &&
-                  this.isMultiValue(
-                    this.props.ent[this.props.id].sesarTitle
-                  ) === false ? (
-                    <div class="pad">
-                      <button
-                        onClick={() => this.areEditing()}
-                        class="ui icon button edit_icon"
-                      >
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  ) : (
-                    <div class="hidden_pad">
-                      <button class="ui icon button edit_icon">
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  )}
-                </object>
-              </div>
-            </div>
+            <FieldCardRender cardType="fieldContainerMetaDataAdd" rObject={times.createRenderingObject} />
           );
         } else {
           {

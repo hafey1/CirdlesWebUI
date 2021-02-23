@@ -117,7 +117,7 @@ class FieldCardRender extends React.Component {
                   ) === false ? (
                     <div class="pad">
                       <button
-                        onClick={() => rObj.areEditing()}
+                        onClick={() => rObj.areEditingFunction()}
                         class="ui icon button edit_icon"
                       >
                         <i class="fa fa-edit"></i>
@@ -414,6 +414,81 @@ class FieldCardRender extends React.Component {
               </div>
             </div>
       );
+    }
+
+    if (this.props.cardType === "fieldContainerMetaDataAdd") {
+      <div className="ui label">
+              <div className="fieldContainerMetadataAdd">
+                <object>
+                  <div className="check__box">
+                    <CheckboxExample id={rObj.id} />
+                  </div>
+                  <div dir="rtl" className="description__title">
+                    {rObj.fieldTitle}
+                  </div>
+                  <div className="description__value"></div>
+                </object>
+                <object className="arrow">
+                  <i className="fa fa-angle-double-right"></i>
+                </object>
+                <object className="descriptionMapped" align="right">
+                  {rObj.areEditing === true ? (
+                    <div className="description__mapped__content">
+                      {lengthCheckedValue(
+                        rObj.fieldTitle + ": " + rObj.fieldValue
+                      )}
+                      {rObj.fieldValue.length > 25 ? (
+                        <span className="hiddentext">
+                          {rObj.ent[rObj.id].value}
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "inline-block",
+                        width: "150px",
+                        paddingRight: "35px"
+                      }}
+                      class="ui input"
+                    >
+                      <input
+                        value={rObj.updatedValue}
+                        onChange={rObj.forceEdit}
+                        onKeyPress={rObj.forceEdit}
+                        style={{ display: "inline-block", width: "150px" }}
+                        type="text"
+                        placeholder={rObj.editPlaceholderText()}
+                      />
+                    </div>
+                  )}
+                  {rObj.ent[rObj.id].isGreen
+                    ? rObj.filterDrop()
+                    : null}
+
+                  {rObj.hasInit === true &&
+                  rObj.ent[rObj.id].sesarTitle !== "" &&
+                  rObj.isMultiValue(
+                    rObj.ent[rObj.id].sesarTitle
+                  ) === false ? (
+                    <div class="pad">
+                      <button
+                        onClick={() => rObj.areEditingFunction()}
+                        class="ui icon button edit_icon"
+                      >
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                  ) : (
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                  )}
+                </object>
+              </div>
+            </div>
     }
   }
   
