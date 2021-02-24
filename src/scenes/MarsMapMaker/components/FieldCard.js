@@ -332,7 +332,7 @@ export class FieldCard extends React.Component {
       isChecked : this.state.isGreen,
       areEditing : this.state.areEditing,
       updatedValue : this.state.updatedValue,
-      forceEdit : this.props.forceEdit,
+      forceEdit : this.forceEdit,
       editPlaceholderText : this.editPlaceholderText,
       filterDrop : this.filterDrop,
       hasInit : this.props.hasInit,
