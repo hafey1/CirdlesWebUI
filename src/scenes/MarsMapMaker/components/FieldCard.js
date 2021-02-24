@@ -391,7 +391,108 @@ export class FieldCard extends React.Component {
         } else {
           // this is the others two csv bug where edit icon doesn't show up
           return (
+<<<<<<< HEAD
             <FieldCardRender cardType="editIcon" rObject={propsToCard} />
+=======
+            <div className="ui label">
+              <div className="fieldContainer1">
+                <object>
+                  <div className="check__box">
+                    <CheckboxExample id={this.props.id} />
+                  </div>
+                  <div dir="rtl" className="description__title">
+                    {this.props.fieldTitle}
+                  </div>
+                  <div className="description__value">
+                    {" "}
+                    {":        " + lengthCheckedValue(this.props.fieldValue)}
+                    {this.props.fieldValue.length > 25 ? (
+                      <span className="hiddentext">
+                        {this.props.fieldValue}
+                      </span>
+                    ) : null}
+                  </div>
+                </object>
+                <object className="arrow">
+                  <i className="fa fa-angle-double-right"></i>
+                </object>
+                <object className="descriptionMapped" align="right">
+                  {this.state.areEditing === true ? (
+                    <div className="description__mapped__content">
+                      {!(
+                        this.props.hasInit &&
+                        this.props.ent[this.props.id].sesarTitle !== "" &&
+                        this.props.ent[this.props.id].sesarTitle !== "none"
+                      )
+                        ? "Not Mapped"
+                        : this.props.ent[this.props.id].sesarTitle ===
+                            "collection_start_date" ||
+                          this.props.ent[this.props.id].sesarTitle ===
+                            "collection_end_date"
+                        ? this.props.ent[this.props.id].value
+                        : lengthCheckedValue(this.props.fieldValue)}
+                      {this.state.updatedValue.length > 25 ? (
+                        <span className="hiddentext">
+                          {this.state.updatedValue}
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "inline-block",
+                        width: "150px",
+                        paddingRight: "35px"
+                      }}
+                      class="ui input"
+                    >
+                      <input
+                        value={this.props.fieldValue}
+                        onKeyPress={this.forceEdit}
+                        onChange={this.forceEdit}
+                        style={{ display: "inline-block", width: "150px" }}
+                        type="text"
+                        placeholder="Edit Content..."
+                      />
+                    </div>
+                  )}
+
+                  {this.props.ent[this.props.id].isGreen
+                    ? this.filterDrop()
+                    : null}
+                  {this.props.hasInit === true &&
+                  this.props.ent[this.props.id].sesarTitle !== "none" &&
+                  this.props.ent[this.props.id].sesarTitle !== "" &&
+                  this.isMultiValue(
+                    this.props.ent[this.props.id].sesarTitle
+                  ) === false ? (
+                    <div class="pad">
+                      <button
+                        onClick={() => this.areEditing()}
+                        class="ui icon button edit_icon"
+                      >
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                  ) : (
+                    <div class="hidden_pad">
+                      <button class="ui icon button edit_icon">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                  )}
+
+                  <div class="hidden_pad">
+                    <div style={{ float: "right" }}>
+                      {this.props.hasInit && this.state.index !== -1
+                        ? this.currentTotal()
+                        : ""}
+                    </div>
+                  </div>
+                </object>
+              </div>
+            </div>
+>>>>>>> UI updates with row changes
           );
         }
       }
@@ -401,7 +502,43 @@ export class FieldCard extends React.Component {
     else {
       //need to set RenderFieldCard Component instead of this Robert Change
       return (
+<<<<<<< HEAD
         <FieldCardRender cardType="white" rObject={propsToCard} />
+=======
+        <div className="ui label">
+          <div className="fieldContainerDisabled">
+            <object>
+              <div className="check__box">
+                <CheckboxExample
+                  id={this.props.id}
+                  isChecked={this.props.ent[this.props.id].isGreen}
+                />
+              </div>
+              <div dir="rtl" className="description__title">
+                {this.props.ent[this.props.id].header.includes("<METADATA_AD")
+                  ? "Added Optional Metadata"
+                  : this.props.fieldTitle}
+              </div>
+              <div className="description__value">
+                {" "}
+                {":        " + lengthCheckedValue(this.props.fieldValue)}
+              </div>
+            </object>
+            <object className="descriptionMapped" align="right">
+              <div className="description__mapped__content"> </div>
+              <div
+                style={{
+                  paddingTop: "10px",
+                  paddingLeft: "62px",
+                  float: "right",
+                  display: "inline"
+                }}
+              ></div>
+              {this.props.ent[this.props.id].isGreen ? this.filterDrop() : null}
+            </object>
+          </div>
+        </div>
+>>>>>>> UI updates with row changes
       );
     }
   }

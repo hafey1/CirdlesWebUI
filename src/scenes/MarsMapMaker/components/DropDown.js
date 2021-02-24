@@ -170,7 +170,6 @@ export class DropDown extends React.Component {
       value.length !== 0 &&
       !this.detectNonDateCharacters(value)
     ) {
-      alert(value);
       alert("You have not selected a date, try again...");
       this.props.refresh();
       console.log("You have not selected a date, try again...");
