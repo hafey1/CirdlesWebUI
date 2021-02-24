@@ -715,11 +715,18 @@ export class FieldCard extends React.Component {
                 <object className="descriptionMapped" align="right">
                   {this.state.areEditing === true ? (
                     <div className="description__mapped__content">
-                      {this.props.hasInit &&
-                      this.props.ent[this.props.id].sesarTitle !== "" &&
-                      this.props.ent[this.props.id].sesarTitle !== "none"
-                        ? lengthCheckedValue(this.state.updatedValue)
-                        : "Not Mapped"}
+                      {!(
+                        this.props.hasInit &&
+                        this.props.ent[this.props.id].sesarTitle !== "" &&
+                        this.props.ent[this.props.id].sesarTitle !== "none"
+                      )
+                        ? "Not Mapped"
+                        : this.props.ent[this.props.id].sesarTitle ===
+                            "collection_start_date" ||
+                          this.props.ent[this.props.id].sesarTitle ===
+                            "collection_end_date"
+                        ? this.props.ent[this.props.id].value
+                        : lengthCheckedValue(this.props.fieldValue)}
                       {this.state.updatedValue.length > 25 ? (
                         <span className="hiddentext">
                           {this.state.updatedValue}
@@ -736,7 +743,7 @@ export class FieldCard extends React.Component {
                       class="ui input"
                     >
                       <input
-                        value={this.state.updatedValue}
+                        value={this.props.fieldValue}
                         onKeyPress={this.forceEdit}
                         onChange={this.forceEdit}
                         style={{ display: "inline-block", width: "150px" }}
@@ -801,7 +808,7 @@ export class FieldCard extends React.Component {
               <div dir="rtl" className="description__title">
                 {this.props.ent[this.props.id].header.includes("<METADATA_AD")
                   ? "Added Optional Metadata"
-                  : this.props.ent[this.props.id].header}
+                  : this.props.fieldTitle}
               </div>
               <div className="description__value">
                 {" "}
