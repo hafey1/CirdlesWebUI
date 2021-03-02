@@ -30,7 +30,7 @@ class FieldCardRender extends React.Component {
               <div dir="rtl" className="description__title">
                 {rObj.ent[rObj.id].header.includes("<METADATA_AD")
                   ? "Added Optional Metadata"
-                  : rObj.ent[rObj.id].header}
+                  : rObj.fieldTitle}
               </div>
               <div className="description__value">
                 {" "}
