@@ -10,6 +10,7 @@ import classNames from "classnames";
 import { connect } from "react-redux";
 import CheckboxExample from "./CheckBox";
 import DropDown from "./DropDown";
+import FieldCardRender from "./renderCards/FieldCardRender";
 import {
   removeContent,
   totalMultiValueCount,
@@ -225,6 +226,7 @@ export class FieldCard extends React.Component {
   };
 
   forceEdit = event => {
+    console.log(event);
     let obj = {};
     let persistentMetaData = {};
     if (event.key === "Enter" || typeof event.key === undefined) {
@@ -320,8 +322,33 @@ export class FieldCard extends React.Component {
       }
     }
   };
+  // function that creates an object with all the properties we need to render fieldCard
+  createRenderingObject = () => {
+    let obj = {
+      id : this.props.id,
+      fieldTitle : this.props.fieldTitle,
+      fieldName : this.props.fieldName,
+      fieldValue : this.props.fieldValue,
+      greenCallback : this.greenToggle,
+      isChecked : this.state.isGreen,
+      areEditing : this.state.areEditing,
+      updatedValue : this.state.updatedValue,
+      forceEdit : this.forceEdit,
+      editPlaceholderText : this.editPlaceholderText,
+      filterDrop : this.filterDrop,
+      hasInit : this.props.hasInit,
+      ent : this.props.ent,
+      isMultiValue : this.isMultiValue,
+      areEditingFunction : this.areEditing,
+      currentTotal: this.currentTotal,
+      entMultiSizeCount: this.entMultiSizeCount,
+      index: this.state.index
+    };
+    return obj;
+  };
 
   render() {
+    let propsToCard = this.createRenderingObject()
     //removes the unchecked field card
     if (this.props.hiding && this.props.ent[this.props.id].isGreen === false)
       return null;
@@ -338,163 +365,14 @@ export class FieldCard extends React.Component {
           this.props.ent[this.props.id].header === "<METADATA>"
         ) {
           return (
-            <div className="ui label">
-              <div className="fieldContainerMetadataAdd">
-                <object>
-                  <div className="check__box">
-                    <CheckboxExample id={this.props.id} />
-                  </div>
-                  <div dir="rtl" className="description__title">
-                    {this.props.fieldTitle}
-                  </div>
-                  <div className="description__value"></div>
-                </object>
-                <object className="arrow">
-                  <i className="fa fa-angle-double-right"></i>
-                </object>
-                <object className="descriptionMapped" align="right">
-                  {this.state.areEditing === true ? (
-                    <div className="description__mapped__content">
-                      {lengthCheckedValue(
-                        this.props.fieldTitle + ": " + this.props.fieldValue
-                      )}
-                      {this.props.fieldValue.length > 25 ? (
-                        <span className="hiddentext">
-                          {this.props.ent[this.props.id].value}
-                        </span>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <div
-                      class="ui input"
-                    >
-                      <input
-                        className="input_box"
-                        value={this.state.updatedValue}
-                        onChange={this.forceEdit}
-                        onKeyPress={this.forceEdit}
-                        type="text"
-                        placeholder={this.editPlaceholderText()}
-                      />
-                    </div>
-                  )}
-                  {this.props.ent[this.props.id].isGreen
-                    ? this.filterDrop()
-                    : null}
-
-                  {this.props.hasInit === true &&
-                  this.props.ent[this.props.id].sesarTitle !== "" &&
-                  this.isMultiValue(
-                    this.props.ent[this.props.id].sesarTitle
-                  ) === false ? (
-                    <div class="pad">
-                      <button
-                        onClick={() => this.areEditing()}
-                        class="ui icon button edit_icon"
-                      >
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  ) : (
-                    <div class="hidden_pad">
-                      <button class="ui icon button edit_icon">
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  )}
-                </object>
-              </div>
-            </div>
+            <FieldCardRender cardType="fieldContainerMetaDataAdd" rObject={propsToCard} />
           );
         } else {
           {
             /*header was not metadata, create normal fieldcard **dropdown was not preselected from JS file***/
           }
           return (
-            <div className="ui label">
-              <div className="fieldContainer1">
-                <object>
-                  <div className="check__box">
-                    <CheckboxExample id={this.props.id} />
-                  </div>
-                  <div dir="rtl" className="description__title">
-                    {this.props.fieldTitle}
-                  </div>
-                  <div className="description__value">
-                    {" "}
-                    {":        " + lengthCheckedValue(this.props.fieldValue)}
-                    {this.props.fieldValue.length > 25 ? (
-                      <span className="hiddentext">
-                        {this.props.fieldValue}
-                      </span>
-                    ) : null}
-                  </div>
-                </object>
-                <object className="arrow">
-                  <i className="fa fa-angle-double-right"></i>
-                </object>
-                <object className="descriptionMapped" align="right">
-                  {/*left side of fieldcard*/}
-                  {this.state.areEditing === true ? (
-                    <div className="description__mapped__content">
-                      {lengthCheckedValue(this.props.fieldValue)}{" "}
-                      {this.props.fieldValue.length > 25 ? (
-                        <span className="hiddentext">
-                          {this.props.fieldValue}
-                        </span>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <div class="ui input">
-                      <input
-                        className="input_box"
-                        value={this.state.updatedValue}
-                        onChange={this.forceEdit}
-                        onKeyPress={this.forceEdit}
-                        type="text"
-                        placeholder={this.editPlaceholderText()}
-                      />
-                    </div>
-                  )}
-                  {this.props.ent[this.props.id].isGreen
-                    ? this.filterDrop()
-                    : null}
-
-                  {/*If dropdown value is chosen, and value is not a multivalue display edit button */}
-                  {this.props.hasInit === true &&
-                  this.props.ent[this.props.id].sesarTitle !== "none" &&
-                  this.props.ent[this.props.id].sesarTitle !== "" &&
-                  this.isMultiValue(
-                    this.props.ent[this.props.id].sesarTitle
-                  ) === false ? (
-                    <div class="pad">
-                    <button
-                      onClick={() => this.areEditing()}
-                      class="ui icon button edit_icon"
-                    >
-                      <i class="fa fa-edit"></i>
-                    </button>
-                  </div>
-                ) : (
-                  <div class="hidden_pad">
-                    <button class="ui icon button edit_icon">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                  </div>
-                )}
-                  <div class="pad">
-                      {" "}
-                      {this.props.hasInit && this.state.index !== -1
-                        ? "ddd" +
-                          this.entMultiSizeCount(
-                            this.props.id,
-                            this.props.ent[this.props.id].sesarTitle
-                          )
-                        : null}
-                    </div>
-                </object>
-              </div>
-            </div>
+            <FieldCardRender cardType="fieldContainer1" rObject={propsToCard} />
           );
         }
       } else if (
@@ -503,256 +381,17 @@ export class FieldCard extends React.Component {
         this.props.ent[this.props.id].header === "<METADATA>"
       ) {
         return (
-          <div className="ui label">
-            <div className="fieldContainerMetadata">
-              <object>
-                <div className="check__box">
-                  <CheckboxExample id={this.props.id} />
-                </div>
-                <div dir="rtl" className="description__title">
-                  {this.props.fieldTitle}
-                </div>
-                <div className="description__value">
-                  {" "}
-                  {":        " + lengthCheckedValue(this.props.fieldValue)}
-                </div>
-              </object>
-              <object className="arrow">
-                <i className="fa fa-angle-double-right"></i>
-              </object>
-              <object className="descriptionMapped" align="right">
-                {this.props.hasInit === true &&
-                this.state.areEditing === true ? (
-                  <div className="description__mapped__content">
-                    {lengthCheckedValue(this.props.ent[this.props.id].value)}
-                    <span className="hiddentext">
-                      {this.props.ent[this.props.id].value}
-                    </span>
-                  </div>
-                ) : (
-                  <div class="ui input">
-                    <input
-                      className="input_box"
-                      value={this.state.updatedValue}
-                      onChange={this.forceEdit}
-                      onKeyPress={this.forceEdit}
-                      type="text"
-                      placeholder={this.editPlaceholderText()}
-                    />
-                  </div>
-                )}
-                {this.props.ent[this.props.id].isGreen
-                  ? this.filterDrop()
-                  : null}
-                {this.props.hasInit === true &&
-                this.props.ent[this.props.id].sesarTitle !== "" &&
-                this.isMultiValue(this.props.ent[this.props.id].sesarTitle) ===
-                  false ? (
-                  <div class="pad">
-                    <button
-                      onClick={() => this.areEditing()}
-                      class="ui icon button edit_icon"
-                    >
-                      <i class="fa fa-edit"></i>
-                    </button>
-                  </div>
-                ) : (
-                  <div class="hidden_pad">
-                    <button class="ui icon button edit_icon">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                  </div>
-                )}
-                <div class="hidden_pad">
-                  <div>
-                    {this.props.hasInit && this.state.index !== -1
-                      ? "sss" +
-                        this.entMultiSizeCount(
-                          this.props.id,
-                          this.props.ent[this.props.id].sesarTitle
-                        )
-                      : ""}
-                  </div>
-                </div>
-              </object>
-            </div>
-          </div>
+          <FieldCardRender cardType="metaCard" rObject={propsToCard} />
         );
       } else {
         if (isMetaDataAddCard(this.props.id)) {
           return (
-            <div className="ui label">
-              <div className="fieldContainerMetadataAdd">
-                <object>
-                  <div className="check__box">
-                    {this.props.id === 0 ? (
-                      <div> </div>
-                    ) : (
-                      <div>
-                        <CheckboxExample id={this.props.id} />
-                      </div>
-                    )}
-                  </div>
-                  <div dir="rtl" className="description__title">
-                    {this.props.id === 0
-                      ? "Required Metadata"
-                      : "Added Optional Metadata"}
-                  </div>
-                  <div className="description__value"></div>
-                </object>
-                <object className="arrow">
-                  <i className="fa fa-angle-double-right"></i>
-                </object>
-                <object className="descriptionMapped" align="right">
-                  {this.state.areEditing === true ? (
-                    <div className="description__mapped__content">
-                      {this.props.hasInit &&
-                      this.props.ent[this.props.id].sesarTitle !== "" &&
-                      this.props.ent[this.props.id].sesarTitle !== "none"
-                        ? lengthCheckedValue(
-                            this.props.ent[this.props.id].value
-                          )
-                        : "Not Mapped"}
-                      {this.props.fieldValue.length > 25 ? (
-                        <span className="hiddentext">
-                          {this.props.fieldValue}
-                        </span>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <div class="ui input">
-                      <input
-                        className="input_box"
-                        onKeyPress={this.forceEdit}
-                        type="text"
-                        placeholder={this.editPlaceholderText()}
-                      />
-                    </div>
-                  )}
-                  {this.props.ent[this.props.id].isGreen
-                    ? this.filterDrop()
-                    : null}
-                  {this.props.hasInit === true &&
-                  this.props.ent[this.props.id].sesarTitle !== "" &&
-                  this.isMultiValue(
-                    this.props.ent[this.props.id].sesarTitle
-                  ) === false ? (
-                    <div class="pad">
-                      <button
-                        onClick={() => this.areEditing()}
-                        class="ui icon button edit_icon"
-                      >
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  ) : (
-                    <div class="hidden_pad">
-                      <button class="ui icon button edit_icon">
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  )}
-                  <div class="hidden_pad">
-                    <div>
-                      {this.props.hasInit && this.state.index !== -1
-                        ? this.entMultiSizeCount(
-                            this.props.id,
-                            this.props.ent[this.props.id].sesarTitle
-                          )
-                        : ""}
-                    </div>
-                  </div>
-                </object>
-              </div>
-            </div>
+            <FieldCardRender cardType="metaCardAdd" rObject={propsToCard} />
           );
         } else {
           // this is the others two csv bug where edit icon doesn't show up
           return (
-            <div className="ui label">
-              <div className="fieldContainer1">
-                <object>
-                  <div className="check__box">
-                    <CheckboxExample id={this.props.id} />
-                  </div>
-                  <div dir="rtl" className="description__title">
-                    {this.props.fieldTitle}
-                  </div>
-                  <div className="description__value">
-                    {" "}
-                    {":        " + lengthCheckedValue(this.props.fieldValue)}
-                    {this.props.fieldValue.length > 25 ? (
-                      <span className="hiddentext">
-                        {this.props.fieldValue}
-                      </span>
-                    ) : null}
-                  </div>
-                </object>
-                <object className="arrow">
-                  <i className="fa fa-angle-double-right"></i>
-                </object>
-                <object className="descriptionMapped" align="right">
-                  {this.state.areEditing === true ? (
-                    <div className="description__mapped__content">
-                      {this.props.hasInit &&
-                      this.props.ent[this.props.id].sesarTitle !== "" &&
-                      this.props.ent[this.props.id].sesarTitle !== "none"
-                        ? lengthCheckedValue(this.state.updatedValue)
-                        : "Not Mapped"}
-                      {this.state.updatedValue.length > 25 ? (
-                        <span className="hiddentext">
-                          {this.state.updatedValue}
-                        </span>
-                      ) : null}
-                    </div>
-                  ) : (
-                    <div class="ui input">
-                      <input
-                        className="input_box"
-                        value={this.state.updatedValue}
-                        onKeyPress={this.forceEdit}
-                        onChange={this.forceEdit}
-                        type="text"
-                        placeholder="Edit Content..."
-                      />
-                    </div>
-                  )}
-
-                  {this.props.ent[this.props.id].isGreen
-                    ? this.filterDrop()
-                    : null}
-                  {this.props.hasInit === true &&
-                  this.props.ent[this.props.id].sesarTitle !== "none" &&
-                  this.props.ent[this.props.id].sesarTitle !== "" &&
-                  this.isMultiValue(
-                    this.props.ent[this.props.id].sesarTitle
-                  ) === false ? (
-                    <div class="pad">
-                      <button
-                        onClick={() => this.areEditing()}
-                        class="ui icon button edit_icon"
-                      >
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  ) : (
-                    <div class="hidden_pad">
-                      <button class="ui icon button edit_icon">
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </div>
-                  )}
-
-                  <div class="hidden_pad">
-                    <div>
-                      {this.props.hasInit && this.state.index !== -1
-                        ? this.currentTotal()
-                        : ""}
-                    </div>
-                  </div>
-                </object>
-              </div>
-            </div>
+            <FieldCardRender cardType="editIcon" rObject={propsToCard} />
           );
         }
       }
@@ -760,33 +399,9 @@ export class FieldCard extends React.Component {
 
     // returns the white styled field card
     else {
+      //need to set RenderFieldCard Component instead of this Robert Change
       return (
-        <div className="ui label">
-          <div className="fieldContainerDisabled">
-            <object>
-              <div className="check__box">
-                <CheckboxExample
-                  id={this.props.id}
-                  isChecked={this.props.ent[this.props.id].isGreen}
-                />
-              </div>
-              <div dir="rtl" className="description__title">
-                {this.props.ent[this.props.id].header.includes("<METADATA_AD")
-                  ? "Added Optional Metadata"
-                  : this.props.ent[this.props.id].header}
-              </div>
-              <div className="description__value">
-                {" "}
-                {":        " + lengthCheckedValue(this.props.fieldValue)}
-              </div>
-            </object>
-            <object className="descriptionMapped" align="right">
-              <div className="description__mapped__content"></div>
-              <div className="map_disabled"></div>
-              {this.props.ent[this.props.id].isGreen ? this.filterDrop() : null}
-            </object>
-          </div>
-        </div>
+        <FieldCardRender cardType="white" rObject={propsToCard} />
       );
     }
   }
