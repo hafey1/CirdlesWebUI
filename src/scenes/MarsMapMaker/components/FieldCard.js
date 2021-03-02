@@ -18,7 +18,11 @@ import {
   persistingDataConcat,
   greenFlip
 } from "../../../actions/marsMapMaker";
-import { isMetaDataAddCard, lengthCheckedValue } from "../util/helper";
+import {
+  isMetaDataAddCard,
+  lengthCheckedValue,
+  dateFormattedToSesar
+} from "../util/helper";
 import { MULTI_VALUE_TITLES as MVT } from "../util/constants";
 const { options } = require("../util/sesarOptions");
 
@@ -372,7 +376,94 @@ export class FieldCard extends React.Component {
             /*header was not metadata, create normal fieldcard **dropdown was not preselected from JS file***/
           }
           return (
+<<<<<<< HEAD
             <FieldCardRender cardType="fieldContainer1" rObject={propsToCard} />
+=======
+            <div className="ui label">
+              <div className="fieldContainer1">
+                <object>
+                  <div className="check__box">
+                    <CheckboxExample id={this.props.id} />
+                  </div>
+                  <div dir="rtl" className="description__title">
+                    {this.props.fieldTitle}
+                  </div>
+                  <div className="description__value">
+                    {" "}
+                    {":        " + lengthCheckedValue(this.props.fieldValue)}
+                    {this.props.fieldValue.length > 25 ? (
+                      <span className="hiddentext">
+                        {this.props.fieldValue}
+                      </span>
+                    ) : null}
+                  </div>
+                </object>
+                <object className="arrow">
+                  <i className="fa fa-angle-double-right"></i>
+                </object>
+                <object className="descriptionMapped" align="right">
+                  {/*right side of fieldcard*/}
+                  {this.state.areEditing === true ? (
+                    <div className="description__mapped__content">
+                      {lengthCheckedValue(this.props.fieldValue)}
+                      {this.props.fieldValue.length > 25 ? (
+                        <span className="hiddentext">
+                          {this.props.fieldValue}
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "inline-block",
+                        width: "150px",
+                        paddingRight: "35px"
+                      }}
+                      class="ui input"
+                    >
+                      <input
+                        value={this.state.updatedValue}
+                        onChange={this.forceEdit}
+                        onKeyPress={this.forceEdit}
+                        style={{ display: "inline-block", width: "150px" }}
+                        type="text"
+                        placeholder={this.editPlaceholderText()}
+                      />
+                    </div>
+                  )}
+                  {this.props.ent[this.props.id].isGreen
+                    ? this.filterDrop()
+                    : null}
+
+                  {/*If dropdown value is chosen, and value is not a multivalue display edit button */}
+                  {this.props.hasInit === true &&
+                  this.props.ent[this.props.id].sesarTitle !== "none" &&
+                  this.props.ent[this.props.id].sesarTitle !== "" &&
+                  this.isMultiValue(
+                    this.props.ent[this.props.id].sesarTitle
+                  ) === false ? (
+                    <div class="pad">
+                      <button
+                        onClick={() => this.areEditing()}
+                        class="ui icon button edit_icon"
+                      >
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                  ) : (
+                    <div class="pad">
+                      {this.props.hasInit && this.props.id !== -1
+                        ? this.entMultiSizeCount(
+                            this.props.id,
+                            this.props.ent[this.props.id].sesarTitle
+                          )
+                        : null}
+                    </div>
+                  )}
+                </object>
+              </div>
+            </div>
+>>>>>>> fieldcard displays proper values on right now
           );
         }
       } else if (
@@ -429,7 +520,10 @@ export class FieldCard extends React.Component {
                             "collection_start_date" ||
                           this.props.ent[this.props.id].sesarTitle ===
                             "collection_end_date"
-                        ? this.props.ent[this.props.id].value
+                        ? dateFormattedToSesar(
+                            this.props.dateFormat,
+                            this.props.fieldValue
+                          )
                         : lengthCheckedValue(this.props.fieldValue)}
                       {this.state.updatedValue.length > 25 ? (
                         <span className="hiddentext">
@@ -547,6 +641,8 @@ export class FieldCard extends React.Component {
 const mapStateToProps = state => {
   return {
     ent: state.marsMapMaker.entries,
+    dateFormat: state.marsMapMaker.chosenDateFormat,
+    century: state.marsMapMaker.century,
     persist: state.marsMapMaker.persistingMetaData,
     hasInit: state.marsMapMaker.hasInit,
     toggleIndex: state.marsMapMaker.toggleIndex,
