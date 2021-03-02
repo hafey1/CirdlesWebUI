@@ -100,6 +100,7 @@ class FieldCardRender extends React.Component {
                       class="ui input"
                     >
                       <input
+                        className="input_box"
                         value={rObj.updatedValue}
                         onKeyPress={rObj.forceEdit}
                         onChange={rObj.forceEdit}
@@ -198,6 +199,8 @@ class FieldCardRender extends React.Component {
                       class="ui input"
                     >
                       <input
+                        className="input_box"
+                        value={this.state.updateValue}
                         onKeyPress={rObj.forceEdit}
                         style={{ display: "inline-block", width: "150px" }}
                         type="text"
@@ -282,6 +285,7 @@ class FieldCardRender extends React.Component {
                     class="ui input"
                   >
                     <input
+                      className="input_box"
                       value={rObj.updatedValue}
                       onChange={rObj.forceEdit}
                       onKeyPress={rObj.forceEdit}
@@ -376,6 +380,7 @@ class FieldCardRender extends React.Component {
                       class="ui input"
                     >
                       <input
+                        className="input_box"
                         value={rObj.updatedValue}
                         onChange={rObj.forceEdit}
                         onKeyPress={rObj.forceEdit}
@@ -461,6 +466,7 @@ class FieldCardRender extends React.Component {
                       class="ui input"
                     >
                       <input
+                        className="input_box"
                         value={rObj.updatedValue}
                         onChange={rObj.forceEdit}
                         onKeyPress={rObj.forceEdit}
