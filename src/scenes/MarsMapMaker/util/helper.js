@@ -1,4 +1,5 @@
 import { MULTI_VALUE_TITLES as MVT } from "./constants";
+import moment from "moment";
 
 //used in FieldCard
 export const isMetaDataAddCard = cardID => {
@@ -106,4 +107,18 @@ export const dialogFilter = entries => {
     }
   });
   return values;
+};
+
+//Used in FieldCard to display date values in sesar's format
+export const dateFormattedToSesar = (format, onScreenValue) => {
+  let sesarDate = moment(onScreenValue, format).format("YYYY-MM-DD");
+  let today = moment().format("YYYY-MM-DD");
+  if (
+    format.includes("YY") &&
+    !format.includes("YYYY") &&
+    moment(sesarDate).isAfter(today)
+  ) {
+    sesarDate = sesarDate.replace("20", "19");
+  }
+  return sesarDate + " T00:00:00Z";
 };

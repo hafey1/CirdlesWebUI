@@ -325,21 +325,23 @@ export class FieldCard extends React.Component {
   // function that creates an object with all the properties we need to render fieldCard
   createRenderingObject = () => {
     let obj = {
-      id : this.props.id,
-      fieldTitle : this.props.fieldTitle,
-      fieldName : this.props.fieldName,
-      fieldValue : this.props.fieldValue,
-      greenCallback : this.greenToggle,
-      isChecked : this.state.isGreen,
-      areEditing : this.state.areEditing,
-      updatedValue : this.state.updatedValue,
-      forceEdit : this.forceEdit,
-      editPlaceholderText : this.editPlaceholderText,
-      filterDrop : this.filterDrop,
-      hasInit : this.props.hasInit,
-      ent : this.props.ent,
-      isMultiValue : this.isMultiValue,
-      areEditingFunction : this.areEditing,
+      id: this.props.id,
+      date: this.props.dateFormat,
+      cent: this.props.century,
+      fieldTitle: this.props.fieldTitle,
+      fieldName: this.props.fieldName,
+      fieldValue: this.props.fieldValue,
+      greenCallback: this.greenToggle,
+      isChecked: this.state.isGreen,
+      areEditing: this.state.areEditing,
+      updatedValue: this.state.updatedValue,
+      forceEdit: this.forceEdit,
+      editPlaceholderText: this.editPlaceholderText,
+      filterDrop: this.filterDrop,
+      hasInit: this.props.hasInit,
+      ent: this.props.ent,
+      isMultiValue: this.isMultiValue,
+      areEditingFunction: this.areEditing,
       currentTotal: this.currentTotal,
       entMultiSizeCount: this.entMultiSizeCount,
       index: this.state.index
@@ -348,7 +350,7 @@ export class FieldCard extends React.Component {
   };
 
   render() {
-    let propsToCard = this.createRenderingObject()
+    let propsToCard = this.createRenderingObject();
     //removes the unchecked field card
     if (this.props.hiding && this.props.ent[this.props.id].isGreen === false)
       return null;
@@ -365,7 +367,10 @@ export class FieldCard extends React.Component {
           this.props.ent[this.props.id].header === "<METADATA>"
         ) {
           return (
-            <FieldCardRender cardType="fieldContainerMetaDataAdd" rObject={propsToCard} />
+            <FieldCardRender
+              cardType="fieldContainerMetaDataAdd"
+              rObject={propsToCard}
+            />
           );
         } else {
           {
@@ -380,9 +385,7 @@ export class FieldCard extends React.Component {
         this.props.ent[this.props.id].sesarTitle !== "none" &&
         this.props.ent[this.props.id].header === "<METADATA>"
       ) {
-        return (
-          <FieldCardRender cardType="metaCard" rObject={propsToCard} />
-        );
+        return <FieldCardRender cardType="metaCard" rObject={propsToCard} />;
       } else {
         if (isMetaDataAddCard(this.props.id)) {
           return (
@@ -390,9 +393,7 @@ export class FieldCard extends React.Component {
           );
         } else {
           // this is the others two csv bug where edit icon doesn't show up
-          return (
-            <FieldCardRender cardType="editIcon" rObject={propsToCard} />
-          );
+          return <FieldCardRender cardType="editIcon" rObject={propsToCard} />;
         }
       }
     }
@@ -400,9 +401,7 @@ export class FieldCard extends React.Component {
     // returns the white styled field card
     else {
       //need to set RenderFieldCard Component instead of this Robert Change
-      return (
-        <FieldCardRender cardType="white" rObject={propsToCard} />
-      );
+      return <FieldCardRender cardType="white" rObject={propsToCard} />;
     }
   }
 }
@@ -410,6 +409,8 @@ export class FieldCard extends React.Component {
 const mapStateToProps = state => {
   return {
     ent: state.marsMapMaker.entries,
+    dateFormat: state.marsMapMaker.chosenDateFormat,
+    century: state.marsMapMaker.century,
     persist: state.marsMapMaker.persistingMetaData,
     hasInit: state.marsMapMaker.hasInit,
     toggleIndex: state.marsMapMaker.toggleIndex,
