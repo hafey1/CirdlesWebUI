@@ -386,7 +386,7 @@ class FieldCardRender extends React.Component {
                 </div>
               ) : (
                 <div class="pad">
-                  {rObj.hasInit && rObj.index !== -1
+                  {rObj.hasInit && rObj.id !== -1
                     ? rObj.entMultiSizeCount(
                         rObj.id,
                         rObj.ent[rObj.id].sesarTitle
