@@ -27,6 +27,21 @@ export const HEADER_DENOTER = denoter;
 
 export const MULTIVALUE_FUNCTION_TEXT = keyValueString + delimit;
 
+export const dateString = (prefix, y, d, m) => {
+  return (
+    'const scrippsDate = (scrippsValue) => {\n  const y  =  "' +
+    prefix +
+    '" + ' +
+    "scrippsValue.substr(" +
+    y +
+    ")\n  const d = scrippsValue.substr(" +
+    d +
+    ")\n  const m = scrippsValue.substr(" +
+    m +
+    ")\n  return y + '-' + m + '-' + d + 'T00:00:00Z'\n}\n\n"
+  );
+};
+
 export const COMBINATION_TEXT = `let combinations = {
   field_name: delimit,
   description: delimit,

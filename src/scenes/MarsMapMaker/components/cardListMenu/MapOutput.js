@@ -15,17 +15,7 @@ import {
   findFirstValueBySesarTitle
 } from "../../util/helper.js";
 import { MULTI_VALUE_TITLES as MVT } from "../../util/constants";
-import {
-  LICENSE,
-  HEADER_TEXT,
-  HEADER_DENOTER,
-  MMM_INFO,
-  MULTIVALUE_FUNCTION_TEXT,
-  COMBINATION_TEXT,
-  STATIC_FUNCTION_TEXT,
-  USER_CODE_ALERT,
-  END_OF_FILE
-} from "../../util/staticMapOutputText";
+import * as templateText from "../../util/staticMapOutputText";
 
 class MapOutput extends React.Component {
   state = { functionIDs: [], orderedForcedFields: [] };
@@ -63,7 +53,8 @@ class MapOutput extends React.Component {
     for (let i = 0; i < this.props.ent.length; i++) {
       if (
         this.props.ent[i].sesarTitle === "current_archive" &&
-        this.props.ent[i].value !== ""
+        this.props.ent[i].value !== "" &&
+        this.props.ent[i].isGreen
       ) {
         arrayContent +=
           "// This is a mapping file for the organization " +
@@ -74,8 +65,12 @@ class MapOutput extends React.Component {
       }
     }
 
-    arrayContent += MMM_INFO + LICENSE + HEADER_DENOTER + "\n";
-    return HEADER_TEXT + arrayContent;
+    arrayContent +=
+      templateText.MMM_INFO +
+      templateText.LICENSE +
+      templateText.HEADER_DENOTER +
+      "\n";
+    return templateText.HEADER_TEXT + arrayContent;
   };
 
   //creates each METADATA and METADATA_ADD functions
@@ -197,23 +192,23 @@ class MapOutput extends React.Component {
         default:
       }
 
-      letDateString =
-        'const scrippsDate = (scrippsValue) => {\n  const y  =  "' +
-        prefix +
-        '" + ' +
-        "scrippsValue.substr(" +
-        y +
-        ")\n  const d = scrippsValue.substr(" +
-        d +
-        ")\n  const m = scrippsValue.substr(" +
-        m +
-        ")\n  return y + '-' + m + '-' + d + 'T00:00:00Z'\n}\n\n";
+      letDateString = templateText.dateString(prefix, y, d, m);
     } else {
       letDateString = "";
     }
     return letDateString;
   };
 
+  //a fieldcard can be mapped normally if enabled (isGreen), is mapped, not a metadata add card, and not a multivalue
+  allowToMap = (arr, id) => {
+    return (
+      arr[id].sesarTitle !== "none" &&
+      arr[id].isGreen &&
+      arr[id].sesarTitle !== "" &&
+      arr[id].value !== "<METADATA_ADD>" &&
+      !MVT.includes(arr[id].sesarTitle)
+    );
+  };
   //this method loops through the array entries in the store multiple times to append to the string based on corresponding SesarTitles selected that
   createMapString() {
     let letMapString = "let map = {\n";
@@ -227,16 +222,17 @@ class MapOutput extends React.Component {
 
     //for formatting need to track the relative last entry of each multivalue and single value and the last entry used
 
+    // loop only once, preserve how singlesAppending string works, make each multiAppend a [sesarTitle , [all headers mapped]]
+    //    and smash them together in order at the end
+    //    create each multiAppend from MVT, cut out hardcode
+
+    // let oneValues = "";
+    // let multis = [];
+
+    // this.props.ent.forEach(element => {});
+
     for (let j = 0; j < this.props.ent.length; j++) {
-      //these conditionals track the last occurance of each type of sesarTitle
-      if (
-        this.props.ent[j].sesarTitle !== "none" &&
-        this.props.ent[j].isGreen &&
-        this.props.ent[j].sesarTitle !== "" &&
-        this.props.ent[j].value !== "<METADATA_ADD>" &&
-        !MVT.includes(this.props.ent[j].sesarTitle)
-      )
-        singleLastIndexOfContent = j;
+      if (this.allowToMap(this.props.ent, j)) singleLastIndexOfContent = j;
       else if (this.props.ent[j].sesarTitle === "geological_age")
         geological_age_found = j;
       else if (this.props.ent[j].sesarTitle === "field_name") field_found = j;
@@ -260,13 +256,7 @@ class MapOutput extends React.Component {
 
     let singlesAppendingString = "";
     for (let i = 0; i < this.props.ent.length; i++) {
-      if (
-        this.props.ent[i].sesarTitle !== "none" &&
-        this.props.ent[i].isGreen &&
-        this.props.ent[i].sesarTitle !== "" &&
-        this.props.ent[i].value !== "<METADATA_ADD>" &&
-        !MVT.includes(this.props.ent[i].sesarTitle)
-      ) {
+      if (this.allowToMap(this.props.ent, i)) {
         if (
           i === lastIndexOfContent &&
           geological_age_found < 0 &&
@@ -410,21 +400,19 @@ class MapOutput extends React.Component {
       "let logic = { " +
       "\n" +
       this.logicFunctionAppend() +
-      STATIC_FUNCTION_TEXT;
+      templateText.STATIC_FUNCTION_TEXT;
 
-    return logic + COMBINATION_TEXT + END_OF_FILE;
+    return logic + templateText.COMBINATION_TEXT + templateText.END_OF_FILE;
   }
 
   finalAppend = () => {
     let dateDoubleCheck = "start";
-    for (let i = 0; i < this.props.ent.length; i++) {
-      if (
-        this.props.ent[i].sesarTitle === "collection_start_date" ||
-        this.props.ent[i].sesarTitle === "collection_end_date"
-      ) {
-        dateDoubleCheck = this.props.dateFormat;
-        break;
-      }
+
+    if (
+      isSesarTitlePresent("collection_start_date", this.props.ent) ||
+      isSesarTitlePresent("collection_end_date", this.props.ent)
+    ) {
+      dateDoubleCheck = this.props.dateFormat;
     }
 
     let today = new Date();
@@ -437,7 +425,7 @@ class MapOutput extends React.Component {
       "// Mapping file created by Mars Map Maker on" + currentDate + "\n";
     fileString = fileString + this.fileMetadataHeader();
     fileString = fileString + this.forceEditFunction();
-    fileString = fileString + MULTIVALUE_FUNCTION_TEXT;
+    fileString = fileString + templateText.MULTIVALUE_FUNCTION_TEXT;
     fileString = fileString + this.createDateFormatString(dateDoubleCheck);
     fileString = fileString + this.createMapString();
     fileString = fileString + this.createLogicAndCombination();
@@ -452,7 +440,7 @@ class MapOutput extends React.Component {
       let name = findFirstValueBySesarTitle(this.props.ent, "user_code");
       saveAs(fileOutput, name + "_Mapping.js");
     } else {
-      alert(USER_CODE_ALERT);
+      alert(templateText.USER_CODE_ALERT);
     }
   };
 
