@@ -326,6 +326,8 @@ export class FieldCard extends React.Component {
   createRenderingObject = () => {
     let obj = {
       id: this.props.id,
+      date: this.props.dateFormat,
+      cent: this.props.century,
       fieldTitle: this.props.fieldTitle,
       fieldName: this.props.fieldName,
       fieldValue: this.props.fieldValue,
