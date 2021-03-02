@@ -226,6 +226,7 @@ export class FieldCard extends React.Component {
   };
 
   forceEdit = event => {
+    console.log(event);
     let obj = {};
     let persistentMetaData = {};
     if (event.key === "Enter" || typeof event.key === undefined) {
@@ -347,6 +348,7 @@ export class FieldCard extends React.Component {
   };
 
   render() {
+    let propsToCard = this.createRenderingObject()
     //removes the unchecked field card
     if (this.props.hiding && this.props.ent[this.props.id].isGreen === false)
       return null;
@@ -363,14 +365,14 @@ export class FieldCard extends React.Component {
           this.props.ent[this.props.id].header === "<METADATA>"
         ) {
           return (
-            <FieldCardRender cardType="fieldContainerMetaDataAdd" rObject={times.createRenderingObject} />
+            <FieldCardRender cardType="fieldContainerMetaDataAdd" rObject={propsToCard} />
           );
         } else {
           {
             /*header was not metadata, create normal fieldcard **dropdown was not preselected from JS file***/
           }
           return (
-            <FieldCardRender cardType="fieldContainer1" rObject={times.createRenderingObject} />
+            <FieldCardRender cardType="fieldContainer1" rObject={propsToCard} />
           );
         }
       } else if (
@@ -379,17 +381,17 @@ export class FieldCard extends React.Component {
         this.props.ent[this.props.id].header === "<METADATA>"
       ) {
         return (
-          <FieldCardRender cardType="metaCard" rObject={this.createRenderingObject()} />
+          <FieldCardRender cardType="metaCard" rObject={propsToCard} />
         );
       } else {
         if (isMetaDataAddCard(this.props.id)) {
           return (
-            <FieldCardRender cardType="metaCardAdd" rObject={this.createRenderingObject()} />
+            <FieldCardRender cardType="metaCardAdd" rObject={propsToCard} />
           );
         } else {
           // this is the others two csv bug where edit icon doesn't show up
           return (
-            <FieldCardRender cardType="editIcon" rObject={this.createRenderingObject()} />
+            <FieldCardRender cardType="editIcon" rObject={propsToCard} />
           );
         }
       }
@@ -399,7 +401,7 @@ export class FieldCard extends React.Component {
     else {
       //need to set RenderFieldCard Component instead of this Robert Change
       return (
-        <FieldCardRender cardType="white" rObject={this.createRenderingObject()} />
+        <FieldCardRender cardType="white" rObject={propsToCard} />
       );
     }
   }

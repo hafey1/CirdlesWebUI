@@ -6,8 +6,12 @@ import { isMetaDataAddCard, lengthCheckedValue } from "../../util/helper";
 
 class FieldCardRender extends React.Component {
 
+  componentDidMount() {
+    console.log(this.props.cardType);
+    console.log(this.props.rObject);
+  }
+  
   render() {
-
     const rObj = this.props.rObject;
 
     if (this.props.cardType === "white"){
@@ -241,7 +245,8 @@ class FieldCardRender extends React.Component {
     }
 
     if (this.props.cardType === "metaCard") {
-      <div className="ui label">
+      return(
+        <div className="ui label">
             <div className="fieldContainerMetadata">
               <object>
                 <div className="check__box">
@@ -322,6 +327,7 @@ class FieldCardRender extends React.Component {
               </object>
             </div>
           </div>
+      );
     }
     
 
@@ -417,7 +423,9 @@ class FieldCardRender extends React.Component {
     }
 
     if (this.props.cardType === "fieldContainerMetaDataAdd") {
-      <div className="ui label">
+    
+      return(
+        <div className="ui label">
               <div className="fieldContainerMetadataAdd">
                 <object>
                   <div className="check__box">
@@ -489,6 +497,7 @@ class FieldCardRender extends React.Component {
                 </object>
               </div>
             </div>
+      );
     }
   }
   
