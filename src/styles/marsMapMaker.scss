@@ -95,6 +95,7 @@ $mars--border: rgb(46, 14, 8);
 .description__mapped__content .hiddentext {
   visibility: hidden;
   max-width: 300px;
+  max-height: 26px;
   background-color: rgb(27, 14, 99);
   color: #fff;
   text-align: center;
@@ -362,9 +363,8 @@ $mars--border: rgb(46, 14, 8);
   width: 20px;
 }
 
-.edit_icon {
-  float: right;
-  margin-top: 5px;
+.mult_count {
+  font-size: small;
 }
 
 .input {
@@ -379,19 +379,10 @@ $mars--border: rgb(46, 14, 8);
   width: 150px;
 }
 
-.pad {
-  padding-left: 10px;
-  padding-right: 10px;
-  float: right;
-  display: inline;
-}
-
-.hidden_pad {
-  padding-left: 10px;
-  padding-right: 10px;
-  float: right;
-  display: inline;
-  visibility: hidden;
+.after_drop {
+  width: 60px;
+  padding: 4px;
+  height: 26px;
 }
 
 .refreshButton {
@@ -413,7 +404,7 @@ $mars--border: rgb(46, 14, 8);
 }
 
 .ReactModal__Overlay {
-  z-index: 1;
+  z-index: 3;
 }
 
 
@@ -422,14 +413,39 @@ $mars--border: rgb(46, 14, 8);
     font-size: 17px;
   } 
   .description__title {
-    font-size: 17px;
+    font-size: small;
     width: 15%;
     max-width: 100%;
   }
   .description__value {
-    font-size: 17px;
+    font-size: small;
   }
   .maps__to {
+    font-size: 17px;
+  }
+  .description__mapped__content {
+    font-size: small;
+  }
+  .descriptionMapped > .dropDown > .dropdown {
+    width: 100px;
+  }
+
+}
+
+@media (min-width: 768px) { 
+  .mars_sticky_top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+}
+
+
+@media (min-width: 992px) { 
+  .description__title {
+    font-size: 17px;
+  }
+  .description__value {
     font-size: 17px;
   }
   .description__mapped__content {
@@ -438,9 +454,8 @@ $mars--border: rgb(46, 14, 8);
   .descriptionMapped > .dropDown > .dropdown {
     width: 170px;
   }
-
-
-
-
-
+  .after_drop {
+    width: 80px;
+    height: 26px;
+  }
 }
