@@ -14,6 +14,20 @@ export const METADATA_ADD_SESAR_TITLES = [
   "material"
 ];
 
+// these are the sesar titles that can have an editable value
+export const EDITABLE_SESAR_TITLES = [
+  "current_archive",
+  "platform_name",
+  "cruise_field_prgrm",
+  "collector",
+  "user_code",
+  "sample_type",
+  "elevation_unit",
+  "material"
+];
+
+export const REQUIRED_SESAR_TITLES = ["user_code"];
+
 // these are possible date formats
 export const DATE_FORMAT_OPTION = [
   { title: "Select Date Format" },
