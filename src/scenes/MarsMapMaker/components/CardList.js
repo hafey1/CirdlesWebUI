@@ -36,7 +36,7 @@ const CardList = props => {
   const [fieldValState, addAFieldCardVal] = useState(props.fieldVal);
 
   // used to toggle between the tuples of the csv loaded in
-  const [toggleIndex, addToToggleIndex] = useState(1);
+  const [toggleIndex, addToToggleIndex] = useState(0);
 
   // maps through fields and creates unique field card entry for each
   // hiding: value to hide entry or not
@@ -57,7 +57,7 @@ const CardList = props => {
 
   // goes to the previous row of content in the csv
   const upArrowToggle = () => {
-    if (toggleIndex > 1) {
+    if (toggleIndex > 0) {
       addToToggleIndex((toggleIndex - 1) % props.toggleArr.length);
       let obj = {
         bool: true

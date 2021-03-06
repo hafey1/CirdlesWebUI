@@ -98,11 +98,11 @@ class FieldCardRender extends React.Component {
                   <input
                     className="input_box"
                     value={rObj.updatedValue}
-                    onKeyPress={rObj.forceEdit}
                     onChange={rObj.forceEdit}
+                    onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
                     type="text"
-                    placeholder="Edit Content..."
+                    placeholder={rObj.editPlaceholderText()}
                   />
                 </div>
               )}
@@ -187,7 +187,8 @@ class FieldCardRender extends React.Component {
                 >
                   <input
                     className="input_box"
-                    value={rObj.updateValue}
+                    defaultValue={rObj.updatedValue}
+                    onChange={rObj.forceEdit}
                     onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
                     type="text"
@@ -268,7 +269,7 @@ class FieldCardRender extends React.Component {
                 >
                   <input
                     className="input_box"
-                    value={rObj.updatedValue}
+                    defaultValue={rObj.ent[rObj.id].value}
                     onChange={rObj.forceEdit}
                     onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
@@ -387,7 +388,7 @@ class FieldCardRender extends React.Component {
                 >
                   <input
                     className="input_box"
-                    value={rObj.updatedValue}
+                    defaultValue={rObj.updatedValue}
                     onChange={rObj.forceEdit}
                     onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
