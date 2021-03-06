@@ -98,11 +98,11 @@ class FieldCardRender extends React.Component {
                   <input
                     className="input_box"
                     value={rObj.updatedValue}
-                    onKeyPress={rObj.forceEdit}
                     onChange={rObj.forceEdit}
+                    onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
                     type="text"
-                    placeholder="Edit Content..."
+                    placeholder={rObj.editPlaceholderText()}
                   />
                 </div>
               )}
@@ -113,7 +113,7 @@ class FieldCardRender extends React.Component {
                 rObj.ent[rObj.id].sesarTitle !== "none" &&
                 rObj.ent[rObj.id].sesarTitle !== "" &&
                 rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false &&
-                EDITABLE_SESAR_TITLES.includes(rObj.ent[rObj.id].sesarTitle ? (
+                EDITABLE_SESAR_TITLES.includes(rObj.ent[rObj.id].sesarTitle) ? (
                   <div>
                     <button
                       onClick={() => rObj.areEditingFunction()}
@@ -122,9 +122,9 @@ class FieldCardRender extends React.Component {
                       <i class="fa fa-edit"></i>
                     </button>
                   </div>
-                ) : 
-                  (<div></div>)
-                }
+                ) : (
+                  <div></div>
+                )}
 
                 <div style={{ float: "right" }}>
                   {rObj.hasInit && rObj.index !== -1 ? (
@@ -133,8 +133,8 @@ class FieldCardRender extends React.Component {
                     <div class="pad"></div>
                   )}
                 </div>
-                </object>
-                </object>
+              </object>
+            </object>
           </div>
         </div>
       );
@@ -187,7 +187,8 @@ class FieldCardRender extends React.Component {
                 >
                   <input
                     className="input_box"
-                    value={rObj.updateValue}
+                    defaultValue={rObj.updatedValue}
+                    onChange={rObj.forceEdit}
                     onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
                     type="text"
@@ -268,7 +269,7 @@ class FieldCardRender extends React.Component {
                 >
                   <input
                     className="input_box"
-                    value={rObj.updatedValue}
+                    defaultValue={rObj.ent[rObj.id].value}
                     onChange={rObj.forceEdit}
                     onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
@@ -278,7 +279,6 @@ class FieldCardRender extends React.Component {
                 </div>
               )}
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
-<<<<<<< HEAD
               <object class="d-inline-flex after_drop">
                 {rObj.hasInit === true &&
                 rObj.ent[rObj.id].sesarTitle !== "" &&
@@ -308,35 +308,6 @@ class FieldCardRender extends React.Component {
                         )
                       : ""}
                   </div>
-=======
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div className="pad">
-                  <button
-                    onClick={() => rObj.areEditingFunction()}
-                    className="ui icon button edit_icon"
-                  >
-                    <i className="fa fa-edit"></i>
-                  </button>
-                </div>
-              ) : (
-                <div className="hidden_pad">
-                  <button className="ui icon button edit_icon">
-                    <i className="fa fa-edit"></i>
-                  </button>
-                </div>
-              )}
-              <div className="hidden_pad">
-                <div style={{ float: "right" }}>
-                  {rObj.hasInit && rObj.index !== -1
-                    ? "sss" +
-                      rObj.entMultiSizeCount(
-                        rObj.id,
-                        rObj.ent[rObj.id].sesarTitle
-                      )
-                    : ""}
->>>>>>> FIX: metadata field cards reset
                 </div>
               </object>
             </object>
@@ -387,7 +358,7 @@ class FieldCardRender extends React.Component {
                 >
                   <input
                     className="input_box"
-                    value={rObj.updatedValue}
+                    defaultValue={rObj.updatedValue}
                     onChange={rObj.forceEdit}
                     onKeyPress={rObj.forceEdit}
                     style={{ display: "inline-block", width: "150px" }}
@@ -397,7 +368,6 @@ class FieldCardRender extends React.Component {
                 </div>
               )}
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
-<<<<<<< HEAD
               <object class="d-inline-flex after_drop">
                 {/*If dropdown value is chosen, and value is not a multivalue display edit button */}
                 {rObj.hasInit === true &&
@@ -423,32 +393,6 @@ class FieldCardRender extends React.Component {
                   </div>
                 )}
               </object>
-=======
-
-              {/*If dropdown value is chosen, and value is not a multivalue display edit button */}
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "none" &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div className="pad">
-                  <button
-                    onClick={() => rObj.areEditingFunction()}
-                    className="ui icon button edit_icon"
-                  >
-                    <i className="fa fa-edit"></i>
-                  </button>
-                </div>
-              ) : (
-                <div className="pad">
-                  {rObj.hasInit && rObj.id !== -1
-                    ? rObj.entMultiSizeCount(
-                        rObj.id,
-                        rObj.ent[rObj.id].sesarTitle
-                      )
-                    : null}
-                </div>
-              )}
->>>>>>> FIX: metadata field cards reset
             </object>
           </div>
         </div>
@@ -502,7 +446,6 @@ class FieldCardRender extends React.Component {
                 </div>
               )}
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
-<<<<<<< HEAD
               <object class="d-inline-flex after_drop">
                 {rObj.hasInit === true &&
                 rObj.ent[rObj.id].sesarTitle !== "" &&
@@ -523,27 +466,6 @@ class FieldCardRender extends React.Component {
                   </div>
                 )}
               </object>
-=======
-
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div className="pad">
-                  <button
-                    onClick={() => rObj.areEditingFunction()}
-                    className="ui icon button edit_icon"
-                  >
-                    <i className="fa fa-edit"></i>
-                  </button>
-                </div>
-              ) : (
-                <div className="hidden_pad">
-                  <button className="ui icon button edit_icon">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              )}
->>>>>>> FIX: metadata field cards reset
             </object>
           </div>
         </div>

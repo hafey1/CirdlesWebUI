@@ -10,7 +10,9 @@ const SampleDisplay = props => {
       >
         <div className="card-body">
           <div className="card-title border-0">Change Displayed Sample</div>
-          <div className="card-text">Current Sample Row: {props.toggleInd}</div>
+          <div className="card-text">
+            Current Sample Row: {props.toggleInd + 1}
+          </div>
           <div className="btn-group-vertical text-center btn-margin">
             <button
               className="btn bg-white btn-outline-dark"

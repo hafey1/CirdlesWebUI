@@ -538,13 +538,13 @@ class FileIn extends React.Component {
         toggleArr.length !== 0 &&
         (this.state.files[1] !== undefined || this.state.files[2] !== undefined)
       ) {
-        if (minimum < 10) {
-          for (let i = 0; i < minimum % 10; i++) {
+        if (minimum < 20) {
+          for (let i = 0; i < minimum % 20; i++) {
             const finalObj = { ...toggleArr[i], ...data.data[i] };
             finalToggleArray.push(finalObj);
           }
         } else {
-          for (let i = 0; i < (minimum % 10) + (10 - (minimum % 10)); i++) {
+          for (let i = 0; i < (minimum % 20) + (20 - (minimum % 20)); i++) {
             const finalObj = { ...toggleArr[i], ...data.data[i] };
             finalToggleArray.push(finalObj);
           }
@@ -554,13 +554,20 @@ class FileIn extends React.Component {
         toggleArr = toggleArr.concat(data.data);
       }
 
-      this.setState({
-        toggleValues: toggleArr,
-        totalFileSize:
-          this.state.totalFileSize + Object.keys(data.data[0]).length,
-        fieldNames: this.state.fieldNames.concat(Object.keys(data.data[0])),
-        fieldValues: this.state.fieldValues.concat(Object.values(data.data[0]))
-      });
+      this.setState(
+        {
+          toggleValues: toggleArr,
+          totalFileSize:
+            this.state.totalFileSize + Object.keys(data.data[0]).length,
+          fieldNames: this.state.fieldNames.concat(Object.keys(data.data[0])),
+          fieldValues: this.state.fieldValues.concat(
+            Object.values(data.data[0])
+          )
+        },
+        () => {
+          console.log(toggleArr);
+        }
+      );
     }
 
     let arr = [this.state.fieldNames, this.state.fieldValues];
