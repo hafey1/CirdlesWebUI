@@ -113,7 +113,7 @@ class FieldCardRender extends React.Component {
                 rObj.ent[rObj.id].sesarTitle !== "none" &&
                 rObj.ent[rObj.id].sesarTitle !== "" &&
                 rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false &&
-                EDITABLE_SESAR_TITLES.includes(rObj.ent[rObj.id].sesarTitle ? (
+                EDITABLE_SESAR_TITLES.includes(rObj.ent[rObj.id].sesarTitle) ? (
                   <div>
                     <button
                       onClick={() => rObj.areEditingFunction()}
