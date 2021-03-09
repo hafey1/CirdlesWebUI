@@ -116,31 +116,33 @@ class FieldCardRender extends React.Component {
               )}
 
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "none" &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div class="pad">
-                  <button
-                    onClick={() => rObj.areEditingFunction()}
-                    class="ui icon button edit_icon"
-                  >
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              ) : (
-                <div class="hidden_pad">
-                  <button class="ui icon button edit_icon">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              )}
+              <object class="d-inline-flex after_drop">
+                {rObj.hasInit === true &&
+                rObj.ent[rObj.id].sesarTitle !== "none" &&
+                rObj.ent[rObj.id].sesarTitle !== "" &&
+                rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
+                  <div>
+                    <button
+                      onClick={() => rObj.areEditingFunction()}
+                      class="ui icon button edit_icon"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                  </div>
+                )}
+              
 
-              <div class="hidden_pad">
+              
                 <div style={{ float: "right" }}>
-                  {rObj.hasInit && rObj.index !== -1 ? rObj.currentTotal() : ""}
+                  {rObj.hasInit && rObj.index !== -1 ? (<div class="mult_count"> {rObj.currentTotal()} </div>)
+                  :
+                  <div class="pad"></div> } 
                 </div>
-              </div>
+              
+              </object>
             </object>
           </div>
         </div>
@@ -203,34 +205,36 @@ class FieldCardRender extends React.Component {
                 </div>
               )}
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div class="pad">
-                  <button
-                    onClick={() => rObj.areEditing()}
-                    class="ui icon button edit_icon"
-                  >
-                    <i class="fa fa-edit"></i>
-                  </button>
+              <object class="d-inline-flex after_drop">
+                {rObj.hasInit === true &&
+                rObj.ent[rObj.id].sesarTitle !== "" &&
+                rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
+                  <div>
+                    <button
+                      onClick={() => rObj.areEditing()}
+                      class="ui icon button edit_icon"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button class="ui icon button edit_icon">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                )}
+                <div>
+                  <div class="mult_count">
+                    {rObj.hasInit && rObj.index !== -1
+                      ? rObj.entMultiSizeCount(
+                          rObj.id,
+                          rObj.ent[rObj.id].sesarTitle
+                        )
+                      : ""}
+                  </div>
                 </div>
-              ) : (
-                <div class="hidden_pad">
-                  <button class="ui icon button edit_icon">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              )}
-              <div class="hidden_pad">
-                <div style={{ float: "right" }}>
-                  {rObj.hasInit && rObj.index !== -1
-                    ? rObj.entMultiSizeCount(
-                        rObj.id,
-                        rObj.ent[rObj.id].sesarTitle
-                      )
-                    : ""}
-                </div>
-              </div>
+              </object>
             </object>
           </div>
         </div>
@@ -283,35 +287,37 @@ class FieldCardRender extends React.Component {
                 </div>
               )}
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div class="pad">
-                  <button
-                    onClick={() => rObj.areEditingFunction()}
-                    class="ui icon button edit_icon"
-                  >
-                    <i class="fa fa-edit"></i>
-                  </button>
+              <object class="d-inline-flex after_drop">
+                {rObj.hasInit === true &&
+                rObj.ent[rObj.id].sesarTitle !== "" &&
+                rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
+                  <div class="pad">
+                    <button
+                      onClick={() => rObj.areEditingFunction()}
+                      class="ui icon button edit_icon"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button class="ui icon button edit_icon">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                )}
+                <div>
+                  <div class="mult_count">
+                    {rObj.hasInit && rObj.index !== -1
+                      ? "sss" +
+                        rObj.entMultiSizeCount(
+                          rObj.id,
+                          rObj.ent[rObj.id].sesarTitle
+                        )
+                      : ""}
+                  </div>
                 </div>
-              ) : (
-                <div class="hidden_pad">
-                  <button class="ui icon button edit_icon">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              )}
-              <div class="hidden_pad">
-                <div style={{ float: "right" }}>
-                  {rObj.hasInit && rObj.index !== -1
-                    ? "sss" +
-                      rObj.entMultiSizeCount(
-                        rObj.id,
-                        rObj.ent[rObj.id].sesarTitle
-                      )
-                    : ""}
-                </div>
-              </div>
+              </object>
             </object>
           </div>
         </div>
@@ -370,30 +376,32 @@ class FieldCardRender extends React.Component {
                 </div>
               )}
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
+              <object class="d-inline-flex after_drop">
 
-              {/*If dropdown value is chosen, and value is not a multivalue display edit button */}
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "none" &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div class="pad">
-                  <button
-                    onClick={() => rObj.areEditingFunction()}
-                    class="ui icon button edit_icon"
-                  >
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              ) : (
-                <div class="pad">
-                  {rObj.hasInit && rObj.id !== -1
-                    ? rObj.entMultiSizeCount(
-                        rObj.id,
-                        rObj.ent[rObj.id].sesarTitle
-                      )
-                    : null}
-                </div>
-              )}
+                {/*If dropdown value is chosen, and value is not a multivalue display edit button */}
+                {rObj.hasInit === true &&
+                rObj.ent[rObj.id].sesarTitle !== "none" &&
+                rObj.ent[rObj.id].sesarTitle !== "" &&
+                rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
+                  <div>
+                    <button
+                      onClick={() => rObj.areEditingFunction()}
+                      class="ui icon button edit_icon"
+                    >
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <div class="mult_count">
+                    {rObj.hasInit && rObj.id !== -1
+                      ? rObj.entMultiSizeCount(
+                          rObj.id,
+                          rObj.ent[rObj.id].sesarTitle
+                        )
+                      : null}
+                  </div>
+                )}
+            </object>
             </object>
           </div>
         </div>
@@ -447,25 +455,26 @@ class FieldCardRender extends React.Component {
                 </div>
               )}
               {rObj.ent[rObj.id].isGreen ? rObj.filterDrop() : null}
-
-              {rObj.hasInit === true &&
-              rObj.ent[rObj.id].sesarTitle !== "" &&
-              rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
-                <div class="pad">
-                  <button
-                    onClick={() => rObj.areEditingFunction()}
-                    class="ui icon button edit_icon"
-                  >
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              ) : (
-                <div class="hidden_pad">
-                  <button class="ui icon button edit_icon">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                </div>
-              )}
+                <object class="d-inline-flex after_drop">
+                  {rObj.hasInit === true &&
+                  rObj.ent[rObj.id].sesarTitle !== "" &&
+                  rObj.isMultiValue(rObj.ent[rObj.id].sesarTitle) === false ? (
+                    <div>
+                      <button
+                        onClick={() => rObj.areEditingFunction()}
+                        class="ui icon button edit_icon"
+                      >
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <button class="ui icon button edit_icon">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+                  )}
+              </object>
             </object>
           </div>
         </div>

@@ -253,7 +253,7 @@ const CardList = props => {
 
     <div>
       <div className="label">
-        <div className="container-fluid">
+        <div className="container-fluid mars_sticky_top">
           <CardListMenu
             toggleIndex={toggleIndex}
             refreshButton={() => refreshButton()}

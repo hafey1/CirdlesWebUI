@@ -85,7 +85,7 @@ const Header = ({ title, logo }) => {
           {title}
         </Link>
         <div className="navbar-nav flex-row ml-auto">
-          <NavLink className="nav-item nav-link ml-4" to="/">
+          <NavLink className="nav-item nav-link ml-4" to="/#">
             <strong>Home</strong>
           </NavLink>
           <NavLink className="nav-item nav-link ml-4" to="/squid">

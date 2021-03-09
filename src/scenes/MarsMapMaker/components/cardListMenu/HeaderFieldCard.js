@@ -16,7 +16,7 @@ const HeaderFieldCard = props => {
           dir="rtl"
           className="description__title"
         >
-          {"Field"}
+          {"Source Field"}
         </div>
         <div
           className="description__value"
@@ -39,7 +39,7 @@ const HeaderFieldCard = props => {
           style={{ fontFamily: "Lucida Grande", whiteSpace: "nowrap" }}
           className="description__mapped__content"
         >
-          {"Content : [Field]"}
+          {"Content : [SESAR Field]"}
         </div>
       </object>
     </div>
