@@ -384,6 +384,7 @@ class FileIn extends React.Component {
             forceEditValueContentArr
           );
         } else if (dateIdentified === true) {
+          //this sets the possible added century value if needed
           if (Object.values(result.data[i])[0].includes("y")) {
             arr = Object.values(result.data[i])[0].split(" ");
             prefix = arr[7];
@@ -403,6 +404,7 @@ class FileIn extends React.Component {
               Object.values(result.data[i])[1][0].match(/[0-9]+/g)[0]
             );
           }
+          console.log(dateIdArr);
         }
 
         if (dateIdArr.length === 6) {

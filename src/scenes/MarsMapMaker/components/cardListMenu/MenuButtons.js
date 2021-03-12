@@ -13,6 +13,7 @@ import { PreviewModal } from "./PreviewModal";
 
 const MenuButtons = props => {
   const checkStore = () => {
+    console.log(props.dateFormat);
     //console.log(props.fileMeta);
     console.log(props.persist);
     //console.log(props.multiCount);
@@ -55,6 +56,7 @@ const mapStateToProps = state => {
   return {
     ent: state.marsMapMaker.entries,
     persist: state.marsMapMaker.persistingMetaData,
+    dateFormat: state.marsMapMaker.substringDateFormat,
     toggleArr: state.marsMapMaker.toggleArr,
     hasDateFormat: state.marsMapMaker.hasChosenDateFormat,
     storeJsFile: state.marsMapMaker.jsFile,

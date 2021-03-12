@@ -118,7 +118,7 @@ class MapOutput extends React.Component {
   //this takes in the chosen date format and creates the text that corresponds to how the user wants the entry to be manipulated
   createDateFormatString = chosenFormat => {
     let letDateString = "";
-
+    alert(chosenFormat);
     if (chosenFormat !== "start") {
       let y = "";
       let d = "";
@@ -243,12 +243,21 @@ class MapOutput extends React.Component {
   finalAppend = async () => {
     let dateDoubleCheck = "start";
 
+    //if we are formatting directly from JS file
+    if (this.props.dateFormatFromJS) {
+      dateDoubleCheck = this.props.dateFormatFromJS;
+    }
+
+    // if date format was set normally
     if (
-      isSesarTitlePresent("collection_start_date", this.props.ent) ||
-      isSesarTitlePresent("collection_end_date", this.props.ent)
+      this.props.dateFormat !== "startingDate" &&
+      (isSesarTitlePresent("collection_start_date", this.props.ent) ||
+        isSesarTitlePresent("collection_end_date", this.props.ent))
     ) {
       dateDoubleCheck = this.props.dateFormat;
     }
+
+    alert(dateDoubleCheck);
 
     let today = new Date();
     let year = today.getFullYear();
@@ -301,6 +310,9 @@ class MapOutput extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    dateFormatFromJS: state.marsMapMaker.chosenDateFormat,
+    hasTwoYs: state.marsMapMaker.hasTwoYs,
+    century: state.marsMapMaker.century,
     ent: state.marsMapMaker.entries,
     fileMeta: state.marsMapMaker.fileMetadata,
     persist: state.marsMapMaker.persistingMetaData,

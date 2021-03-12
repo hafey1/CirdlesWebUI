@@ -39,7 +39,7 @@ const initialState = {
   hasChosenDateFormat: false,
   hasChosenDropdownOption: false,
   hasTwoYs: false,
-  substringDateFormat: "start",
+  substringDateFormat: "startingDate",
   fileMetadata: []
 };
 
