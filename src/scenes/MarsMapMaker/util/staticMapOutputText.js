@@ -53,7 +53,7 @@ export const COMBINATION_TEXT = `let combinations = {
 export const STATIC_FUNCTION_TEXT =
   "  collection_start_date: scrippsDate,\n  collection_end_date: scrippsDate," +
   "\n  geological_age: keyValueString,\n  field_name: keyValueString,\n  description: keyValueString," +
-  "\n  sample_comment: keyValueString,\n  size: keyValueString\n  }\n\n";
+  "\n  sample_comment: keyValueString,\n  size: keyValueString\n}\n\n";
 
 export const USER_CODE_ALERT =
   "Sesar Selection 'user_code' must be set before file output\n " +

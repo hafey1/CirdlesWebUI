@@ -12,14 +12,16 @@ import { formatDate } from "../../../../actions/marsMapMaker";
 import mars from "../../../../img/marsMapMakerImg/planet.png";
 import {
   isSesarTitlePresent,
-  findFirstValueBySesarTitle
+  findFirstValueBySesarTitle,
+  convertSinglesData,
+  mapSinglesOutputData,
+  convertMultiData,
+  mapMultiOutputData
 } from "../../util/helper.js";
 import { MULTI_VALUE_TITLES as MVT } from "../../util/constants";
 import * as templateText from "../../util/staticMapOutputText";
 
 class MapOutput extends React.Component {
-  state = { functionIDs: [], orderedForcedFields: [] };
-
   filterSortedPersistent = sorted => {
     let unfiltered = sorted;
     let filtered = [];
@@ -75,17 +77,20 @@ class MapOutput extends React.Component {
 
   //creates each METADATA and METADATA_ADD functions
   forceEditFunction = () => {
-    let id = 0;
-
     //sortedPersistent are the METADATA and METADATA_ADD fields
     let sortedPersistent = this.props.persist;
     sortedPersistent.sort((a, b) => (a.index > b.index ? 1 : -1));
 
     let sifted = this.filterSortedPersistent(sortedPersistent);
 
-    this.setState({ orderedForcedFields: sifted });
     let functID = "";
+    let value = "";
     for (let i = 0; i < sifted.length; i++) {
+      value = sifted[i].value;
+      if (!sifted[i].header.includes("<METADATA_ADD")) {
+        value = this.props.ent[sifted[i].index].value;
+      }
+
       functID =
         functID +
         "const forceEditID" +
@@ -102,14 +107,9 @@ class MapOutput extends React.Component {
         "\n  " +
         "return " +
         '"' +
-        sifted[i].value +
+        value +
         '"' +
-        ";\n}\n";
-
-      let appendValue = "forceEditID" + i;
-      let arr = this.state.functionIDs;
-      arr.push(appendValue);
-      this.setState(state => ({ functionIDs: arr }));
+        ";\n}\n\n";
     }
 
     return functID;
@@ -199,197 +199,32 @@ class MapOutput extends React.Component {
     return letDateString;
   };
 
-  //a fieldcard can be mapped normally if enabled (isGreen), is mapped, not a metadata add card, and not a multivalue
-  allowToMap = (arr, id) => {
-    return (
-      arr[id].sesarTitle !== "none" &&
-      arr[id].isGreen &&
-      arr[id].sesarTitle !== "" &&
-      arr[id].value !== "<METADATA_ADD>" &&
-      !MVT.includes(arr[id].sesarTitle)
-    );
-  };
   //this method loops through the array entries in the store multiple times to append to the string based on corresponding SesarTitles selected that
   createMapString() {
-    let letMapString = "let map = {\n";
-    let lastIndexOfContent = -1;
-    let singleLastIndexOfContent = -1;
-    let geological_age_found = -1;
-    let sample_found = -1;
-    let description_found = -1;
-    let field_found = -1;
-    let size_found = -1;
+    const letMapString = "let map = {\n";
+    const mapStringEnd = "\n  }\n\n";
 
-    //for formatting need to track the relative last entry of each multivalue and single value and the last entry used
-
-    // loop only once, preserve how singlesAppending string works, make each multiAppend a [sesarTitle , [all headers mapped]]
-    //    and smash them together in order at the end
-    //    create each multiAppend from MVT, cut out hardcode
-
-    // let oneValues = "";
-    // let multis = [];
-
-    // this.props.ent.forEach(element => {});
-
-    for (let j = 0; j < this.props.ent.length; j++) {
-      if (this.allowToMap(this.props.ent, j)) singleLastIndexOfContent = j;
-      else if (this.props.ent[j].sesarTitle === "geological_age")
-        geological_age_found = j;
-      else if (this.props.ent[j].sesarTitle === "field_name") field_found = j;
-      else if (this.props.ent[j].sesarTitle === "sample_comment")
-        sample_found = j;
-      else if (this.props.ent[j].sesarTitle === "description")
-        description_found = j;
-      else if (this.props.ent[j].sesarTitle === "size") size_found = j;
-    }
-
-    //this finds the overall last occurance of a value in the array
-    const findFinalPosition = [
-      singleLastIndexOfContent,
-      geological_age_found,
-      sample_found,
-      description_found,
-      field_found,
-      size_found
-    ];
-    lastIndexOfContent = Math.max(...findFinalPosition);
-
-    let singlesAppendingString = "";
-    for (let i = 0; i < this.props.ent.length; i++) {
-      if (this.allowToMap(this.props.ent, i)) {
-        if (
-          i === lastIndexOfContent &&
-          geological_age_found < 0 &&
-          field_found < 0 &&
-          sample_found < 0 &&
-          size_found < 0 &&
-          description_found < 0
-        )
-          singlesAppendingString +=
-            "  " +
-            this.props.ent[i].sesarTitle +
-            ': "' +
-            this.props.ent[i].header +
-            '"\n';
-        else
-          singlesAppendingString +=
-            "  " +
-            this.props.ent[i].sesarTitle +
-            ': "' +
-            this.props.ent[i].header +
-            '",\n';
-      }
-    }
-
-    let multiAppendingString = "";
-    if (geological_age_found > -1) {
-      multiAppendingString += "  geological_age: [";
-      for (let z = 0; z < this.props.ent.length; z++) {
-        if (this.props.ent[z].sesarTitle === "geological_age") {
-          if (
-            z === geological_age_found &&
-            (field_found < 0 &&
-              sample_found < 0 &&
-              size_found < 0 &&
-              description_found < 0)
-          )
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ]\n';
-          else if (
-            z === geological_age_found &&
-            (field_found > -1 ||
-              sample_found > -1 ||
-              size_found > -1 ||
-              description_found > -1)
-          )
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ],\n';
-          else multiAppendingString += ' "' + this.props.ent[z].header + '", ';
-        }
-      }
-    }
-
-    if (field_found > -1) {
-      multiAppendingString += "  field_name: [";
-      for (let z = 0; z < this.props.ent.length; z++) {
-        if (this.props.ent[z].sesarTitle === "field_name") {
-          if (
-            z === field_found &&
-            (sample_found < 0 && size_found < 0 && description_found < 0)
-          )
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ]\n';
-          else if (
-            z === field_found &&
-            (sample_found > -1 || size_found > -1 || description_found > -1)
-          )
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ],\n';
-          else multiAppendingString += ' "' + this.props.ent[z].header + '", ';
-        }
-      }
-    }
-    if (sample_found > -1) {
-      multiAppendingString += "  sample_comment: [";
-      for (let z = 0; z < this.props.ent.length; z++) {
-        if (this.props.ent[z].sesarTitle === "sample_comment") {
-          if (z === sample_found && (size_found < 0 && description_found < 0))
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ]\n';
-          else if (
-            z === sample_found &&
-            (size_found > -1 || description_found > -1)
-          )
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ],\n';
-          else if (z < lastIndexOfContent && z < sample_found)
-            multiAppendingString += ' "' + this.props.ent[z].header + '", ';
-        }
-      }
-    }
-
-    if (description_found > -1) {
-      multiAppendingString += "  description: [";
-      for (let z = 0; z < this.props.ent.length; z++) {
-        if (this.props.ent[z].sesarTitle === "description") {
-          if (z === description_found && size_found < 0)
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ]\n';
-          else if (z === description_found && size_found > -1)
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ],\n';
-          else if (z < lastIndexOfContent && z < description_found)
-            multiAppendingString += ' "' + this.props.ent[z].header + '", ';
-        }
-      }
-    }
-
-    if (size_found > -1) {
-      multiAppendingString += "  size: [";
-      for (let z = 0; z < this.props.ent.length; z++) {
-        if (this.props.ent[z].sesarTitle === "size") {
-          if (z === size_found)
-            multiAppendingString += ' "' + this.props.ent[z].header + '" ]\n';
-          else if (z < lastIndexOfContent && z < size_found)
-            multiAppendingString += ' "' + this.props.ent[z].header + '", ';
-        }
-      }
-    }
-
-    let appendingString =
-      singlesAppendingString + multiAppendingString + "}\n\n";
-
-    letMapString = letMapString.concat(appendingString);
-
-    return letMapString;
+    return (
+      letMapString +
+      [
+        convertSinglesData(mapSinglesOutputData(this.props.ent)),
+        convertMultiData(mapMultiOutputData(this.props.ent))
+      ].join(",\n") +
+      mapStringEnd
+    );
   }
 
   logicFunctionAppend() {
     let logicID = "";
 
-    for (let i = 0; i < this.state.orderedForcedFields.length; i++) {
-      if (this.state.functionIDs[i] === undefined) {
-      } else {
-        logicID =
-          logicID +
-          "  " +
-          this.state.orderedForcedFields[i].sesar +
-          ": forceEditID" +
-          i +
-          ",\n";
-      }
+    for (let i = 0; i < this.props.persist.length; i++) {
+      logicID =
+        logicID +
+        "  " +
+        this.props.persist[i].sesar +
+        ": forceEditID" +
+        this.props.persist[i].index +
+        ",\n";
     }
     return logicID;
   }
@@ -405,7 +240,7 @@ class MapOutput extends React.Component {
     return logic + templateText.COMBINATION_TEXT + templateText.END_OF_FILE;
   }
 
-  finalAppend = () => {
+  finalAppend = async () => {
     let dateDoubleCheck = "start";
 
     if (
@@ -432,9 +267,9 @@ class MapOutput extends React.Component {
     return fileString;
   };
 
-  createMapFile = () => {
+  createMapFile = async () => {
     if (isSesarTitlePresent("user_code", this.props.ent)) {
-      const fileOutput = new Blob([this.finalAppend()], {
+      const fileOutput = new Blob([await this.finalAppend()], {
         type: "text/javascript;charset=utf-8"
       });
       let name = findFirstValueBySesarTitle(this.props.ent, "user_code");

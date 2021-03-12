@@ -3,15 +3,22 @@ import { connect } from "react-redux";
 import "../../../../styles/marsMapMaker.scss";
 import { hideField } from "../../../../actions/marsMapMaker";
 
+import {
+  mapMultiOutputData,
+  convertMultiData,
+  mapSinglesOutputData,
+  convertSinglesData
+} from "../../util/helper";
 import { PreviewModal } from "./PreviewModal";
 
 const MenuButtons = props => {
   const checkStore = () => {
-    console.log(props.fileMeta);
+    //console.log(props.fileMeta);
     console.log(props.persist);
-    console.log(props.multiCount);
+    //console.log(props.multiCount);
     console.log(props.ent);
-    console.log(props.toggleArr);
+    //console.log(props.toggleArr);
+    console.log("\n---------------------------------\n");
   };
 
   return (
