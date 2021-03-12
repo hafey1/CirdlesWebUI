@@ -229,7 +229,6 @@ class MapOutput extends React.Component {
   }
 
   createLogicAndCombination() {
-    alert("Mapping Accepted!");
     const logic =
       "let logic = { " +
       "\n" +
