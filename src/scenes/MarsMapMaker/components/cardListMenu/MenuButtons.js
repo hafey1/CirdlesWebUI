@@ -3,15 +3,23 @@ import { connect } from "react-redux";
 import "../../../../styles/marsMapMaker.scss";
 import { hideField } from "../../../../actions/marsMapMaker";
 
+import {
+  mapMultiOutputData,
+  convertMultiData,
+  mapSinglesOutputData,
+  convertSinglesData
+} from "../../util/helper";
 import { PreviewModal } from "./PreviewModal";
 
 const MenuButtons = props => {
   const checkStore = () => {
-    console.log(props.fileMeta);
+    console.log(props.dateFormat);
+    //console.log(props.fileMeta);
     console.log(props.persist);
-    console.log(props.multiCount);
+    //console.log(props.multiCount);
     console.log(props.ent);
-    console.log(props.toggleArr);
+    //console.log(props.toggleArr);
+    console.log("\n---------------------------------\n");
   };
 
   return (
@@ -48,6 +56,7 @@ const mapStateToProps = state => {
   return {
     ent: state.marsMapMaker.entries,
     persist: state.marsMapMaker.persistingMetaData,
+    dateFormat: state.marsMapMaker.substringDateFormat,
     toggleArr: state.marsMapMaker.toggleArr,
     hasDateFormat: state.marsMapMaker.hasChosenDateFormat,
     storeJsFile: state.marsMapMaker.jsFile,

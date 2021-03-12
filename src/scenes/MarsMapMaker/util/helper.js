@@ -1,5 +1,6 @@
 import { MULTI_VALUE_TITLES as MVT } from "./constants";
 import moment from "moment";
+import { element } from "prop-types";
 
 //used in FieldCard
 export const isMetaDataAddCard = cardID => {
@@ -121,4 +122,79 @@ export const dateFormattedToSesar = (format, onScreenValue) => {
     sesarDate = sesarDate.replace("20", "19");
   }
   return sesarDate + " T00:00:00Z";
+};
+
+// used in Mapoutput to create string that is multivalues mapped to sesar titles
+// PRECONDITION: ent -> an array containing objects to track mappings
+// POSTCONDITION: an array for possible values mapped to MVT's [sesarTitle, [sourceFields...]]
+export const mapMultiOutputData = ent => {
+  //create structure
+  let multis = [];
+  MVT.forEach(element => {
+    multis.push([element, []]);
+  });
+
+  //fills structure
+  multis.forEach(ele => {
+    ele[1] = ent.filter(entEle => {
+      if (ele[0] === entEle.sesarTitle) {
+        return entEle;
+      }
+    });
+  });
+
+  return multis;
+};
+
+// used in Mapoutput to create string that is multivalue source fields mapped to sesar titles
+// PRECONDITION: an array of possible values mapped to MVT's [sesarTitle, [sourceFields...]]
+// POSTCONDITION: a string that is formatted and joined from the nested array.
+export const convertMultiData = mul => {
+  // get sesarTitles headers from mul and format by enclosing in " "
+  const multData = mul.map(ele => {
+    return [
+      ele[0],
+      ele[1].map(sesarValues => {
+        return `\"` + sesarValues.header + `"`;
+      })
+    ];
+  });
+
+  // formats each line
+  let outputLines = [];
+  multData.forEach(ele => {
+    if (ele[1].length > 0) {
+      let line = `  ${ele[0]}: [ ${ele[1].join(", ")} ]`;
+      outputLines.push(line);
+    }
+  });
+
+  return [outputLines.join(",\n")];
+};
+
+// used in Mapoutput to create an array that is single source fields mapped to sesar titles
+// PRECONDITION: ent -> an array containing objects to track mappings
+// POSTCONDITION: an array of single mapped values from ent
+export const mapSinglesOutputData = ent => {
+  const singleValues = ent.filter(ele => {
+    return (
+      ele.sesarTitle !== "none" &&
+      ele.isGreen &&
+      ele.sesarTitle !== "" &&
+      ele.value !== "<METADATA_ADD>" &&
+      !MVT.includes(ele.sesarTitle)
+    );
+  });
+  return singleValues;
+};
+
+// used in Mapoutput to create string that is multivalue source fields mapped to sesar titles
+// PRECONDITION: an array of possible single source fields mapped to sesar titles
+// POSTCONDITION: a string that is formatted and joined
+export const convertSinglesData = singles => {
+  const singlesData = singles.map(ele => {
+    return `  ${ele.sesarTitle}: "${ele.header}"`;
+  });
+
+  return [singlesData.join(",\n")];
 };
