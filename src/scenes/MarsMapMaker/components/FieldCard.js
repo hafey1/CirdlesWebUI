@@ -18,8 +18,13 @@ import {
   persistingDataConcat,
   greenFlip
 } from "../../../actions/marsMapMaker";
-import { isMetaDataAddCard, lengthCheckedValue } from "../util/helper";
-import { MULTI_VALUE_TITLES as MVT } from "../util/constants";
+import { isMetaDataAddCard } from "../util/helper";
+import {
+  MULTI_VALUE_TITLES as MVT,
+  METADATA_ADD_SESAR_TITLES as META_ADD,
+  EDITABLE_SESAR_TITLES as EDIT_TITLES,
+  REQUIRED_SESAR_TITLES as REQ_TITLES
+} from "../util/constants";
 const { options } = require("../util/sesarOptions");
 
 export class FieldCard extends React.Component {
@@ -383,7 +388,10 @@ export class FieldCard extends React.Component {
       } else if (
         this.props.hasInit &&
         this.props.ent[this.props.id].sesarTitle !== "none" &&
-        this.props.ent[this.props.id].header === "<METADATA>"
+        this.props.ent[this.props.id].header === "<METADATA>" &&
+        EDIT_TITLES.includes(this.props.ent[this.props.id].sesarTitle) &&
+        !REQ_TITLES.includes(this.props.ent[this.props.id].sesarTitle) &&
+        !META_ADD.includes(this.props.ent[this.props.id].sesarTitle)
       ) {
         return <FieldCardRender cardType="metaCard" rObject={propsToCard} />;
       } else {
