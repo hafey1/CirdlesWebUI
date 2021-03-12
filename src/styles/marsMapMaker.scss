@@ -8,6 +8,10 @@ $mars--border: rgb(46, 14, 8);
     "Lucida Sans", Arial, sans-serif;
 }
 
+span {
+  display: block;
+}
+
 .pageBackground {
   height: "100vh";
   position: "relative";
@@ -95,7 +99,6 @@ $mars--border: rgb(46, 14, 8);
 .description__mapped__content .hiddentext {
   visibility: hidden;
   max-width: 300px;
-  max-height: 26px;
   background-color: rgb(27, 14, 99);
   color: #fff;
   text-align: center;
