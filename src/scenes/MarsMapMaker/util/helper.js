@@ -146,8 +146,8 @@ export const mapMultiOutputData = ent => {
   return multis;
 };
 
-// used in Mapoutput to create string that is multivalues mapped to sesar titles
-// PRECONDITION: an array for possible values mapped to MVT's [sesarTitle, [sourceFields...]]
+// used in Mapoutput to create string that is multivalue source fields mapped to sesar titles
+// PRECONDITION: an array of possible values mapped to MVT's [sesarTitle, [sourceFields...]]
 // POSTCONDITION: a string that is formatted and joined from the nested array.
 export const convertMultiData = mul => {
   // get sesarTitles headers from mul and format by enclosing in " "
@@ -172,6 +172,9 @@ export const convertMultiData = mul => {
   return [outputLines.join(",\n")];
 };
 
+// used in Mapoutput to create an array that is single source fields mapped to sesar titles
+// PRECONDITION: ent -> an array containing objects to track mappings
+// POSTCONDITION: an array of single mapped values from ent
 export const mapSinglesOutputData = ent => {
   const singleValues = ent.filter(ele => {
     return (
@@ -185,6 +188,9 @@ export const mapSinglesOutputData = ent => {
   return singleValues;
 };
 
+// used in Mapoutput to create string that is multivalue source fields mapped to sesar titles
+// PRECONDITION: an array of possible single source fields mapped to sesar titles
+// POSTCONDITION: a string that is formatted and joined
 export const convertSinglesData = singles => {
   const singlesData = singles.map(ele => {
     return `  ${ele.sesarTitle}: "${ele.header}"`;

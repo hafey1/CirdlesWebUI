@@ -118,7 +118,6 @@ class MapOutput extends React.Component {
   //this takes in the chosen date format and creates the text that corresponds to how the user wants the entry to be manipulated
   createDateFormatString = chosenFormat => {
     let letDateString = "";
-    alert(chosenFormat);
     if (chosenFormat !== "start") {
       let y = "";
       let d = "";
@@ -256,8 +255,6 @@ class MapOutput extends React.Component {
     ) {
       dateDoubleCheck = this.props.dateFormat;
     }
-
-    alert(dateDoubleCheck);
 
     let today = new Date();
     let year = today.getFullYear();
