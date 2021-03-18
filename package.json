@@ -98,8 +98,5 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",
     "worker-loader": "^2.0.0"
-  },
-  "peerDependencies": {
-    "node-sass":"^5.0.0"
   }
 }
