@@ -33,7 +33,7 @@
     "lodash": "^4.17.19",
     "lodash.isequal": "^4.5.0",
     "moment": "^2.29.1",
-    "mui-datatables": "^2.15.0",
+    "mui-datatables": "^3.7.6",
     "node-fetch": "^2.6.1",
     "node-sass": "^5.0.0",
     "papaparse": "^5.3.0",

@@ -23,11 +23,7 @@ class MarsPage extends Component {
         <main>
           <Route exact path="/mars" component={Landing} />
           <Route exact path="/mars/signin" component={SignIn} />
-          <Route
-            exact
-            path="/mars/mysamples"
-            component={requireAuth(MySamples)}
-          />
+          <Route exact path="/mars/mysamples" component={requireAuth(MySamples)}/>
           <Route exact path="/mars/mapping" component={requireAuth(Mapping)} />
         </main>
         <Route exact path="/mars/upload" component={requireAuth(Upload)} />

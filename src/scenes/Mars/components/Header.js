@@ -89,7 +89,7 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <nav className="navbar top-nav fixed-top navbar-light bg-light">
+        <nav className="navbar top-nav my-2 fixed navbar-light bg-light">
           <Link className="navbar-brand" to="/mars">
             MARS {MARS_VERSION} - interacting with: <a href={SESAR_BASE_URL} target="_blank">{SESAR_BASE_URL.replace("https://", "")}</a>   
           </Link>

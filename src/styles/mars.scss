@@ -110,6 +110,19 @@
   height: 90%;
 }
 
+.MUIDataTableToolbar-actions-105 { // React classname
+  display: flex;
+  justify-content: center;
+  flex: inherit !important;
+}
+
+@media (min-width: 599px) {
+  .MUIDataTableToolbar-actions-105 {
+    display: inline-flex;
+    align-content: end;
+  }
+}
+
 // =======================================
 // Panel
 // =======================================

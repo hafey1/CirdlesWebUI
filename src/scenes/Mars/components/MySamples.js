@@ -2,14 +2,19 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import MUIDataTable from "mui-datatables";
-import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import { fetchUsercodeAndSamples } from "../../../actions/mars";
 import { SESAR_SAMPLE_DISPLAY } from "../../../constants/api";
 import "../../../styles/mars.scss";
+import { CsvBuilder } from "filefy";
 
 import { SESAR_BASE_URL } from "../../../constants/api";
 
 class MySamples extends Component {
+
   //When the component mounts, get the user's samples and key data about those samples
   componentDidMount() {
     this.props.fetchUsercodeAndSamples(
@@ -36,11 +41,13 @@ class MySamples extends Component {
       let sample = displayData[index].data[0];
       samples.push(sample);
     }
-
+    
     //For each sample selected open a new popup window showing the sample profile
     for (i = 0; i < samples.length; i++) {
       let igsn = samples[i];
       var randomnumber = Math.floor(Math.random() * 100 + 1);
+
+      
       window.open(
         SESAR_SAMPLE_DISPLAY + `${igsn}`,
         "_blank",
@@ -48,10 +55,34 @@ class MySamples extends Component {
         randomnumber,
         "scrollbars=1,menubar=0,resizable=1,width=850,height=500"
       );
+    
+
     }
+
+  }
+
+  handleExport(selectedRows, displayData, columns) {
+    //Get the rows that the user selected
+    let rows = [];
+    for (var i = 0; i < selectedRows.data.length; i++) {
+      let index = selectedRows.data[i].index;
+      rows.push(index);
+    }
+    let samples = [];
+    for (i = 0; i < rows.length; i++) {
+      let index = rows[i];
+      let sample = displayData[index];
+      samples.push(sample.data);
+    }
+    var csvBuilder = new CsvBuilder("selected.csv")
+      .setDelimeter(",")
+      .setColumns(columns)
+      .addRows(samples)
+      .exportFile()
   }
 
   renderTable() {
+
     if (this.props.loading === true || this.props.loading == undefined) {
       //Show spinner
       return (
@@ -83,18 +114,24 @@ class MySamples extends Component {
       const options = {
         filter: true,
         filterType: "dropdown",
-        responsive: "scroll",
+        responsive: "standard",
+        download: false,
+        selectToolbarPlacement: "above", 
+
         customToolbarSelect: (selectedRows, displayData) => (
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => this.openWindow(selectedRows, displayData)}
-            >
-              View Webpage for Selected Samples
-            </Button>
+          <div style={{paddingRight: '25px'}}>
+            <Tooltip title="View Webpage(s) for Selected (Allow Pop-ups for Multiple)">
+              <IconButton aria-label="view" onClick={() => this.openWindow(selectedRows, displayData)}>
+                <VisibilityIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Download CSV of Selected Samples">
+              <IconButton aria-label="download" onClick={() => this.handleExport(selectedRows, displayData, columns)}>
+                <CloudDownloadIcon />
+              </IconButton>
+            </Tooltip>
           </div>
-        ),
+        )
       };
 
       let theme = createMuiTheme({
@@ -111,7 +148,8 @@ class MySamples extends Component {
       });
 
       return (
-        <div className="mysamples-table__container">
+        
+        <div className="mysamples-table__container p-0">
           <div className="mysamples-table">
             <MuiThemeProvider theme={theme}>
               <MUIDataTable
@@ -140,6 +178,7 @@ class MySamples extends Component {
 }
 
 function mapStateToProps(state) {
+
   return {
     usercode: state.mars.usercode,
     password: state.mars.password,
