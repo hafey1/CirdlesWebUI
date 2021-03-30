@@ -19,8 +19,6 @@ import { colors } from "constants";
 import "styles/index.scss";
 import { maxHeaderSize } from "http";
 
-//<NavLink className="nav-item nav-link ml-4" to="/portedsquid">portedsquid</NavLink>
-
 const routes = [
   {
     path: "/",
@@ -105,9 +103,11 @@ const Header = ({ title, logo }) => {
           <NavLink className="nav-item nav-link ml-4" to="/marsMapMaker">
             MARS Map Maker
           </NavLink>
+{/* Uncomment squidink in home/index.js as well
           <NavLink className="nav-item nav-link ml-4" to="/squidink">
             SQUIDINK
           </NavLink>
+*/}
         </div>
       </div>
     </nav>

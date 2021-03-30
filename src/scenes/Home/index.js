@@ -61,6 +61,9 @@ const HomePage = ({ history }: Props) => {
           onClick={() => history.push("/marsMapMaker")}
           style={{ margin: 40 }}
         />
+{
+  /* Temporarily unavailable
+          uncomment squidink references in App.js as well
         <ProjectCard
           description={SQUIDINK.description}
           logo={require("img/logos/SquidInk.svg")}
@@ -69,6 +72,9 @@ const HomePage = ({ history }: Props) => {
           onClick={() => history.push("/squidink")}
           style={{ margin: 40 }}
         />
+  */
+
+}
       </div>
     </div>
   );
