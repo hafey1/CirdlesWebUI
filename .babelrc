@@ -1,18 +1,12 @@
 {
   "presets": [
-    [
-      "latest",
-      {
-        "es2015": {
-          "modules": false
-        }
-      }
-    ],
-    "react",
-    "flow"
+      "@babel/preset-env",
+    "@babel/preset-react",
+    "@babel/preset-flow"
   ],
   "retainLines": true,
   "plugins": [
+    
     [
       "module-resolver",
       {
@@ -21,7 +15,26 @@
         "extensions": [".js", ".scss"]
       }
     ],
-    "transform-object-rest-spread",
-    "transform-class-properties"
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@material-ui/core",
+        // Use ""libraryDirectory": ""," if your bundler does not support ES modules
+        "libraryDirectory": "esm",
+        "camel2DashComponentName": false
+      },
+      "core"
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@material-ui/icons",
+        "libraryDirectory": "esm",
+        "camel2DashComponentName": false
+      },
+      "icons"
+    ],
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-class-properties"
   ]
 }
