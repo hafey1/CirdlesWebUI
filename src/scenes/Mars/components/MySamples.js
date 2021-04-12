@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme, MuiThemeProvider, createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import MUIDataTable from "mui-datatables";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -142,6 +142,13 @@ class MySamples extends Component {
           MUIDataTableSelectCell: {
             root: {
               backgroundColor: "#FFFF",
+            },
+          },
+          MUIDataTableToolbar: {
+            actions: {
+              display: 'flex',
+              flexDirection: 'row',
+              flex: 'initial',
             },
           },
         },

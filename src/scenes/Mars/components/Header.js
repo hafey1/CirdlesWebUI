@@ -29,11 +29,9 @@ class Header extends Component {
             <button
               type="button"
               style={{
-                background: "#f8f9fa",
                 color: "#007bff",
-                borderColor: "#f8f9fa",
               }}
-              className="btn btn-primary btn-md nav-link"
+              className="btn btn-md nav-link"
               onClick={() => this.props.signOutAction()}
             >
               Sign Out
@@ -89,7 +87,7 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <nav className="navbar top-nav my-2 fixed navbar-light bg-light">
+        <nav className="navbar navbar-light sticky-top">
           <Link className="navbar-brand" to="/mars">
             MARS {MARS_VERSION} - interacting with: <a href={SESAR_BASE_URL} target="_blank">{SESAR_BASE_URL.replace("https://", "")}</a>   
           </Link>
