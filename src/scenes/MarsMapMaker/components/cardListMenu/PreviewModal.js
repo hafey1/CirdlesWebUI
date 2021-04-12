@@ -7,8 +7,8 @@ export const PreviewModal = props => {
   const previewMapping = entry => {
     return (
       <tr key={entry[0]}>
-        <td>{entry[0]}</td>
         <td>{entry[1].join(";")}</td>
+        <td>{entry[0]}</td>
       </tr>
     );
   };
