@@ -5,9 +5,38 @@ import { dialogFilter } from "../../util/helper";
 export const PreviewModal = props => {
   const [modalShow, setModalShow] = useState(false);
   const previewMapping = entry => {
+    
+    let localVals = entry[1]
+
+    if (localVals[0].includes(" : ")) {
+      
+      localVals = localVals.map(ele => {
+        let replaceValue = "[VALUE]"
+        // digit value
+        if( ele.match(/[\d]/)) {
+          replaceValue = "NNN"
+        }
+        // no value
+        else if (ele.match(/^.*([  ]$)/)) {
+          replaceValue = "Not_Provided"
+        }
+
+        return ele.replace(/(?<= : )(.*)/, replaceValue)
+      })
+    }
+
+    let localAtt = localVals.join(";");
+    
+    //displays forced value
+    if (localAtt.includes("<METADATA"))
+      localAtt = localAtt.replace(/(<.*>)/, "z");
+    console.log(localAtt)
+    console.log(localVals)
+    //const sesarAtt = 
+    
     return (
       <tr key={entry[0]}>
-        <td>{entry[1].join(";")}</td>
+        <td>{localAtt}</td>
         <td>{entry[0]}</td>
       </tr>
     );
