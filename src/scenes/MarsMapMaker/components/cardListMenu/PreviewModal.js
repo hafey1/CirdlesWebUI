@@ -1,6 +1,11 @@
 import Modal from "react-modal";
+import { connect } from "react-redux";
 import React, { useState } from "react";
 import { dialogFilter } from "../../util/helper";
+
+import {
+  findFirstValueBySesarTitle
+} from "../../util/helper";
 
 export const PreviewModal = props => {
   const [modalShow, setModalShow] = useState(false);
@@ -29,10 +34,10 @@ export const PreviewModal = props => {
     
     //displays forced value
     if (localAtt.includes("<METADATA"))
-      localAtt = localAtt.replace(/(<.*>)/, "z");
+      localAtt = localAtt.replace(/(<.*>)/, findFirstValueBySesarTitle(props.ent, entry[0]));
     console.log(localAtt)
     console.log(localVals)
-    //const sesarAtt = 
+  
     
     return (
       <tr key={entry[0]}>
@@ -71,3 +76,15 @@ export const PreviewModal = props => {
     </div>
   );
 };
+
+
+const mapStateToProps = state => {
+  return {
+    ent: state.marsMapMaker.entries,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(PreviewModal);
