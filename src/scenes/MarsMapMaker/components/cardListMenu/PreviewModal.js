@@ -29,16 +29,11 @@ export const PreviewModal = props => {
         return ele.replace(/(?<= : )(.*)/, replaceValue)
       })
     }
-
     let localAtt = localVals.join(";");
-    
     //displays forced value
     if (localAtt.includes("<METADATA"))
       localAtt = localAtt.replace(/(<.*>)/, findFirstValueBySesarTitle(props.ent, entry[0]));
-    console.log(localAtt)
-    console.log(localVals)
   
-    
     return (
       <tr key={entry[0]}>
         <td>{localAtt}</td>
