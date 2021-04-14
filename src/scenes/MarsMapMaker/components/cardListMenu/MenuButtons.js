@@ -38,13 +38,14 @@ const MenuButtons = props => {
               {props.hideText()}{" "}
             </button>
             <PreviewModal ent={props.ent} />
-            <button
+            <a
               className="btn bg-white btn-outline-dark"
-              onClick={checkStore}
+              target="_blank"
+              href='https://drive.google.com/file/d/1F10Fh3k2pnPr5iCJnlsxirPaegup5glP/view?usp=sharing'
             >
               {" "}
               Help{" "}
-            </button>
+            </a>
           </div>
         </div>
       </div>

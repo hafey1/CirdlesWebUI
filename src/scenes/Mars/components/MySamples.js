@@ -151,6 +151,11 @@ class MySamples extends Component {
               flex: 'initial',
             },
           },
+          MuiTableCell : {
+            root: {
+              lineHeight: 1,
+            }
+          }
         },
       });
 
