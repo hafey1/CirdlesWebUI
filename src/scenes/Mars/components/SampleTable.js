@@ -202,7 +202,7 @@ const EnhancedTableToolbar = (props) => {
             id="tableTitle"
             component="div"
           >
-            Upload to SESAR
+            Mapped data - select items to upload to SESAR
           </Typography>
         )}
 
